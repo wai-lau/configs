@@ -125,4 +125,5 @@ python3 powerline_setup()
 python3 del powerline_setup
 " autocmd VimEnter,VimLeave * silent !tmux set status off
 autocmd VimEnter * if &filetype !=# 'gitcommit' | NERDTree | endif
-let g:NERDTreeWinSize=22
+let g:NERDTreeWinSize=35
+nnoremap <C-n> :NERDTreeToggle<CR>
