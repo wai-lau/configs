@@ -20,15 +20,16 @@ call vundle#begin()
 " alternatively, pass a path where Vundle should install plugins
 "call vundle#begin('~/some/path/here')
 
-" let Vundle manage Vundle, required
+" let Vundle manage Vundle, requirej
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'christoomey/vim-tmux-navigator'
-Plugin 'vim-ruby/vim-ruby'
 Plugin 'vim-scripts/indentpython.vim'
-Bundle 'Valloric/YouCompleteMe'
 Plugin 'vim-syntastic/syntastic'
 Plugin 'nvie/vim-flake8'
 Plugin 'nathanaelkane/vim-indent-guides'
+Plugin 'flazz/vim-colorschemes'
+Bundle 'vim-ruby/vim-ruby'
+Plugin 'scrooloose/nerdcommenter'
 
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
@@ -39,33 +40,33 @@ Plugin 'nathanaelkane/vim-indent-guides'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 
-
-
-filetype plugin indent on    " required
+syntax on
+filetype on
+filetype indent on
+filetype plugin on    " required
 
 call plug#begin('~/.vim/plugged')
 " :PlugInstall      - installs plugins
 " Plugin outside ~/.vim/plugged with post-update hook
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+Plug 'lifepillar/vim-mucomplete'
 
 call plug#end()
 
 execute pathogen#infect()
 
-syntax on
-
-" set term=screen-256color
+set term=screen-256color
 set t_ut=
 
 syntax enable
-set background=dark
-let g:solarized_termcolors=256
-" colorscheme solarized
-colorscheme slate
+colorscheme SlateDark
 
 let NERDTreeShowHidden=1
 let g:NERDTreeWinPos = "left"
+let g:NERDTreeWinSize=35
+nnoremap <C-n> :NERDTreeToggle<CR>
+nnoremap <C-v> :NERDTreeFind<CR>
 " Quit NERDTree if last pane
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
@@ -77,6 +78,7 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
+let g:syntastic_python_checkers=['flake8']
 
 set number
 set nowrap
@@ -95,16 +97,18 @@ set expandtab
 highlight BadWhitespace ctermfg=16 ctermbg=253 guifg=#000000 guibg=#F80000
 au BufRead,BufNewFile *.rb,*.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
 
-" for use with YCM
-let g:ycm_server_python_interpreter = '/usr/bin/python'
-let g:syntastic_python_checkers=['flake8']
 
 :Helptags
 
-nnoremap + 10<C-W>+
-nnoremap _ 10<C-W>-
-nnoremap < 10<c-w><
-nnoremap > 10<c-w>>
+nnoremap + 3<C-W>+
+nnoremap - 3<C-W>-
+nnoremap < 3<c-w><
+nnoremap > 3<c-w>>
+inoremap œ <Esc>:q<CR>
+nnoremap œ :q<CR>
+inoremap ∑ <Esc>:w<CR>
+nnoremap ∑ :w<CR>
+vmap <C-_> \ci
 
 noremap ; :
 noremap : ;
@@ -113,17 +117,33 @@ inoremap jk <Esc>
 
 let g:indent_guides_enable_on_vim_startup = 1
 let g:indent_guides_auto_colors = 0
-autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=236
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=235
 autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=0
 
 let g:fzf_action = {
   \ 'ctrl-s': 'split',
-  \ 'ctrl-t': 'vsplit' }
+  \ 'ctrl-t': 'vsplit',
+  \ 'ctrl-n': 'tab split' }
 
 python3 from powerline.vim import setup as powerline_setup
 python3 powerline_setup()
 python3 del powerline_setup
-" autocmd VimEnter,VimLeave * silent !tmux set status off
-autocmd VimEnter * if &filetype !=# 'gitcommit' | NERDTree | endif
-let g:NERDTreeWinSize=35
-nnoremap <C-n> :NERDTreeToggle<CR>
+
+let NERDSpaceDelims=1
+
+set completeopt+=menuone
+set completeopt-=preview
+set completeopt+=longest,menuone,noselect
+set shortmess+=c   " Shut off completion messages
+set belloff+=ctrlg " If Vim beeps during copletion
+set noinfercase
+" The following line assumes `brew install llvm` in macOS
+let g:clang_library_path = '/usr/local/opt/llvm/lib/libclang.dylib'
+let g:clang_user_options = '-std=c++14'
+
+:silent! ruby --version
+
+nnoremap _ :tabp<CR>
+" nnoremap - :tabn<CR>
+nnoremap ` :b#<CR>
+set pastetoggle=<C-P>
