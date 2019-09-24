@@ -11,8 +11,7 @@ call vundle#begin()
 
 " Brief help
 " :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just
-" :PluginUpdate
+" :PluginInstall    - installs plugins; append `!` to update or just " :PluginUpdate
 " :PluginSearch foo - searches for foo; append `!` to refresh local cache
 " :PluginClean      - confirms removal of unused plugins; append `!` to
 " auto-approve removal
@@ -69,6 +68,9 @@ nnoremap <C-n> :NERDTreeToggle<CR>
 nnoremap <C-v> :NERDTreeFind<CR>
 " Quit NERDTree if last pane
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+let NERDTreeMapOpenSplit="<C-i>"
+let NERDTreeMapOpenVSplit="<C-t>"
+let NERDSpaceDelims=1
 
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
@@ -101,13 +103,13 @@ au BufRead,BufNewFile *.rb,*.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
 :Helptags
 
 nnoremap + 3<C-W>+
-nnoremap - 3<C-W>-
+nnoremap _ 3<C-W>-
 nnoremap < 3<c-w><
 nnoremap > 3<c-w>>
-inoremap œ <Esc>:q<CR>
-nnoremap œ :q<CR>
-inoremap ∑ <Esc>:w<CR>
-nnoremap ∑ :w<CR>
+inoremap <C-d> <Esc>:q<CR>
+nnoremap <C-d> :q<CR>
+inoremap <C-w> <Esc>:w<CR>
+nnoremap <C-w> :w<CR>
 vmap <C-_> \ci
 
 noremap ; :
@@ -121,15 +123,13 @@ autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=235
 autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=0
 
 let g:fzf_action = {
-  \ 'ctrl-s': 'split',
+  \ 'ctrl-i': 'split',
   \ 'ctrl-t': 'vsplit',
   \ 'ctrl-n': 'tab split' }
 
 python3 from powerline.vim import setup as powerline_setup
 python3 powerline_setup()
 python3 del powerline_setup
-
-let NERDSpaceDelims=1
 
 set completeopt+=menuone
 set completeopt-=preview
@@ -143,7 +143,7 @@ let g:clang_user_options = '-std=c++14'
 
 :silent! ruby --version
 
-nnoremap _ :tabp<CR>
-" nnoremap - :tabn<CR>
+nnoremap - :tabp<CR>
 nnoremap ` :b#<CR>
+nnoremap <C-e> :edit!<CR>
 set pastetoggle=<C-P>
