@@ -1,0 +1,19 @@
+# ~/.vim/bundle
+Vundle.vim
+indentpython.vim       
+nerdcommenter         
+nerdtree     
+syntastic            
+vim-colorschemes   
+vim-endwise         
+vim-flake8    
+vim-indent-guides   
+vim-ruby    
+vim-tmux-navigator
+# cd ../plugged
+carbonized     
+fzf.vim  
+vim-mucomplete
+# somewhere in ../pack
+vim-go
+

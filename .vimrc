@@ -1,4 +1,4 @@
-set nocompatible              " be iMproved, required
+set nocompatible
 set encoding=utf-8
 filetype off                  " required
 
@@ -9,8 +9,7 @@ call vundle#begin()
 " To ignore plugin indent changes, instead use:
 " filetype plugin on
 
-" Brief help
-" :PluginList       - lists configured plugins
+" Brief help " :PluginList       - lists configured plugins " 
 " :PluginInstall    - installs plugins; append `!` to update or just " :PluginUpdate
 " :PluginSearch foo - searches for foo; append `!` to refresh local cache
 " :PluginClean      - confirms removal of unused plugins; append `!` to
@@ -21,16 +20,18 @@ call vundle#begin()
 
 " let Vundle manage Vundle, requirej
 Plugin 'VundleVim/Vundle.vim'
+Plugin 'fatih/vim-go'
 Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'vim-scripts/indentpython.vim'
 Plugin 'vim-syntastic/syntastic'
 Plugin 'nvie/vim-flake8'
 Plugin 'nathanaelkane/vim-indent-guides'
 Plugin 'flazz/vim-colorschemes'
-Bundle 'vim-ruby/vim-ruby'
+Plugin 'vim-ruby/vim-ruby'
 Plugin 'scrooloose/nerdcommenter'
-
-" see :h vundle for more details or wiki for FAQ
+Plugin 'tpope/vim-rails'
+Plugin 'tpope/vim-rbenv'
+Plugin 'tpope/vim-bundler' " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
 " Specify a directory for plugins
 " - For Neovim: ~/.local/share/nvim/plugged
@@ -59,7 +60,11 @@ set term=screen-256color
 set t_ut=
 
 syntax enable
-colorscheme SlateDark
+colorscheme sierra "SlateDark Sierra carrot seti maui stonewashed-256 py-darcula
+" autocmd FileType ruby colorscheme sierra
+autocmd FileType go colorscheme SlateDark
+" autocmd FileType markdown colorscheme SlateDark
+" autocmd FileType sh colorscheme SlateDark
 
 let NERDTreeShowHidden=1
 let g:NERDTreeWinPos = "left"
@@ -96,34 +101,46 @@ set softtabstop =2
 set shiftwidth  =2
 set expandtab
 
-highlight BadWhitespace ctermfg=16 ctermbg=253 guifg=#000000 guibg=#F80000
-au BufRead,BufNewFile *.rb,*.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
-
-
 :Helptags
 
-nnoremap + 3<C-W>+
-nnoremap _ 3<C-W>-
-nnoremap < 3<c-w><
-nnoremap > 3<c-w>>
+nnoremap + 6<C-W>+
+nnoremap _ 6<C-W>-
+nnoremap < 6<c-w><
+nnoremap > 6<c-w>>
+nnoremap ? :vsp<CR><C-]>
+nnoremap " <c-]>
 inoremap <C-d> <Esc>:q<CR>
 nnoremap <C-d> :q<CR>
 inoremap <C-w> <Esc>:w<CR>
+inoremap jk <Esc>
 nnoremap <C-w> :w<CR>
+vnoremap * "*y
+nmap <C-_> \ci
 vmap <C-_> \ci
+nnoremap œ :tabp<CR> 
+nnoremap ∑ :tabn<CR>
+nnoremap † :tabnew<CR>
+nnoremap ` :b#<CR>
+nnoremap <C-e> :edit!<CR>
+set pastetoggle=<C-P>
+nnoremap & v<C-P>"*p<C-P><Esc>
 
 noremap ; :
 noremap : ;
 
-inoremap jk <Esc>
+set hls
+nnoremap \\ :nohls<CR>
 
 let g:indent_guides_enable_on_vim_startup = 1
 let g:indent_guides_auto_colors = 0
-autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=235
-autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=0
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=237
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=239
+autocmd VimEnter,Colorscheme * :hi BadWhitespace ctermbg=7
+" autocmd VimEnter,Colorscheme * :hi Normal ctermbg=235
+autocmd BufRead,BufNewFile,VimEnter,ColorScheme *.go,*.rb,*.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
 
 let g:fzf_action = {
-  \ 'ctrl-i': 'split',
+    \ 'ctrl-i': 'split',
   \ 'ctrl-t': 'vsplit',
   \ 'ctrl-n': 'tab split' }
 
@@ -135,15 +152,25 @@ set completeopt+=menuone
 set completeopt-=preview
 set completeopt+=longest,menuone,noselect
 set shortmess+=c   " Shut off completion messages
-set belloff+=ctrlg " If Vim beeps during copletion
+set belloff+=ctrlg " If Vim beeps during completion
 set noinfercase
 " The following line assumes `brew install llvm` in macOS
 let g:clang_library_path = '/usr/local/opt/llvm/lib/libclang.dylib'
 let g:clang_user_options = '-std=c++14'
 
-:silent! ruby --version
+let g:go_highlight_structs = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_build_constraints = 1
 
-nnoremap - :tabp<CR>
-nnoremap ` :b#<CR>
-nnoremap <C-e> :edit!<CR>
-set pastetoggle=<C-P>
+" set listchars+=space:·
+" set listchars+=eol:\ 
+" set list
+
+nnoremap <c-c><c-c> :exec "color " .
+  \ ((g:colors_name == "sierra") ? "SlateDark" : "sierra")<CR>
+
+:command -nargs=+ GG execute 'silent Ggrep!' '<q-args>' | cw | redraw!
+
+:silent! ruby --version

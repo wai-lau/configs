@@ -1,6 +1,5 @@
 # Ignore everything
 *
-
 !.gitignore
 !.vimrc
 !.zshrc
@@ -8,3 +7,5 @@
 !.config/
 !.config/*.json
 !.config/**/*.json
+!.vim
+!.vim/*
