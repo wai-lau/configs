@@ -9,11 +9,12 @@ eval "$(shadowenv init zsh)"
 export PATH=/usr/local/bin:$PATH
 alias pip='pip3'
 alias python='python3'
-alias tags='ctags -R'
+alias tags='ctags -R -o'
 export XDG_CONFIG_HOME=~/.config
 . /usr/local/lib/python3.7/site-packages/powerline/bindings/zsh/powerline.zsh
 export EDITOR=/usr/local/bin/vim
 alias k=kubectl
+alias wk='watch kubectl'
 alias g=git
 autoload -U compinit && compinit
 zmodload -i zsh/complist

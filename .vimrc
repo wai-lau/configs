@@ -9,7 +9,7 @@ call vundle#begin()
 " To ignore plugin indent changes, instead use:
 " filetype plugin on
 
-" Brief help " :PluginList       - lists configured plugins " 
+" Brief help " :PluginList       - lists configured plugins "
 " :PluginInstall    - installs plugins; append `!` to update or just " :PluginUpdate
 " :PluginSearch foo - searches for foo; append `!` to refresh local cache
 " :PluginClean      - confirms removal of unused plugins; append `!` to
@@ -32,6 +32,8 @@ Plugin 'scrooloose/nerdcommenter'
 Plugin 'tpope/vim-rails'
 Plugin 'tpope/vim-rbenv'
 Plugin 'tpope/vim-bundler' " see :h vundle for more details or wiki for FAQ
+Plugin 'pangloss/vim-javascript'
+Plugin 'mxw/vim-jsx'
 " Put your non-Plugin stuff after this line
 " Specify a directory for plugins
 " - For Neovim: ~/.local/share/nvim/plugged
@@ -63,19 +65,9 @@ syntax enable
 colorscheme sierra "SlateDark Sierra carrot seti maui stonewashed-256 py-darcula
 " autocmd FileType ruby colorscheme sierra
 autocmd FileType go colorscheme SlateDark
+autocmd FileType javascript colorscheme maui
 " autocmd FileType markdown colorscheme SlateDark
 " autocmd FileType sh colorscheme SlateDark
-
-let NERDTreeShowHidden=1
-let g:NERDTreeWinPos = "left"
-let g:NERDTreeWinSize=35
-nnoremap <C-n> :NERDTreeToggle<CR>
-nnoremap <C-v> :NERDTreeFind<CR>
-" Quit NERDTree if last pane
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-let NERDTreeMapOpenSplit="<C-i>"
-let NERDTreeMapOpenVSplit="<C-t>"
-let NERDSpaceDelims=1
 
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
@@ -107,23 +99,24 @@ nnoremap + 6<C-W>+
 nnoremap _ 6<C-W>-
 nnoremap < 6<c-w><
 nnoremap > 6<c-w>>
-nnoremap ? :vsp<CR><C-]>
-nnoremap " <c-]>
+
 inoremap <C-d> <Esc>:q<CR>
 nnoremap <C-d> :q<CR>
 inoremap <C-w> <Esc>:w<CR>
 inoremap jk <Esc>
 nnoremap <C-w> :w<CR>
-vnoremap * "*y
+vnoremap <C-c> "*y
+vnoremap <C-x> "*d
 nmap <C-_> \ci
 vmap <C-_> \ci
-nnoremap œ :tabp<CR> 
+nnoremap œ :tabp<CR>
 nnoremap ∑ :tabn<CR>
 nnoremap † :tabnew<CR>
 nnoremap ` :b#<CR>
 nnoremap <C-e> :edit!<CR>
 set pastetoggle=<C-P>
-nnoremap & v<C-P>"*p<C-P><Esc>
+nnoremap <C-v> a <Esc>v<C-P>"*p<C-P><Esc>
+inoremap <C-v> <Space><Esc>v<C-P>"*p<C-P><Esc>i
 
 noremap ; :
 noremap : ;
@@ -131,13 +124,26 @@ noremap : ;
 set hls
 nnoremap \\ :nohls<CR>
 
+let NERDTreeShowHidden=1
+let g:NERDTreeWinPos = "left"
+let g:NERDTreeWinSize=35
+nnoremap <C-@> :NERDTreeToggle<CR>
+nnoremap <C-n> :NERDTreeFind<CR>
+" Quit NERDTree if last pane
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+let NERDTreeMapOpenSplit="<C-i>"
+let NERDTreeMapOpenVSplit="<C-t>"
+let NERDSpaceDelims=1
+
 let g:indent_guides_enable_on_vim_startup = 1
 let g:indent_guides_auto_colors = 0
 autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=237
 autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=239
 autocmd VimEnter,Colorscheme * :hi BadWhitespace ctermbg=7
 " autocmd VimEnter,Colorscheme * :hi Normal ctermbg=235
-autocmd BufRead,BufNewFile,VimEnter,ColorScheme *.go,*.rb,*.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
+autocmd VimEnter,ColorScheme * match BadWhitespace /\s\+$/
+autocmd FileType go   nnoremap ? :vsp<CR>:GoDef<CR>
+autocmd FileType ruby,python,javascript nnoremap ? :vsp<CR><C-]>
 
 let g:fzf_action = {
     \ 'ctrl-i': 'split',
@@ -154,6 +160,7 @@ set completeopt+=longest,menuone,noselect
 set shortmess+=c   " Shut off completion messages
 set belloff+=ctrlg " If Vim beeps during completion
 set noinfercase
+set ignorecase
 " The following line assumes `brew install llvm` in macOS
 let g:clang_library_path = '/usr/local/opt/llvm/lib/libclang.dylib'
 let g:clang_user_options = '-std=c++14'
