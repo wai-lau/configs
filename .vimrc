@@ -105,18 +105,25 @@ nnoremap <C-d> :q<CR>
 inoremap <C-w> <Esc>:w<CR>
 inoremap jk <Esc>
 nnoremap <C-w> :w<CR>
+nnoremap <C-c> V"*y
 vnoremap <C-c> "*y
+nnoremap <C-c> V"*d
 vnoremap <C-x> "*d
 nmap <C-_> \ci
 vmap <C-_> \ci
-nnoremap œ :tabp<CR>
-nnoremap ∑ :tabn<CR>
-nnoremap † :tabnew<CR>
 nnoremap ` :b#<CR>
 nnoremap <C-e> :edit!<CR>
 set pastetoggle=<C-P>
 nnoremap <C-v> a <Esc>v<C-P>"*p<C-P><Esc>
 inoremap <C-v> <Space><Esc>v<C-P>"*p<C-P><Esc>i
+nnoremap <C-t> :vnew
+
+noremap å 1gt
+noremap ß 2gt
+noremap ∂ 3gt
+noremap ƒ 4gt
+noremap © 5gt
+nnoremap † :tabnew<CR>
 
 noremap ; :
 noremap : ;
@@ -133,6 +140,7 @@ nnoremap <C-n> :NERDTreeFind<CR>
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 let NERDTreeMapOpenSplit="<C-i>"
 let NERDTreeMapOpenVSplit="<C-t>"
+let NERDTreeMapOpenInTab="<C-n>"
 let NERDSpaceDelims=1
 
 let g:indent_guides_enable_on_vim_startup = 1

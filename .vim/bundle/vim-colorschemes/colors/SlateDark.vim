@@ -1,5 +1,5 @@
 "%% SiSU Vim color file
-" SlateDark Maintainer: Rudra Banerjee <bnrj.rudra@yahoo.com> 
+" SlateDark Maintainer: Rudra Banerjee <bnrj.rudra@yahoo.com>
 " Originally inspired from Slate by Ralph Amissah
 :set t_Co=256
 :set background=dark
@@ -30,7 +30,7 @@ hi Statement guifg=CornflowerBlue ctermfg=81
 hi Visual gui=none guifg=khaki guibg=olivedrab cterm=reverse
 hi WarningMsg guifg=salmon ctermfg=1
 hi String guifg=SkyBlue ctermfg=183
-hi Comment term=bold ctermfg=11 guifg=grey40
+hi Comment term=bold ctermfg=3 guifg=grey40
 hi Constant guifg=#ffa0a0 ctermfg=220
 hi Special guifg=darkkhaki ctermfg=208
 hi Identifier guifg=salmon ctermfg=red
