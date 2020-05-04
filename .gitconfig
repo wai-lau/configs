@@ -1,0 +1,33 @@
+[diff]
+	algorithm = patience
+[protocol]
+	version = 2
+[user]
+	name = Wai Lau
+	email = user@example.com
+[core]
+	editor = /usr/local/bin/vim
+	excludesfile = /Users/wai/.gitignoreglobal
+	commitGraph = true
+[alias]
+  fb = !git fetch && git rebase origin/master
+  fp = !git push --force-with-lease origin $(git rev-parse --abbrev-ref HEAD)
+  f = !git add -A && git commit --amend --no-edit
+  ff = !git f && git fp
+  d1 = !git diff HEAD~1 HEAD
+  d = !git diff
+  fbf = !git f && git fb && git fp
+  c = !git checkout
+  co = !git commit
+  b = !git branch
+  bb = !git checkout -b
+  log = log --oneline --graph
+[gc]
+	writeCommitGraph = true
+[credential]
+	helper = store --file /opt/dev/var/private/git_credential_store
+[url "https://github.com/work/"]
+	insteadOf = git@github.com:work/
+	insteadOf = git@github.com:work/
+	insteadOf = ssh://git@github.com/work/
+	insteadOf = ssh://git@github.com/work/

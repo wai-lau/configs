@@ -116,7 +116,7 @@ nnoremap <C-e> :edit!<CR>
 set pastetoggle=<C-P>
 nnoremap <C-v> a <Esc>v<C-P>"*p<C-P><Esc>
 inoremap <C-v> <Space><Esc>v<C-P>"*p<C-P><Esc>i
-nnoremap <C-t> :vnew
+nnoremap <C-t> :vnew<CR>
 
 noremap å 1gt
 noremap ß 2gt
@@ -187,5 +187,8 @@ nnoremap <c-c><c-c> :exec "color " .
   \ ((g:colors_name == "sierra") ? "SlateDark" : "sierra")<CR>
 
 :command -nargs=+ GG execute 'silent Ggrep!' '<q-args>' | cw | redraw!
+:command DIFF execute 'windo diffthis'
+
+:set switchbuf+=split
 
 :silent! ruby --version

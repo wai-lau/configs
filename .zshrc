@@ -7,9 +7,23 @@ fi
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 eval "$(shadowenv init zsh)"
 export PATH=/usr/local/bin:$PATH
+export SKIP_RAILGUN_CHECK=1
 alias pip='pip3'
 alias python='python3'
 alias tags='ctags -R -o'
+alias core='dev cd work'
+alias consumer='dev cd internalrepo1'
+alias client='dev cd internalrepo1 && cd gems/elasticsearch-work-client'
+alias searchbud='dev cd internalrepo2 && dev cd internalrepo2 && cd internalrepos/internalrepo3'
+
+  
+alias central='k config use-context es-tier1-us-central1-2'
+alias east='k config use-context es-tier1-us-east1-2'
+alias snapfind='k get pods -n es7 | grep snapshot | awk '\''{print $1}'\'''
+alias snap='k exec -it -n es7 $(snapfind) -- sh --login'
+alias snapcent='central && snap'
+alias snapeast='east && snap'
+
 export XDG_CONFIG_HOME=~/.config
 . /usr/local/lib/python3.7/site-packages/powerline/bindings/zsh/powerline.zsh
 export EDITOR=/usr/local/bin/vim

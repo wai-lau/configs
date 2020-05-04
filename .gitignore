@@ -1,6 +1,7 @@
 # Ignore everything
 *
 !.gitignore
+!.gitconfig
 !.vimrc
 !.zshrc
 !.tmux.conf
