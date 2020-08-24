@@ -1,8 +1,13 @@
 " Initialisation:"{{{
 " ----------------------------------------------------------------------------
-hi clear
-if exists("syntax_on")
-  syntax reset
+:set background=light
+
+highlight clear
+if version > 580
+  hi clear
+  if exists("syntax_on")
+    syntax reset
+  endif
 endif
 
 let s:style = get(g:, 'ayucolor', 'dark')

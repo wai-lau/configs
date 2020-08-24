@@ -11,12 +11,17 @@ export SKIP_RAILGUN_CHECK=1
 alias pip='pip3'
 alias python='python3'
 alias tags='ctags -R -o'
-alias core='dev cd work'
 alias consumer='dev cd internalrepo1'
 alias client='dev cd internalrepo1 && cd gems/elasticsearch-work-client'
 alias searchbud='dev cd internalrepo2 && dev cd internalrepo2 && cd internalrepos/internalrepo3'
+alias vim!='sudo vim'
+v () {
+  dev cd $* && vim
+}
+f () {
+  dev cd $*  && ls
+}
 
-  
 alias central='k config use-context es-tier1-us-central1-2'
 alias east='k config use-context es-tier1-us-east1-2'
 alias snapfind='k get pods -n es7 | grep snapshot | awk '\''{print $1}'\'''
@@ -63,3 +68,4 @@ export LDFLAGS="-L/usr/local/opt/openssl@1.1/lib"
 export CPPFLAGS="-I/usr/local/opt/openssl@1.1/include"
 export PKG_CONFIG_PATH="PKG_CONFIG_PATH:/usr/local/opt/openssl@1.1/lib/pkgconfig"
 
+if [ -e /Users/wai/.nix-profile/etc/profile.d/nix.sh ]; then . /Users/wai/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer

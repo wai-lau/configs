@@ -24,10 +24,11 @@
   log = log --oneline --graph
 [gc]
 	writeCommitGraph = true
-[credential]
-	helper = store --file /opt/dev/var/private/git_credential_store
 [url "https://github.com/work/"]
 	insteadOf = git@github.com:work/
 	insteadOf = git@github.com:work/
 	insteadOf = ssh://git@github.com/work/
 	insteadOf = ssh://git@github.com/work/
+[credential]
+	helper = 
+	helper = store --file /opt/dev/var/private/git_credential_store

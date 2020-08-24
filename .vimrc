@@ -62,7 +62,7 @@ set term=screen-256color
 set t_ut=
 
 syntax enable
-colorscheme sierra "SlateDark Sierra carrot seti maui stonewashed-256 py-darcula
+colorscheme sierra "SlateDark Sierra carrot seti maui stonewashed-256 py-darcula ayu
 " autocmd FileType ruby colorscheme sierra
 autocmd FileType go colorscheme SlateDark
 autocmd FileType javascript colorscheme maui
@@ -82,7 +82,7 @@ let g:syntastic_python_checkers=['flake8']
 set number
 set nowrap
 set fillchars=""
-set relativenumber
+set norelativenumber
 
 " tabstop:          Width of tab character
 " softtabstop:      Fine tunes the amount of white space to be added
@@ -97,8 +97,10 @@ set expandtab
 
 nnoremap + 6<C-W>+
 nnoremap _ 6<C-W>-
-nnoremap < 6<c-w><
-nnoremap > 6<c-w>>
+nnoremap - 12<c-w><
+nnoremap = 12<c-w>>
+nnoremap < v<<Esc>
+nnoremap > v><Esc>
 
 inoremap <C-d> <Esc>:q<CR>
 nnoremap <C-d> :q<CR>
@@ -116,14 +118,15 @@ nnoremap <C-e> :edit!<CR>
 set pastetoggle=<C-P>
 nnoremap <C-v> a <Esc>v<C-P>"*p<C-P><Esc>
 inoremap <C-v> <Space><Esc>v<C-P>"*p<C-P><Esc>i
-nnoremap <C-t> :vnew<CR>
+nnoremap † :vnew<CR>
 
 noremap å 1gt
 noremap ß 2gt
 noremap ∂ 3gt
 noremap ƒ 4gt
 noremap © 5gt
-nnoremap † :tabnew<CR>
+nnoremap ≥ :tabnew<CR>
+nnoremap <Tab> .
 
 noremap ; :
 noremap : ;
@@ -145,16 +148,16 @@ let NERDSpaceDelims=1
 
 let g:indent_guides_enable_on_vim_startup = 1
 let g:indent_guides_auto_colors = 0
-autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=237
-autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=239
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=251
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=248
 autocmd VimEnter,Colorscheme * :hi BadWhitespace ctermbg=7
 " autocmd VimEnter,Colorscheme * :hi Normal ctermbg=235
 autocmd VimEnter,ColorScheme * match BadWhitespace /\s\+$/
-autocmd FileType go   nnoremap ? :vsp<CR>:GoDef<CR>
+autocmd FileType go nnoremap ? :vsp<CR>:GoDef<CR>
 autocmd FileType ruby,python,javascript nnoremap ? :vsp<CR><C-]>
 
 let g:fzf_action = {
-    \ 'ctrl-i': 'split',
+  \ 'ctrl-i': 'split',
   \ 'ctrl-t': 'vsplit',
   \ 'ctrl-n': 'tab split' }
 
@@ -180,14 +183,16 @@ let g:go_highlight_operators = 1
 let g:go_highlight_build_constraints = 1
 
 " set listchars+=space:·
-" set listchars+=eol:\ 
-" set list
+set listchars+=eol:\ 
+set listchars+=tab:▻▻
+set list
 
 nnoremap <c-c><c-c> :exec "color " .
-  \ ((g:colors_name == "sierra") ? "SlateDark" : "sierra")<CR>
+  \ ((g:colors_name == "sierra") ? "ayu" : "sierra")<CR>
 
 :command -nargs=+ GG execute 'silent Ggrep!' '<q-args>' | cw | redraw!
 :command DIFF execute 'windo diffthis'
+:command DOFF execute 'windo diffoff'
 
 :set switchbuf+=split
 
