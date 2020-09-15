@@ -1,16 +1,15 @@
 set nocompatible
 set encoding=utf-8
-filetype off                  " required
 
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
-
 " To ignore plugin indent changes, instead use:
 " filetype plugin on
-
-" Brief help " :PluginList       - lists configured plugins "
-" :PluginInstall    - installs plugins; append `!` to update or just " :PluginUpdate
+" Brief help
+" :PluginList       - lists configured plugins
+" :PluginInstall    - installs plugins; append `!` to update or just
+" :PluginUpdate
 " :PluginSearch foo - searches for foo; append `!` to refresh local cache
 " :PluginClean      - confirms removal of unused plugins; append `!` to
 " auto-approve removal
@@ -28,12 +27,15 @@ Plugin 'nvie/vim-flake8'
 Plugin 'nathanaelkane/vim-indent-guides'
 Plugin 'flazz/vim-colorschemes'
 Plugin 'vim-ruby/vim-ruby'
+Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/nerdcommenter'
-Plugin 'tpope/vim-rails'
+Plugin 'tpope/vim-endwise'
 Plugin 'tpope/vim-rbenv'
 Plugin 'tpope/vim-bundler' " see :h vundle for more details or wiki for FAQ
 Plugin 'pangloss/vim-javascript'
 Plugin 'mxw/vim-jsx'
+Plugin 'junegunn/fzf'
+Plugin 'junegunn/fzf.vim'
 " Put your non-Plugin stuff after this line
 " Specify a directory for plugins
 " - For Neovim: ~/.local/share/nvim/plugged
@@ -42,30 +44,16 @@ Plugin 'mxw/vim-jsx'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 
-syntax on
-filetype on
-filetype indent on
-filetype plugin on    " required
-
-call plug#begin('~/.vim/plugged')
-" :PlugInstall      - installs plugins
-" Plugin outside ~/.vim/plugged with post-update hook
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
-Plug 'lifepillar/vim-mucomplete'
-
-call plug#end()
-
-execute pathogen#infect()
-
 set term=screen-256color
 set t_ut=
 
 syntax enable
 colorscheme sierra "SlateDark Sierra carrot seti maui stonewashed-256 py-darcula ayu
 " autocmd FileType ruby colorscheme sierra
-autocmd FileType go colorscheme SlateDark
-autocmd FileType javascript colorscheme maui
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=239 ctermfg=235
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=238 ctermfg=235
+autocmd VimEnter,Colorscheme * :hi BadWhitespace ctermbg=196
+autocmd VimEnter,ColorScheme * match BadWhitespace /\s\+$/
 " autocmd FileType markdown colorscheme SlateDark
 " autocmd FileType sh colorscheme SlateDark
 
@@ -93,8 +81,6 @@ set softtabstop =2
 set shiftwidth  =2
 set expandtab
 
-:Helptags
-
 nnoremap + 6<C-W>+
 nnoremap _ 6<C-W>-
 nnoremap - 12<c-w><
@@ -102,15 +88,16 @@ nnoremap = 12<c-w>>
 nnoremap < v<<Esc>
 nnoremap > v><Esc>
 
-inoremap <C-d> <Esc>:q<CR>
 nnoremap <C-d> :q<CR>
-inoremap <C-w> <Esc>:w<CR>
+inoremap <C-d> <Esc>:q<CR>
+vnoremap <C-d> <Esc>:q<CR>
 inoremap jk <Esc>
-nnoremap <C-w> :w<CR>
 nnoremap <C-c> V"*y
 vnoremap <C-c> "*y
 nnoremap <C-c> V"*d
 vnoremap <C-x> "*d
+nnoremap G G$
+vnoremap G G$
 nmap <C-_> \ci
 vmap <C-_> \ci
 nnoremap ` :b#<CR>
@@ -125,7 +112,7 @@ noremap ß 2gt
 noremap ∂ 3gt
 noremap ƒ 4gt
 noremap © 5gt
-nnoremap ≥ :tabnew<CR>
+nnoremap ˇ :tabnew<CR>
 nnoremap <Tab> .
 
 noremap ; :
@@ -148,11 +135,6 @@ let NERDSpaceDelims=1
 
 let g:indent_guides_enable_on_vim_startup = 1
 let g:indent_guides_auto_colors = 0
-autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=251
-autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=248
-autocmd VimEnter,Colorscheme * :hi BadWhitespace ctermbg=7
-" autocmd VimEnter,Colorscheme * :hi Normal ctermbg=235
-autocmd VimEnter,ColorScheme * match BadWhitespace /\s\+$/
 autocmd FileType go nnoremap ? :vsp<CR>:GoDef<CR>
 autocmd FileType ruby,python,javascript nnoremap ? :vsp<CR><C-]>
 
@@ -184,7 +166,7 @@ let g:go_highlight_build_constraints = 1
 
 " set listchars+=space:·
 set listchars+=eol:\ 
-set listchars+=tab:▻▻
+set listchars+=tab:⌐\ 
 set list
 
 nnoremap <c-c><c-c> :exec "color " .
@@ -196,4 +178,5 @@ nnoremap <c-c><c-c> :exec "color " .
 
 :set switchbuf+=split
 
-:silent! ruby --version
+autocmd FileType go colo SlateDark
+autocmd FileType javascript colorscheme maui

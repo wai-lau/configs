@@ -86,7 +86,7 @@ endfunction
 
 function! s:build_path(path) abort
   let path = join(map(copy(a:path), 'v:val ==# "." ? "" : v:val'), ',')
-  if &g:path !~# '\v^\.%(,/%(usr|emx)/include)=,,$'
+  if &g:path !~# '\v^%(\.,)=%(/%(usr|emx)/include,)=,$'
     let path = substitute(&g:path,',,$',',','') . ',' . path
   endif
   return path
@@ -111,7 +111,7 @@ else
   if !exists('g:ruby_default_path')
     if has("ruby") && has("win32")
       ruby ::VIM::command( 'let g:ruby_default_path = split("%s",",")' % $:.join(%q{,}) )
-    elseif executable('ruby')
+    elseif executable('ruby') && !empty($HOME)
       let g:ruby_default_path = s:query_path($HOME)
     else
       let g:ruby_default_path = map(split($RUBYLIB,':'), 'v:val ==# "." ? "" : v:val')
@@ -372,7 +372,6 @@ function! RubyCursorFile() abort
   endtry
   let pre = matchstr(strpart(getline('.'), 0, col('.')-1), '.*\f\@<!')
   let post = matchstr(strpart(getline('.'), col('.')), '\f\@!.*')
-  let ext = getline('.') =~# '^\s*\%(require\%(_relative\)\=\|autoload\)\>' && cfile !~# '\.rb$' ? '.rb' : ''
   if s:synid() ==# hlID('rubyConstant')
     let cfile = substitute(cfile,'\.\w\+[?!=]\=$','','')
     let cfile = substitute(cfile,'^::','','')
@@ -381,12 +380,15 @@ function! RubyCursorFile() abort
     let cfile = substitute(cfile,'\(\l\|\d\)\(\u\)','\1_\2', 'g')
     return tolower(cfile) . '.rb'
   elseif getline('.') =~# '^\s*require_relative\s*\(["'']\).*\1\s*$'
-    let cfile = expand('%:p:h') . '/' . matchstr(getline('.'),'\(["'']\)\zs.\{-\}\ze\1') . ext
+    let cfile = expand('%:p:h') . '/' . matchstr(getline('.'),'\(["'']\)\zs.\{-\}\ze\1')
+    let cfile .= cfile !~# '\.rb$' ? '.rb' : ''
   elseif getline('.') =~# '^\s*\%(require[( ]\|load[( ]\|autoload[( ]:\w\+,\)\s*\%(::\)\=File\.expand_path(\(["'']\)\.\./.*\1,\s*__FILE__)\s*$'
     let target = matchstr(getline('.'),'\(["'']\)\.\.\zs/.\{-\}\ze\1')
-    let cfile = expand('%:p:h') . target . ext
+    let cfile = expand('%:p:h') . target
+    let cfile .= cfile !~# '\.rb$' ? '.rb' : ''
   elseif getline('.') =~# '^\s*\%(require \|load \|autoload :\w\+,\)\s*\(["'']\).*\1\s*$'
-    let cfile = matchstr(getline('.'),'\(["'']\)\zs.\{-\}\ze\1') . ext
+    let cfile = matchstr(getline('.'),'\(["'']\)\zs.\{-\}\ze\1')
+    let cfile .= cfile !~# '\.rb$' ? '.rb' : ''
   elseif pre.post =~# '\<File.expand_path[( ].*[''"]\{2\}, *__FILE__\>' && cfile =~# '^\.\.'
     let cfile = expand('%:p:h') . strpart(cfile, 2)
   else

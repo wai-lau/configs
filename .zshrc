@@ -15,6 +15,8 @@ alias consumer='dev cd internalrepo1'
 alias client='dev cd internalrepo1 && cd gems/elasticsearch-work-client'
 alias searchbud='dev cd internalrepo2 && dev cd internalrepo2 && cd internalrepos/internalrepo3'
 alias vim!='sudo vim'
+alias kk='kctx'
+
 v () {
   dev cd $* && vim
 }
@@ -22,12 +24,10 @@ f () {
   dev cd $*  && ls
 }
 
-alias central='k config use-context es-tier1-us-central1-2'
-alias east='k config use-context es-tier1-us-east1-2'
-alias snapfind='k get pods -n es7 | grep snapshot | awk '\''{print $1}'\'''
-alias snap='k exec -it -n es7 $(snapfind) -- sh --login'
-alias snapcent='central && snap'
-alias snapeast='east && snap'
+alias snapfind='k get pods | grep snapshot | awk '\''{print $1}'\'''
+alias snap='k exec -it $(snapfind) -- sh --login'
+alias internalrepo3find='k get -n internalrepo2dies pods | grep internalrepo3 | awk '\''{print $1}'\'''
+alias sblog='k logs -f $(internalrepo3find) -n internalrepo2dies'
 
 export XDG_CONFIG_HOME=~/.config
 . /usr/local/lib/python3.7/site-packages/powerline/bindings/zsh/powerline.zsh

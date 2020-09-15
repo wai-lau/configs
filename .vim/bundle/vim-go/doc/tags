@@ -1,4 +1,5 @@
 'b:go_fmt_options'	vim-go.txt	/*'b:go_fmt_options'*
+'g:go_addtags_skip_unexported'	vim-go.txt	/*'g:go_addtags_skip_unexported'*
 'g:go_addtags_transform'	vim-go.txt	/*'g:go_addtags_transform'*
 'g:go_alternate_mode'	vim-go.txt	/*'g:go_alternate_mode'*
 'g:go_asmfmt_autosave'	vim-go.txt	/*'g:go_asmfmt_autosave'*
@@ -8,6 +9,7 @@
 'g:go_bin_path'	vim-go.txt	/*'g:go_bin_path'*
 'g:go_build_tags'	vim-go.txt	/*'g:go_build_tags'*
 'g:go_code_completion_enabled'	vim-go.txt	/*'g:go_code_completion_enabled'*
+'g:go_code_completion_icase'	vim-go.txt	/*'g:go_code_completion_icase'*
 'g:go_debug'	vim-go.txt	/*'g:go_debug'*
 'g:go_debug_address'	vim-go.txt	/*'g:go_debug_address'*
 'g:go_debug_log_output'	vim-go.txt	/*'g:go_debug_log_output'*
@@ -31,15 +33,17 @@
 'g:go_fmt_options'	vim-go.txt	/*'g:go_fmt_options'*
 'g:go_fold_enable'	vim-go.txt	/*'g:go_fold_enable'*
 'g:go_get_update'	vim-go.txt	/*'g:go_get_update'*
-'g:go_gocode_propose_builtins'	vim-go.txt	/*'g:go_gocode_propose_builtins'*
-'g:go_gocode_propose_source'	vim-go.txt	/*'g:go_gocode_propose_source'*
-'g:go_gocode_socket_type'	vim-go.txt	/*'g:go_gocode_socket_type'*
-'g:go_gocode_unimported_packages'	vim-go.txt	/*'g:go_gocode_unimported_packages'*
+'g:go_gopls_analyses'	vim-go.txt	/*'g:go_gopls_analyses'*
 'g:go_gopls_complete_unimported'	vim-go.txt	/*'g:go_gopls_complete_unimported'*
 'g:go_gopls_deep_completion'	vim-go.txt	/*'g:go_gopls_deep_completion'*
 'g:go_gopls_enabled'	vim-go.txt	/*'g:go_gopls_enabled'*
-'g:go_gopls_fuzzy_matching'	vim-go.txt	/*'g:go_gopls_fuzzy_matching'*
+'g:go_gopls_gofumpt'	vim-go.txt	/*'g:go_gopls_gofumpt'*
+'g:go_gopls_local'	vim-go.txt	/*'g:go_gopls_local'*
+'g:go_gopls_matcher'	vim-go.txt	/*'g:go_gopls_matcher'*
+'g:go_gopls_options'	vim-go.txt	/*'g:go_gopls_options'*
+'g:go_gopls_settings'	vim-go.txt	/*'g:go_gopls_settings'*
 'g:go_gopls_staticcheck'	vim-go.txt	/*'g:go_gopls_staticcheck'*
+'g:go_gopls_temp_modfile'	vim-go.txt	/*'g:go_gopls_temp_modfile'*
 'g:go_gopls_use_placeholders'	vim-go.txt	/*'g:go_gopls_use_placeholders'*
 'g:go_gorename_prefill'	vim-go.txt	/*'g:go_gorename_prefill'*
 'g:go_guru_scope'	vim-go.txt	/*'g:go_guru_scope'*
@@ -63,6 +67,9 @@
 'g:go_highlight_types'	vim-go.txt	/*'g:go_highlight_types'*
 'g:go_highlight_variable_assignments'	vim-go.txt	/*'g:go_highlight_variable_assignments'*
 'g:go_highlight_variable_declarations'	vim-go.txt	/*'g:go_highlight_variable_declarations'*
+'g:go_implements_mode'	vim-go.txt	/*'g:go_implements_mode'*
+'g:go_imports_autosave'	vim-go.txt	/*'g:go_imports_autosave'*
+'g:go_imports_mode'	vim-go.txt	/*'g:go_imports_mode'*
 'g:go_info_mode'	vim-go.txt	/*'g:go_info_mode'*
 'g:go_jump_to_error'	vim-go.txt	/*'g:go_jump_to_error'*
 'g:go_list_autoclose'	vim-go.txt	/*'g:go_list_autoclose'*
@@ -90,6 +97,7 @@
 'g:go_term_enabled'	vim-go.txt	/*'g:go_term_enabled'*
 'g:go_term_height'	vim-go.txt	/*'g:go_term_height'*
 'g:go_term_mode'	vim-go.txt	/*'g:go_term_mode'*
+'g:go_term_reuse'	vim-go.txt	/*'g:go_term_reuse'*
 'g:go_term_width'	vim-go.txt	/*'g:go_term_width'*
 'g:go_test_show_name'	vim-go.txt	/*'g:go_test_show_name'*
 'g:go_test_timeout'	vim-go.txt	/*'g:go_test_timeout'*
@@ -98,6 +106,7 @@
 'g:go_textobj_include_variable'	vim-go.txt	/*'g:go_textobj_include_variable'*
 'g:go_updatetime'	vim-go.txt	/*'g:go_updatetime'*
 'g:go_version_warning'	vim-go.txt	/*'g:go_version_warning'*
+'go:go_debug_breakpoint_sign_text'	vim-go.txt	/*'go:go_debug_breakpoint_sign_text'*
 (go-alternate-edit)	vim-go.txt	/*(go-alternate-edit)*
 (go-alternate-split)	vim-go.txt	/*(go-alternate-split)*
 (go-alternate-vertical)	vim-go.txt	/*(go-alternate-vertical)*
@@ -111,6 +120,7 @@
 (go-coverage-toggle)	vim-go.txt	/*(go-coverage-toggle)*
 (go-debug-breakpoint)	vim-go.txt	/*(go-debug-breakpoint)*
 (go-debug-continue)	vim-go.txt	/*(go-debug-continue)*
+(go-debug-halt)	vim-go.txt	/*(go-debug-halt)*
 (go-debug-next)	vim-go.txt	/*(go-debug-next)*
 (go-debug-print)	vim-go.txt	/*(go-debug-print)*
 (go-debug-step)	vim-go.txt	/*(go-debug-step)*
@@ -122,9 +132,14 @@
 (go-def-stack)	vim-go.txt	/*(go-def-stack)*
 (go-def-stack-clear)	vim-go.txt	/*(go-def-stack-clear)*
 (go-def-tab)	vim-go.txt	/*(go-def-tab)*
+(go-def-type)	vim-go.txt	/*(go-def-type)*
+(go-def-type-split)	vim-go.txt	/*(go-def-type-split)*
+(go-def-type-tab)	vim-go.txt	/*(go-def-type-tab)*
+(go-def-type-vertical)	vim-go.txt	/*(go-def-type-vertical)*
 (go-def-vertical)	vim-go.txt	/*(go-def-vertical)*
 (go-deps)	vim-go.txt	/*(go-deps)*
 (go-describe)	vim-go.txt	/*(go-describe)*
+(go-diagnostics)	vim-go.txt	/*(go-diagnostics)*
 (go-doc)	vim-go.txt	/*(go-doc)*
 (go-doc-browser)	vim-go.txt	/*(go-doc-browser)*
 (go-doc-split)	vim-go.txt	/*(go-doc-split)*
@@ -169,8 +184,10 @@
 :GoCoverageBrowser	vim-go.txt	/*:GoCoverageBrowser*
 :GoCoverageClear	vim-go.txt	/*:GoCoverageClear*
 :GoCoverageToggle	vim-go.txt	/*:GoCoverageToggle*
+:GoDebugAttach	vim-go.txt	/*:GoDebugAttach*
 :GoDebugBreakpoint	vim-go.txt	/*:GoDebugBreakpoint*
 :GoDebugContinue	vim-go.txt	/*:GoDebugContinue*
+:GoDebugHalt	vim-go.txt	/*:GoDebugHalt*
 :GoDebugNext	vim-go.txt	/*:GoDebugNext*
 :GoDebugPrint	vim-go.txt	/*:GoDebugPrint*
 :GoDebugRestart	vim-go.txt	/*:GoDebugRestart*
@@ -243,7 +260,6 @@ ft-gomod-syntax	vim-go.txt	/*ft-gomod-syntax*
 ft-gotexttmpl-syntax	vim-go.txt	/*ft-gotexttmpl-syntax*
 go#complete#Complete()	vim-go.txt	/*go#complete#Complete()*
 go#complete#GetInfo()	vim-go.txt	/*go#complete#GetInfo()*
-go#complete#GocodeComplete()	vim-go.txt	/*go#complete#GocodeComplete()*
 go#statusline#Show()	vim-go.txt	/*go#statusline#Show()*
 go#tool#DescribeBalloon()	vim-go.txt	/*go#tool#DescribeBalloon()*
 go-[[	vim-go.txt	/*go-[[*

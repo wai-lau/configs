@@ -5,6 +5,7 @@ ft-ruby-syntax	ft-ruby-syntax.txt	/*ft-ruby-syntax*
 g:ruby_indent_access_modifier_style	ft-ruby-indent.txt	/*g:ruby_indent_access_modifier_style*
 g:ruby_indent_assignment_style	ft-ruby-indent.txt	/*g:ruby_indent_assignment_style*
 g:ruby_indent_block_style	ft-ruby-indent.txt	/*g:ruby_indent_block_style*
+g:ruby_indent_hanging_elements	ft-ruby-indent.txt	/*g:ruby_indent_hanging_elements*
 g:ruby_recommended_style	ft-ruby-plugin.txt	/*g:ruby_recommended_style*
 ruby-[M	ft-ruby-plugin.txt	/*ruby-[M*
 ruby-[[	ft-ruby-plugin.txt	/*ruby-[[*
@@ -19,6 +20,7 @@ ruby-access-modifier-indentation	ft-ruby-indent.txt	/*ruby-access-modifier-inden
 ruby-am	ft-ruby-plugin.txt	/*ruby-am*
 ruby-assignment-style-indentation	ft-ruby-indent.txt	/*ruby-assignment-style-indentation*
 ruby-block-style-indentation	ft-ruby-indent.txt	/*ruby-block-style-indentation*
+ruby-hanging-element-indentation	ft-ruby-indent.txt	/*ruby-hanging-element-indentation*
 ruby-iM	ft-ruby-plugin.txt	/*ruby-iM*
 ruby-im	ft-ruby-plugin.txt	/*ruby-im*
 ruby-motion	ft-ruby-plugin.txt	/*ruby-motion*
@@ -37,3 +39,7 @@ ruby_operators	ft-ruby-syntax.txt	/*ruby_operators*
 ruby_space_errors	ft-ruby-syntax.txt	/*ruby_space_errors*
 ruby_spellcheck_strings	ft-ruby-syntax.txt	/*ruby_spellcheck_strings*
 ruby_syntax_errors	ft-ruby-syntax.txt	/*ruby_syntax_errors*
+vim-ruby-indent	ft-ruby-indent.txt	/*vim-ruby-indent*
+vim-ruby-omni	ft-ruby-omni.txt	/*vim-ruby-omni*
+vim-ruby-plugin	ft-ruby-plugin.txt	/*vim-ruby-plugin*
+vim-ruby-syntax	ft-ruby-syntax.txt	/*vim-ruby-syntax*

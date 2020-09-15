@@ -159,8 +159,6 @@
 'g:syntastic_svg_w3_doctype'	syntastic-checkers.txt	/*'g:syntastic_svg_w3_doctype'*
 'g:syntastic_svg_w3_exec'	syntastic-checkers.txt	/*'g:syntastic_svg_w3_exec'*
 'g:syntastic_tex_chktex_showmsgs'	syntastic-checkers.txt	/*'g:syntastic_tex_chktex_showmsgs'*
-'g:syntastic_vala_modules'	syntastic-checkers.txt	/*'g:syntastic_vala_modules'*
-'g:syntastic_vala_vapi_dirs'	syntastic-checkers.txt	/*'g:syntastic_vala_vapi_dirs'*
 'g:syntastic_verapp_config_file'	syntastic-checkers.txt	/*'g:syntastic_verapp_config_file'*
 'g:syntastic_verilog_compiler'	syntastic-checkers.txt	/*'g:syntastic_verilog_compiler'*
 'g:syntastic_verilog_compiler_options'	syntastic-checkers.txt	/*'g:syntastic_verilog_compiler_options'*
@@ -353,7 +351,6 @@ syntastic-checkers-trig	syntastic-checkers.txt	/*syntastic-checkers-trig*
 syntastic-checkers-turtle	syntastic-checkers.txt	/*syntastic-checkers-turtle*
 syntastic-checkers-twig	syntastic-checkers.txt	/*syntastic-checkers-twig*
 syntastic-checkers-typescript	syntastic-checkers.txt	/*syntastic-checkers-typescript*
-syntastic-checkers-vala	syntastic-checkers.txt	/*syntastic-checkers-vala*
 syntastic-checkers-verilog	syntastic-checkers.txt	/*syntastic-checkers-verilog*
 syntastic-checkers-vhdl	syntastic-checkers.txt	/*syntastic-checkers-vhdl*
 syntastic-checkers-vim	syntastic-checkers.txt	/*syntastic-checkers-vim*
@@ -570,6 +567,7 @@ syntastic-ruby-mri	syntastic-checkers.txt	/*syntastic-ruby-mri*
 syntastic-ruby-reek	syntastic-checkers.txt	/*syntastic-ruby-reek*
 syntastic-ruby-rubocop	syntastic-checkers.txt	/*syntastic-ruby-rubocop*
 syntastic-ruby-rubylint	syntastic-checkers.txt	/*syntastic-ruby-rubylint*
+syntastic-ruby-sorbet	syntastic-checkers.txt	/*syntastic-ruby-sorbet*
 syntastic-sass-sass	syntastic-checkers.txt	/*syntastic-sass-sass*
 syntastic-sass-sass_lint	syntastic-checkers.txt	/*syntastic-sass-sass_lint*
 syntastic-sass-sassc	syntastic-checkers.txt	/*syntastic-sass-sassc*
@@ -587,6 +585,7 @@ syntastic-sh-bashate	syntastic-checkers.txt	/*syntastic-sh-bashate*
 syntastic-sh-checkbashisms	syntastic-checkers.txt	/*syntastic-sh-checkbashisms*
 syntastic-sh-sh	syntastic-checkers.txt	/*syntastic-sh-sh*
 syntastic-sh-shellcheck	syntastic-checkers.txt	/*syntastic-sh-shellcheck*
+syntastic-sh-shfmt	syntastic-checkers.txt	/*syntastic-sh-shfmt*
 syntastic-shellslash	syntastic.txt	/*syntastic-shellslash*
 syntastic-slim-slim_lint	syntastic-checkers.txt	/*syntastic-slim-slim_lint*
 syntastic-slim-slimrb	syntastic-checkers.txt	/*syntastic-slim-slimrb*
@@ -619,7 +618,6 @@ syntastic-twig-twiglint	syntastic-checkers.txt	/*syntastic-twig-twiglint*
 syntastic-typescript-eslint	syntastic-checkers.txt	/*syntastic-typescript-eslint*
 syntastic-typescript-lynt	syntastic-checkers.txt	/*syntastic-typescript-lynt*
 syntastic-typescript-tslint	syntastic-checkers.txt	/*syntastic-typescript-tslint*
-syntastic-vala-valac	syntastic-checkers.txt	/*syntastic-vala-valac*
 syntastic-verilog-iverilog	syntastic-checkers.txt	/*syntastic-verilog-iverilog*
 syntastic-verilog-verilator	syntastic-checkers.txt	/*syntastic-verilog-verilator*
 syntastic-vhdl-ghdl	syntastic-checkers.txt	/*syntastic-vhdl-ghdl*
@@ -631,6 +629,7 @@ syntastic-vim-vint	syntastic-checkers.txt	/*syntastic-vim-vint*
 syntastic-vim-virtualenv	syntastic.txt	/*syntastic-vim-virtualenv*
 syntastic-vue-eslint	syntastic-checkers.txt	/*syntastic-vue-eslint*
 syntastic-vue-pug_lint_vue	syntastic-checkers.txt	/*syntastic-vue-pug_lint_vue*
+syntastic-vue-stylelint	syntastic-checkers.txt	/*syntastic-vue-stylelint*
 syntastic-xhtml-jshint	syntastic-checkers.txt	/*syntastic-xhtml-jshint*
 syntastic-xhtml-proselint	syntastic-checkers.txt	/*syntastic-xhtml-proselint*
 syntastic-xhtml-tidy	syntastic-checkers.txt	/*syntastic-xhtml-tidy*
