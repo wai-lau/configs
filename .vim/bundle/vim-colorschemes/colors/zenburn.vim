@@ -465,3 +465,6 @@ endif
 
 " TODO check for more obscure syntax groups that they're ok
 
+hi IndentGuidesOdd  ctermbg=239 ctermfg=235
+hi IndentGuidesEven ctermbg=238 ctermfg=235
+hi BadWhitespace ctermbg=196

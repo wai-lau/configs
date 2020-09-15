@@ -55,7 +55,7 @@ hi DiffText cterm=bold ctermbg=1
 hi Underlined cterm=underline ctermfg=5
 hi Error guifg=White guibg=Red cterm=bold ctermfg=7 ctermbg=1
 hi SpellErrors cterm=bold ctermfg=7 ctermbg=1 gui=undercurl,bold
+
 hi IndentGuidesOdd  ctermbg=239 ctermfg=235
 hi IndentGuidesEven ctermbg=238 ctermfg=235
 hi BadWhitespace ctermbg=196
-

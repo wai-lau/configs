@@ -54,8 +54,6 @@ autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=239 ctermfg=235
 autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=238 ctermfg=235
 autocmd VimEnter,Colorscheme * :hi BadWhitespace ctermbg=196
 autocmd VimEnter,ColorScheme * match BadWhitespace /\s\+$/
-" autocmd FileType markdown colorscheme SlateDark
-" autocmd FileType sh colorscheme SlateDark
 
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
@@ -170,7 +168,7 @@ set listchars+=tab:⌐\
 set list
 
 nnoremap <c-c><c-c> :exec "color " .
-  \ ((g:colors_name == "sierra") ? "ayu" : "sierra")<CR>
+  \ ((g:colors_name == "sierra") ? "zenburn" : "sierra")<CR>
 
 :command -nargs=+ GG execute 'silent Ggrep!' '<q-args>' | cw | redraw!
 :command DIFF execute 'windo diffthis'
@@ -178,5 +176,6 @@ nnoremap <c-c><c-c> :exec "color " .
 
 :set switchbuf+=split
 
-autocmd FileType go colo SlateDark
-autocmd FileType javascript colorscheme maui
+autocmd FileType go colo zenburn
+autocmd FileType vim colorscheme SlateDark
+autocmd BufEnter *.ts,*.tsx,*.js colorscheme maui

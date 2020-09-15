@@ -360,3 +360,7 @@ if g:despacio_Clear_Skies
     highlight! CursorLine          guifg=NONE  guibg=NONE  gui=NONE  ctermfg=NONE  ctermbg=NONE  cterm=NONE
     highlight! CursorColumn        guifg=NONE  guibg=NONE  gui=NONE  ctermfg=NONE  ctermbg=NONE  cterm=NONE
 endif
+
+hi IndentGuidesOdd  ctermbg=239 ctermfg=235
+hi IndentGuidesEven ctermbg=238 ctermfg=235
+hi BadWhitespace ctermbg=196

@@ -52,7 +52,7 @@ hi CursorColumn term=reverse guibg=#303030 ctermbg=236
 hi CursorLine term=none gui=none cterm=none guibg=#000000 ctermbg=233
 hi ColorColumn term=none guibg=#303030 ctermbg=236
 hi MatchParen term=reverse gui=bold cterm=bold guifg=#121212 ctermfg=233 guibg=#ff8700 ctermbg=208
-hi Normal guifg=#d0d0d0 ctermfg=252 guibg=#151515 ctermbg=233
+hi Normal guifg=#d0d0d0 ctermfg=252 guibg=#151515 ctermbg=236
 hi Cursor guifg=#151515 ctermfg=16 guibg=#dadada ctermbg=253
 hi Comment guifg=#585858 ctermfg=240
 hi Constant term=underline gui=bold cterm=bold guifg=#df005f ctermfg=161
@@ -96,8 +96,8 @@ hi link gitKeyword Function
 hi link gitIdentity Title
 hi link gitDate PreProc
 
-hi IndentGuidesOdd guibg=#151515 ctermbg=233
-hi IndentGuidesEven guibg=#080808 ctermbg=232
+hi IndentGuidesOdd guibg=#151515 ctermbg=239
+hi IndentGuidesEven guibg=#080808 ctermbg=238
 
 hi SyntasticError term=reverse gui=bold,underline cterm=bold,underline guifg=#ffafff ctermfg=219 guibg=#303030 ctermbg=236
 hi SyntasticWarning term=standout gui=bold,underline cterm=bold,underline guifg=#ff00af ctermfg=199 guibg=#262626 ctermbg=235
