@@ -295,7 +295,7 @@ if exists("g:zenburn_high_Contrast") && g:zenburn_high_Contrast
     hi TabLineFill   guifg=#88b090 guibg=#313633 gui=none  ctermbg=236 ctermfg=108 cterm=none
 else
     " Original, lighter background
-    hi Normal        guifg=#dcdccc guibg=#3f3f3f           ctermfg=188 ctermbg=237
+    hi Normal        guifg=#dcdccc guibg=#3f3f3f           ctermfg=188 ctermbg=236
     hi ColorColumn   guibg=#484848                         ctermbg=238
     hi CursorLine    guibg=#434443                         ctermbg=238 cterm=none
     hi CursorLineNr  guifg=#d2d39b guibg=#262626           ctermfg=230 ctermbg=235
@@ -366,8 +366,8 @@ else
         endif
     else
         " low contrast
-        hi Visual        guibg=#2f2f2f  ctermbg=235
-        hi VisualNOS     guibg=#2f2f2f  ctermbg=235
+        hi Visual      term=reverse cterm=reverse
+        hi VisualNOS   term=reverse cterm=reverse
     endif
 endif
 

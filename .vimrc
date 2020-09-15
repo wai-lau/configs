@@ -1,6 +1,7 @@
 set nocompatible
 set encoding=utf-8
-
+filetype indent plugin on
+"
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
@@ -53,7 +54,7 @@ colorscheme sierra "SlateDark Sierra carrot seti maui stonewashed-256 py-darcula
 autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=239 ctermfg=235
 autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=238 ctermfg=235
 autocmd VimEnter,Colorscheme * :hi BadWhitespace ctermbg=196
-autocmd VimEnter,ColorScheme * match BadWhitespace /\s\+$/
+autocmd VimEnter,ColorScheme * match BadWhitespace /\s\+$/ 
 
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
@@ -162,6 +163,9 @@ let g:go_highlight_functions = 1
 let g:go_highlight_operators = 1
 let g:go_highlight_build_constraints = 1
 
+let g:go_metalinter_autosave_enabled = ['vet', 'golint', 'errcheck']
+
+
 " set listchars+=space:·
 set listchars+=eol:\ 
 set listchars+=tab:⌐\ 
@@ -179,3 +183,6 @@ nnoremap <c-c><c-c> :exec "color " .
 autocmd FileType go colo zenburn
 autocmd FileType vim colorscheme SlateDark
 autocmd BufEnter *.ts,*.tsx,*.js colorscheme maui
+
+let g:go_fmt_autosave=0
+let g:go_asmfmt_autosave=0
