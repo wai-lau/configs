@@ -86,6 +86,8 @@ nnoremap - 12<c-w><
 nnoremap = 12<c-w>>
 nnoremap < v<<Esc>
 nnoremap > v><Esc>
+nnoremap <C-a> <C-w>H
+nnoremap <C-z> <C-w>L
 
 nnoremap <C-d> :q<CR>
 inoremap <C-d> <Esc>:q<CR>
@@ -93,7 +95,7 @@ vnoremap <C-d> <Esc>:q<CR>
 inoremap jk <Esc>
 nnoremap <C-c> V"*y
 vnoremap <C-c> "*y
-nnoremap <C-c> V"*d
+nnoremap <C-x> V"*d
 vnoremap <C-x> "*d
 nnoremap G G$
 vnoremap G G$
@@ -105,6 +107,8 @@ set pastetoggle=<C-P>
 nnoremap <C-v> a <Esc>v<C-P>"*p<C-P><Esc>
 inoremap <C-v> <Space><Esc>v<C-P>"*p<C-P><Esc>i
 nnoremap † :vnew<CR>
+vnoremap <Tab> $
+vnoremap <S-Tab> ^
 
 noremap å 1gt
 noremap ß 2gt
@@ -163,9 +167,6 @@ let g:go_highlight_functions = 1
 let g:go_highlight_operators = 1
 let g:go_highlight_build_constraints = 1
 
-let g:go_metalinter_autosave_enabled = ['vet', 'golint', 'errcheck']
-
-
 " set listchars+=space:·
 set listchars+=eol:\ 
 set listchars+=tab:⌐\ 
@@ -186,3 +187,8 @@ autocmd BufEnter *.ts,*.tsx,*.js colorscheme maui
 
 let g:go_fmt_autosave=0
 let g:go_asmfmt_autosave=0
+let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
+let g:syntastic_go_checkers = ['golint', 'govet', 'golangci-lint']
+let g:syntastic_go_gometalinter_args = ['--disable-all', '--enable=errcheck']
+let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
+let g:go_list_type = "quickfix"
