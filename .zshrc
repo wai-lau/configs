@@ -18,7 +18,12 @@ alias vim!='sudo vim'
 alias kk='kctx'
 
 v () {
-  dev cd $* && vim
+  if [[ $# -eq 0 ]]
+  then
+    vim
+  else
+    dev cd $* && vim
+  fi
 }
 f () {
   dev cd $*  && ls

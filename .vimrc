@@ -184,6 +184,7 @@ nnoremap <c-c><c-c> :exec "color " .
 autocmd FileType go colo zenburn
 autocmd FileType vim colorscheme SlateDark
 autocmd BufEnter *.ts,*.tsx,*.js colorscheme maui
+autocmd BufEnter .*rc colorscheme SlateDark
 
 let g:go_fmt_autosave=0
 let g:go_asmfmt_autosave=0
