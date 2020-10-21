@@ -143,6 +143,7 @@ let g:indent_guides_auto_colors = 0
 autocmd FileType go nnoremap ? :vsp<CR>:GoDef<CR>
 autocmd FileType ruby,python,javascript nnoremap ? :vsp<CR><C-]>
 
+
 let g:fzf_action = {
   \ 'ctrl-i': 'split',
   \ 'ctrl-t': 'vsplit',
@@ -175,7 +176,7 @@ set listchars+=tab:⌐\
 set list
 
 nnoremap <c-c><c-c> :exec "color " .
-  \ ((g:colors_name == "sierra") ? "zenburn" : "sierra")<CR>
+  \ ((g:colors_name == "sierra") ? "sialoquent" : "sierra")<CR>
 
 :command -nargs=+ GG execute 'silent Ggrep!' '<q-args>' | cw | redraw!
 :command DIFF execute 'windo diffthis'
@@ -183,10 +184,11 @@ nnoremap <c-c><c-c> :exec "color " .
 
 :set switchbuf+=split
 
-autocmd FileType go colo zenburn
+autocmd FileType go colo sialoquent
 autocmd FileType vim colorscheme SlateDark
-autocmd BufEnter *.ts,*.tsx,*.js colorscheme maui
+autocmd BufEnter *.ts,*.tsx,*.js,*.yml,*.yaml colorscheme maui
 autocmd BufEnter .*rc colorscheme SlateDark
+au BufNewFile,BufRead *.yaml,*.yml so ~/.vim/yaml.vim
 
 let g:go_fmt_autosave=0
 let g:go_asmfmt_autosave=0
@@ -195,3 +197,6 @@ let g:syntastic_go_checkers = ['golint', 'govet', 'golangci-lint']
 let g:syntastic_go_gometalinter_args = ['--disable-all', '--enable=errcheck']
 let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
 let g:go_list_type = "quickfix"
+
+autocmd FileType qf setlocal wrap
+autocmd FileType qf 10wincmd_
