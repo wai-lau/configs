@@ -18,7 +18,7 @@ call vundle#begin()
 " alternatively, pass a path where Vundle should install plugins
 "call vundle#begin('~/some/path/here')
 
-" let Vundle manage Vundle, requirej
+" let Vundle manage Vundle, require
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'fatih/vim-go'
 Plugin 'christoomey/vim-tmux-navigator'
@@ -93,6 +93,8 @@ nnoremap <C-d> :q<CR>
 inoremap <C-d> <Esc>:q<CR>
 vnoremap <C-d> <Esc>:q<CR>
 inoremap jk <Esc>
+vnoremap j j$
+vnoremap k k$
 nnoremap <C-c> V"*y
 vnoremap <C-c> "*y
 nnoremap <C-x> V"*d
