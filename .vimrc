@@ -49,13 +49,6 @@ set term=screen-256color
 set t_ut=
 
 syntax enable
-colorscheme sierra "SlateDark Sierra carrot seti maui stonewashed-256 py-darcula ayu
-" autocmd FileType ruby colorscheme sierra
-autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=239 ctermfg=235
-autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=238 ctermfg=235
-autocmd VimEnter,Colorscheme * :hi BadWhitespace ctermbg=196
-autocmd VimEnter,ColorScheme * match BadWhitespace /\s\+$/ 
-
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
@@ -78,7 +71,6 @@ set norelativenumber
 set tabstop     =2
 set softtabstop =2
 set shiftwidth  =2
-set expandtab
 
 nnoremap + 6<C-W>+
 nnoremap _ 6<C-W>-
@@ -119,12 +111,14 @@ noremap ƒ 4gt
 noremap © 5gt
 nnoremap ˇ :tabnew<CR>
 nnoremap <Tab> .
+nnoremap ø <Tab>
 
 noremap ; :
 noremap : ;
 
 set hls
 nnoremap \\ :nohls<CR>
+nnoremap <C-g> :w<CR> :GoVet<CR>
 
 let NERDTreeShowHidden=1
 let g:NERDTreeWinPos = "left"
@@ -140,6 +134,8 @@ let NERDSpaceDelims=1
 
 let g:indent_guides_enable_on_vim_startup = 1
 let g:indent_guides_auto_colors = 0
+autocmd FileType go nnoremap " :GoDef<CR>
+autocmd FileType ruby,python,javascript nnoremap " <C-]>
 autocmd FileType go nnoremap ? :vsp<CR>:GoDef<CR>
 autocmd FileType ruby,python,javascript nnoremap ? :vsp<CR><C-]>
 
@@ -184,12 +180,6 @@ nnoremap <c-c><c-c> :exec "color " .
 
 :set switchbuf+=split
 
-autocmd FileType go colo sialoquent
-autocmd FileType vim colorscheme SlateDark
-autocmd BufEnter *.ts,*.tsx,*.js,*.yml,*.yaml colorscheme maui
-autocmd BufEnter .*rc colorscheme SlateDark
-au BufNewFile,BufRead *.yaml,*.yml so ~/.vim/yaml.vim
-
 let g:go_fmt_autosave=0
 let g:go_asmfmt_autosave=0
 let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
@@ -200,3 +190,51 @@ let g:go_list_type = "quickfix"
 
 autocmd FileType qf setlocal wrap
 autocmd FileType qf 10wincmd_
+
+function AdjustColors()
+	highlight! Visual               guifg=#5f8787  guibg=NONE     gui=reverse    ctermfg=66     ctermbg=NONE    cterm=reverse
+	highlight! Search               guifg=#ffffdf  guibg=NONE     gui=reverse  ctermfg=230   ctermbg=NONE  cterm=reverse
+
+	highlight! Normal               guifg=#e4e4e4  guibg=#303030  gui=NONE     ctermfg=251   ctermbg=236   cterm=NONE
+	highlight! TabLineFill          guifg=NONE     guibg=#262626  gui=NONE     ctermfg=NONE  ctermbg=235   cterm=NONE
+
+	highlight! CursorLine           guifg=NONE     guibg=#3a3a3a  gui=NONE     ctermfg=NONE  ctermbg=237   cterm=NONE
+	highlight! CursorColumn         guifg=NONE     guibg=#3a3a3a  gui=NONE     ctermfg=NONE  ctermbg=237   cterm=NONE
+	highlight! ColorColumn          guifg=NONE     guibg=#3a3a3a  gui=NONE     ctermfg=NONE  ctermbg=237   cterm=NONE
+
+	highlight! StatusLine           guifg=#eeeeee  guibg=#262626  gui=NONE     ctermfg=255   ctermbg=235   cterm=NONE
+	highlight! TabLineSel           guifg=#eeeeee  guibg=#262626  gui=NONE     ctermfg=255   ctermbg=235   cterm=NONE
+	highlight! PmenuSel             guifg=#eeeeee  guibg=#262626  gui=NONE     ctermfg=255   ctermbg=235   cterm=NONE
+
+	highlight! StatusLineNC         guifg=#767676  guibg=#262626  gui=NONE     ctermfg=243   ctermbg=235   cterm=NONE
+	highlight! VertSplit            guifg=#767676  guibg=#262626  gui=NONE     ctermfg=243   ctermbg=235   cterm=NONE
+	highlight! TabLine              guifg=#767676  guibg=#262626  gui=NONE     ctermfg=243   ctermbg=235   cterm=NONE
+	highlight! Pmenu                guifg=#767676  guibg=#262626  gui=NONE     ctermfg=243   ctermbg=235   cterm=NONE
+	highlight! LineNr               guifg=#767676  guibg=#262626  gui=NONE     ctermfg=243   ctermbg=235   cterm=NONE
+
+	highlight! NonText              guifg=#444444  guibg=NONE     gui=NONE     ctermfg=238   ctermbg=NONE  cterm=NONE
+	highlight! SpecialKey           guifg=#444444  guibg=NONE     gui=NONE     ctermfg=238   ctermbg=NONE  cterm=NONE
+
+	highlight! PmenuSbar            guifg=#262626  guibg=#262626  gui=NONE     ctermfg=235   ctermbg=235   cterm=NONE
+	highlight! PmenuThumb           guifg=#262626  guibg=#262626  gui=NONE     ctermfg=235   ctermbg=235   cterm=NONE
+
+	highlight! Comment              guifg=#767676  guibg=NONE     gui=NONE     ctermfg=243   ctermbg=NONE  cterm=NONE
+	highlight! Folded               guifg=#767676  guibg=NONE     gui=NONE     ctermfg=243   ctermbg=NONE  cterm=NONE
+
+	highlight! IndentGuidesOdd  ctermbg=239 ctermfg=235
+	highlight! IndentGuidesEven ctermbg=238 ctermfg=235
+	highlight! BadWhitespace ctermbg=196
+	match BadWhitespace /\s\+$/ 
+endfunction
+
+"SlateDark Sierra carrot seti maui stonewashed-256 py-darcula ayu
+colorscheme sierra | call AdjustColors()
+autocmd FileType ruby colorscheme sierra | call AdjustColors()
+autocmd FileType go colorscheme sialoquent | call AdjustColors()
+autocmd BufEnter *.py,*.ts,*.tsx,*.js colorscheme maui | call AdjustColors()
+autocmd BufEnter *.yml,*.yaml colorscheme sift | call AdjustColors()
+autocmd FileType vim colorscheme sift | call AdjustColors()
+autocmd BufEnter .*rc colorscheme sift | call AdjustColors()
+autocmd! ColorScheme * call AdjustColors()
+au BufNewFile,BufRead *.yaml,*.yml so ~/.vim/yaml.vim
+

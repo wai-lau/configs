@@ -111,6 +111,8 @@ set bg=dark "bg switches to light for some reason
 
 " vim:set fdm=marker
 
+
+highlight! Visual                 guifg=#5f8787  guibg=NONE     gui=reverse    ctermfg=66     ctermbg=NONE    cterm=reverse
 highlight! Search               guifg=#ffffdf  guibg=NONE     gui=reverse  ctermfg=230   ctermbg=NONE  cterm=reverse
 
 highlight! Normal               guifg=#e4e4e4  guibg=#303030  gui=NONE     ctermfg=251   ctermbg=236   cterm=NONE

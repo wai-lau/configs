@@ -10,12 +10,14 @@ export PATH=/usr/local/bin:$PATH
 export SKIP_RAILGUN_CHECK=1
 alias pip='pip3'
 alias python='python3'
-alias tags='ctags -R -o'
+alias tags='ctags -R --exclude=.git --exclude=node_modules --exclude=.dev -o'
 alias consumer='dev cd internalrepo1'
 alias client='dev cd internalrepo1 && cd gems/elasticsearch-work-client'
 alias searchbud='dev cd internalrepo2 && dev cd internalrepo2 && cd internalrepos/internalrepo3'
 alias vim!='sudo vim'
 alias kk='kctx'
+alias kc='kubectl config current-context'
+alias reindex='bundle exec rake elasticsearch:update_test_mappings && bundle exec rake elasticsearch:reindex'
 
 v () {
   if [[ $# -eq 0 ]]
@@ -38,7 +40,6 @@ export XDG_CONFIG_HOME=~/.config
 . /usr/local/lib/python3.7/site-packages/powerline/bindings/zsh/powerline.zsh
 export EDITOR=/usr/local/bin/vim
 alias k=kubectl
-alias wk='watch kubectl'
 alias g=git
 autoload -U compinit && compinit
 zmodload -i zsh/complist
