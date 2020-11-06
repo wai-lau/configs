@@ -192,7 +192,7 @@ autocmd FileType qf setlocal wrap
 autocmd FileType qf 10wincmd_
 
 function AdjustColors()
-	highlight! Visual               guifg=#5f8787  guibg=NONE     gui=reverse    ctermfg=66     ctermbg=NONE    cterm=reverse
+	highlight! Visual               guifg=#5f8787  guibg=NONE     gui=reverse  ctermfg=66    ctermbg=NONE  cterm=reverse
 	highlight! Search               guifg=#ffffdf  guibg=NONE     gui=reverse  ctermfg=230   ctermbg=NONE  cterm=reverse
 
 	highlight! Normal               guifg=#e4e4e4  guibg=#303030  gui=NONE     ctermfg=251   ctermbg=236   cterm=NONE
@@ -224,17 +224,22 @@ function AdjustColors()
 	highlight! IndentGuidesOdd  ctermbg=239 ctermfg=235
 	highlight! IndentGuidesEven ctermbg=238 ctermfg=235
 	highlight! BadWhitespace ctermbg=196
-	match BadWhitespace /\s\+$/ 
+	match BadWhitespace /\s\+$\|binding.pry/ 
 endfunction
 
-"SlateDark Sierra carrot seti maui stonewashed-256 py-darcula ayu
-colorscheme sierra | call AdjustColors()
-autocmd FileType ruby colorscheme sierra | call AdjustColors()
-autocmd FileType go colorscheme sialoquent | call AdjustColors()
-autocmd BufEnter *.py,*.ts,*.tsx,*.js colorscheme maui | call AdjustColors()
-autocmd BufEnter *.yml,*.yaml colorscheme sift | call AdjustColors()
-autocmd FileType vim colorscheme sift | call AdjustColors()
-autocmd BufEnter .*rc colorscheme sift | call AdjustColors()
-autocmd! ColorScheme * call AdjustColors()
+"SlateDark Sierra carrot seti maui
+"stonewashed-256 py-darcula ayu sialoquent
+"zenburn sift
+
 au BufNewFile,BufRead *.yaml,*.yml so ~/.vim/yaml.vim
+
+colorscheme sierra | call AdjustColors()
+autocmd BufEnter *.rb                  colorscheme sierra        | call AdjustColors()
+autocmd BufEnter *.py                  colorscheme sialoquent    | call AdjustColors()
+autocmd BufEnter *.go                  colorscheme sialoquent    | call AdjustColors()
+autocmd BufEnter *.*rc                 colorscheme zenburn       | call AdjustColors()
+autocmd BufEnter *.yml,*.yaml          colorscheme sift          | call AdjustColors()
+autocmd BufEnter *.ts,*.tsx,*.js       colorscheme sift          | call AdjustColors()
+
+autocmd! ColorScheme * call AdjustColors()
 
