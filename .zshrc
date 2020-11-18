@@ -37,7 +37,7 @@ alias internalrepo3find='k get -n internalrepo2dies pods | grep internalrepo3 | 
 alias sblog='k logs -f $(internalrepo3find) -n internalrepo2dies'
 
 export XDG_CONFIG_HOME=~/.config
-. /usr/local/lib/python3.7/site-packages/powerline/bindings/zsh/powerline.zsh
+. /Users/wai/Library/Python/3.9/lib/python/site-packages/powerline/bindings/zsh/powerline.zsh
 export EDITOR=/usr/local/bin/vim
 alias k=kubectl
 alias g=git
