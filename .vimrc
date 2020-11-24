@@ -93,6 +93,8 @@ nnoremap <C-d> :q<CR>
 inoremap <C-d> <Esc>:q<CR>
 vnoremap <C-d> <Esc>:q<CR>
 inoremap jk <Esc>
+nnoremap <Esc><Esc> :nohls<CR>
+vnoremap <Esc><Esc> <Esc>
 vnoremap j j$
 vnoremap k k$
 nnoremap <C-c> V"*y
@@ -103,7 +105,6 @@ nnoremap G G$
 vnoremap G G$
 nmap <C-_> \ci
 vmap <C-_> \ci
-nnoremap ` :b#<CR>
 nnoremap <C-e> :edit!<CR>
 set pastetoggle=<C-P>
 nnoremap <C-v> a <Esc>v<C-P>"*p<C-P><Esc>
@@ -125,7 +126,6 @@ noremap ; :
 noremap : ;
 
 set hls
-nnoremap \\ :nohls<CR>
 nnoremap <C-g> :w<CR> :GoVet<CR>
 
 let NERDTreeShowHidden=1
@@ -175,8 +175,8 @@ let g:go_highlight_operators = 1
 let g:go_highlight_build_constraints = 1
 
 " set listchars+=space:·
-set listchars+=eol:\ 
-set listchars+=tab:⌐\ 
+set listchars+=eol:\ 
+set listchars+=tab:⌐\ 
 set list
 
 nnoremap <c-c><c-c> :exec "color " .
@@ -201,40 +201,38 @@ autocmd FileType qf setlocal wrap
 autocmd FileType qf 10wincmd_
 
 function AdjustColors()
-	highlight! Visual               guifg=#5f8787  guibg=NONE     gui=reverse  ctermfg=66    ctermbg=NONE  cterm=reverse
-	highlight! Search               guifg=#ffffdf  guibg=NONE     gui=reverse  ctermfg=230   ctermbg=NONE  cterm=reverse
+  highlight! Visual               ctermfg=66     ctermbg=NONE  cterm=reverse
+  highlight! Search               ctermfg=230    ctermbg=NONE  cterm=reverse
 
-	highlight! Normal               guifg=#e4e4e4  guibg=#303030  gui=NONE     ctermfg=251   ctermbg=234   cterm=NONE
+  highlight! Normal               ctermfg=252    ctermbg=234
 
-	highlight! TabLineFill          guifg=NONE     guibg=#262626  gui=NONE     ctermfg=NONE  ctermbg=235   cterm=NONE
-	highlight! TabLineSel           guifg=#eeeeee  guibg=#262626  gui=NONE     ctermfg=255   ctermbg=245   cterm=NONE
-	highlight! TabLine              guifg=#767676  guibg=#262626  gui=NONE     ctermfg=243   ctermbg=235   cterm=NONE
+  highlight! TabLineFill          ctermfg=NONE   ctermbg=235   cterm=NONE
+  highlight! TabLineSel           ctermfg=255    ctermbg=245   cterm=NONE
+  highlight! TabLine              ctermfg=243    ctermbg=235   cterm=NONE
 
-	highlight! StatusLineNC         guifg=#767676  guibg=#000000  gui=NONE     ctermfg=243   ctermbg=0     cterm=NONE
+  highlight! StatusLine           ctermfg=NONE   ctermbg=242   cterm=NONE
+  highlight! StatusLineNC         ctermfg=NONE   ctermbg=240   cterm=NONE
 
-	highlight! VertSplit            guifg=#767676  guibg=#262626  gui=NONE     ctermfg=243   ctermbg=0     cterm=NONE
-	highlight! LineNr               guifg=#767676  guibg=#262626  gui=NONE     ctermfg=243   ctermbg=235   cterm=NONE
+  highlight! VertSplit            ctermfg=243    ctermbg=237   cterm=NONE
+  highlight! LineNr               ctermfg=243    ctermbg=236   cterm=NONE
 
-	highlight! NonText              guifg=#444444  guibg=NONE     gui=NONE     ctermfg=238   ctermbg=NONE  cterm=NONE
-	highlight! SpecialKey           guifg=#444444  guibg=NONE     gui=NONE     ctermfg=238   ctermbg=NONE  cterm=NONE
+  highlight! NonText              ctermfg=238    ctermbg=NONE  cterm=NONE
+  highlight! SpecialKey           ctermfg=238    ctermbg=NONE  cterm=NONE
 
-	highlight! Pmenu                guifg=#767676  guibg=#262626  gui=NONE     ctermfg=243   ctermbg=235   cterm=NONE
-	highlight! PmenuSel             guifg=#eeeeee  guibg=#262626  gui=NONE     ctermfg=255   ctermbg=235   cterm=NONE
-	highlight! PmenuSbar            guifg=#262626  guibg=#262626  gui=NONE     ctermfg=235   ctermbg=235   cterm=NONE
-	highlight! PmenuThumb           guifg=#262626  guibg=#262626  gui=NONE     ctermfg=235   ctermbg=235   cterm=NONE
+  highlight! CursorLine           ctermbg=236    cterm=underline
+  highlight! Comment              ctermfg=244    ctermbg=NONE  cterm=NONE
 
-	highlight! Comment              guifg=#767676  guibg=NONE     gui=NONE     ctermfg=244   ctermbg=NONE  cterm=NONE
+  highlight! IndentGuidesOdd  ctermbg=240
+  highlight! IndentGuidesEven ctermbg=239
 
-	highlight! IndentGuidesOdd  ctermbg=239 ctermfg=235
-	highlight! IndentGuidesEven ctermbg=238 ctermfg=235
+  " highlight! Scrollbar_Clear ctermfg=green ctermbg=black guifg=green guibg=black cterm=none
+  " highlight! Scrollbar_Thumb ctermfg=darkgreen ctermbg=darkgreen guifg=darkgreen guibg=darkgreen cterm=reverse
 
-	highlight! Scrollbar_Clear ctermfg=green ctermbg=black guifg=green guibg=black cterm=none
-	highlight! Scrollbar_Thumb ctermfg=darkgreen ctermbg=darkgreen guifg=darkgreen guibg=darkgreen cterm=reverse
+  highlight! BonusLight ctermbg=196
+  " match BonusLight /\s\+$\|binding.pry/
+  match BonusLight /binding.pry/
 
-	highlight! BonusLight ctermbg=196
-	match BonusLight /\s\+$\|binding.pry/ 
-
-	AirlineRefresh
+  AirlineRefresh
 endfunction
 
 "slatedark sierra carrot seti maui
@@ -255,3 +253,4 @@ let g:colors_name = "sierra"
 autocmd! colorscheme * call AdjustColors()
 
 set backspace=indent,eol,start
+set cursorline

@@ -1,0 +1,20 @@
+*scrollbar.txt* Plugin to create a curses scrollbar
+
+Author: Loni Nix <http://lornix.com>
+License: Same terms as Vim itself (see |license|)
+
+This plugin will draw a scrollbar in the window depicting the cursor's
+current position in the file.
+
+INTRODUCTION                                    *scrollbar*
+
+This vim plugin creates a scrollbar in the window to the left of the open
+buffer.
+
+KEYBINDINGS                                     *scrollbar-keybindings*
+
+By default, <leader>sb will toggle the scrollbar.
+
+ABOUT                                           *scrollbar-about*
+
+This project is functional without major issues. See `github.com/lornix/vim-scrollbar` for the latest version.

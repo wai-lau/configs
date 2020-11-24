@@ -5,8 +5,13 @@
 !.vimrc
 !.zshrc
 !.tmux.conf
-!.config/
-!.config/*.json
-!.config/**/*.json
+
 !.vim
 !.vim/*
+!.vim/**/*
+
+!.hammerspoon
+!.hammerspoon/*
+!.hammerspoon/**/*
+
+!.config/alacritty/*

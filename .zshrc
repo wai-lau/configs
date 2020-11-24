@@ -16,9 +16,10 @@ alias client='dev cd internalrepo1 && cd gems/elasticsearch-work-client'
 alias searchbud='dev cd internalrepo2 && dev cd internalrepo2 && cd internalrepos/internalrepo3'
 alias vim!='sudo vim'
 alias kk='kctx'
+alias colocon='vim ~/.vim/bundle/vim-colorschemes/colors'
+alias alacon='vim ~/.config/alacritty/alacritty.yml'
 alias kc='kubectl config current-context'
 alias reindex='bundle exec rake elasticsearch:update_test_mappings && bundle exec rake elasticsearch:reindex'
-
 v () {
   if [[ $# -eq 0 ]]
   then

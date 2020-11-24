@@ -21,7 +21,7 @@
   co = !git commit
   b = !git branch
   bb = !git checkout -b
-  log = log --oneline --graph
+  l = !git log --oneline --graph
 [gc]
 	writeCommitGraph = true
 [url "https://github.com/work/"]
