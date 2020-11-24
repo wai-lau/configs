@@ -1,1 +1,1 @@
-syntax clear rubySymbol
+" syntax clear rubySymbol
