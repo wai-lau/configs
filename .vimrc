@@ -1,7 +1,7 @@
 set nocompatible
 set encoding=utf-8
 filetype indent plugin on
-"
+
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
@@ -14,9 +14,8 @@ call vundle#begin()
 " :PluginSearch foo - searches for foo; append `!` to refresh local cache
 " :PluginClean      - confirms removal of unused plugins; append `!` to
 " auto-approve removal
-
 " alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
+" call vundle#begin('~/some/path/here')
 
 " let Vundle manage Vundle, require Plugin 'VundleVim/Vundle.vim'
 Plugin 'fatih/vim-go'
@@ -51,112 +50,28 @@ call vundle#end()            " required
 " let g:scrollbar_thumb='#'
 " let g:scrollbar_clear='|'
 
+syntax enable
 set term=screen-256color
 set t_ut=
 
-syntax enable
+let g:airline_theme='fruit_punch'
+
+" Syntastic options
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
-
-let g:airline_theme='fruit_punch'
-
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 let g:syntastic_python_checkers=['flake8']
 
-set number
-set nowrap
-set fillchars=""
-set norelativenumber
-
-" tabstop:          Width of tab character
-" softtabstop:      Fine tunes the amount of white space to be added
-" shiftwidth:       Determines the amount of whitespace to add in normal mode
-" expandtab:        When on uses space instead of tabs
-set tabstop     =2
-set softtabstop =2
-set shiftwidth  =2
-
-nnoremap + 6<C-W>+
-nnoremap _ 6<C-W>-
-nnoremap - 12<c-w><
-nnoremap = 12<c-w>>
-nnoremap < v<<Esc>
-nnoremap > v><Esc>
-nnoremap <C-a> <C-w>H
-nnoremap <C-z> <C-w>L
-
-nnoremap <C-d> :q<CR>
-inoremap <C-d> <Esc>:q<CR>
-vnoremap <C-d> <Esc>:q<CR>
-inoremap jk <Esc>
-nnoremap <Esc><Esc> :nohls<CR>
-vnoremap <Esc><Esc> <Esc>
-vnoremap j j$
-vnoremap k k$
-nnoremap <C-c> V"*y
-vnoremap <C-c> "*y
-nnoremap <C-x> V"*d
-vnoremap <C-x> "*d
-nnoremap G G$
-vnoremap G G$
-nmap <C-_> \ci
-vmap <C-_> \ci
-nnoremap <C-e> :edit!<CR>
-set pastetoggle=<C-P>
-nnoremap <C-v> a <Esc>v<C-P>"*p<C-P><Esc>
-inoremap <C-v> <Space><Esc>v<C-P>"*p<C-P><Esc>i
-nnoremap † :vnew<CR>
-vnoremap <Tab> $
-vnoremap <S-Tab> ^
-
-noremap å 1gt
-noremap ß 2gt
-noremap ∂ 3gt
-noremap ƒ 4gt
-noremap © 5gt
-nnoremap ˇ :tabnew<CR>
-nnoremap <Tab> .
-nnoremap ø <Tab>
-
-noremap ; :
-noremap : ;
-
-set hls
-nnoremap <C-g> :w<CR> :GoVet<CR>
-
-let NERDTreeShowHidden=1
-let g:NERDTreeWinPos = "left"
-let g:NERDTreeWinSize=35
-nnoremap <C-@> :NERDTreeToggle<CR>
-nnoremap <C-n> :NERDTreeFind<CR>
-" Quit NERDTree if last pane
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-let NERDTreeMapOpenSplit="<C-i>"
-let NERDTreeMapOpenVSplit="<C-t>"
-let NERDTreeMapOpenInTab="<C-n>"
-let NERDSpaceDelims=1
-
-let g:indent_guides_enable_on_vim_startup = 1
-let g:indent_guides_auto_colors = 0
-autocmd FileType go nnoremap " :GoDef<CR>
-autocmd FileType ruby,python,javascript nnoremap " <C-]>
-autocmd FileType go nnoremap ? :vsp<CR>:GoDef<CR>
-autocmd FileType ruby,python,javascript nnoremap ? :vsp<CR><C-]>
-
-
 let g:fzf_action = {
   \ 'ctrl-i': 'split',
   \ 'ctrl-t': 'vsplit',
   \ 'ctrl-n': 'tab split' }
 
-" python3 from powerline.vim import setup as powerline_setup
-" python3 powerline_setup()
-" python3 del powerline_setup
-
+" Autocomplete options
 set completeopt+=menuone
 set completeopt-=preview
 set completeopt+=longest,menuone,noselect
@@ -178,17 +93,144 @@ let g:go_highlight_build_constraints = 1
 set listchars+=eol:\ 
 set listchars+=tab:⌐\ 
 set list
+"
+" tabstop:          Width of tab character
+" softtabstop:      Fine tunes the amount of white space to be added
+" shiftwidth:       Determines the amount of whitespace to add in normal mode
+" expandtab:        When on uses space instead of tabs
+set tabstop     =2
+set softtabstop =2
+set shiftwidth  =2
+set number
+set nowrap
+set fillchars=""
+set norelativenumber
+set backspace=indent,eol,start
+set hls
+set cursorline
+
+" No shift for commands
+noremap ; :
+noremap : ;
+
+" Stop it vim
+inoremap jk <Esc>
+nnoremap <Esc><Esc> :nohls<CR>
+vnoremap <Esc><Esc> <Esc>
+
+" Resize the vim windows
+nnoremap + 6<C-W>+
+nnoremap _ 6<C-W>-
+nnoremap - 12<c-w><
+nnoremap = 12<c-w>>
+
+" Add or remove indent
+nnoremap < v<<Esc>
+nnoremap > v><Esc>
+
+" Move window to left/right
+nnoremap <C-a> <C-w>H
+nnoremap <C-z> <C-w>L
+
+" Ctrl+d to quit
+nnoremap <C-d> :q<CR>
+inoremap <C-d> <Esc>:q<CR>
+vnoremap <C-d> <Esc>:q<CR>
+
+" Going to the end/beginning of the line when selecting 
+vnoremap j jg_
+vnoremap k k0
+vnoremap G Gg_
+nnoremap G Gg_
+
+" Commenting
+nmap <C-_> \ci
+vmap <C-_> \ci
+
+" Pry
+nnoremap @ orequire 'pry'; binding.pry<Esc>
+
+" Refresh the buffer
+nnoremap <C-e> :edit!<CR>
+
+set pastetoggle=<C-P>
+" Using the native clipboard
+vnoremap <C-c> "*y
+" Paste on next line
+nnoremap <C-v> $<C-P>"*p<C-P>
+nnoremap <C-c> V"*y
+" Paste right here
+inoremap <C-v> <Space><Esc>v<C-P>"*p<C-P><Esc>i<Right>
+
+" Alt-T
+nnoremap † :vnew<CR>
+" Alt-Shift-T
+nnoremap ˇ :tabnew<CR>
+
+" Select forwards or back without reaching for the number 4/6
+vnoremap <Tab> $
+vnoremap <S-Tab> ^
+
+" Tab navigation, tbh idk how to get to tab 6
+noremap å 1gt
+noremap ß 2gt
+noremap ∂ 3gt
+noremap ƒ 4gt
+noremap © 5gt
+
+" Repeat
+nnoremap <Tab> .
+
+" Alt-O to undo Ctrl-O
+nnoremap ø <Tab>
+
+" The big GoVet
+nnoremap <C-g> :w<CR> :GoVet<CR>
 
 nnoremap <c-c><c-c> :exec "color " .
   \ ((g:colors_name == "sierra") ? "sialoquent" : "sierra")<CR>
 let g:colors_name = "sierra"
 
+" Use GoDef for Go definitions
+autocmd FileType go nnoremap " :GoDef<CR>
+autocmd FileType go nnoremap ? :vsp<CR>:GoDef<CR><C-w>L
+autocmd FileType ruby,python,javascript nnoremap " <C-]>
+autocmd FileType ruby,python,javascript nnoremap ? :vsp<CR><C-]><C-w>L
+
+" Seaching through the whole directory
 :command -nargs=+ GG execute 'silent Ggrep!' '<q-args>' | cw | redraw!
+" Global Search Highlighted Text
+vnoremap <C-g> y/<C-R>"<CR>:GG <C-R>"<CR>
+vnoremap <C-f> y/<C-R>"<CR>
+
+" Show diff between windows
 :command DIFF execute 'windo diffthis'
 :command DOFF execute 'windo diffoff'
 
-:set switchbuf+=split
+" NERDTree settings
+let NERDTreeShowHidden=1
+let g:NERDTreeWinPos = "left"
+let g:NERDTreeWinSize=35
+nnoremap <C-@> :NERDTreeToggle<CR>
+nnoremap <C-n> :NERDTreeFind<CR>
+" Quit NERDTree if last pane
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+let NERDTreeMapOpenSplit="<C-i>"
+let NERDTreeMapOpenVSplit="<C-t>"
+let NERDTreeMapOpenInTab="<C-n>"
+let NERDSpaceDelims=1
 
+let g:indent_guides_enable_on_vim_startup = 1
+let g:indent_guides_auto_colors = 0
+"
+" Open Quickfix in Vertical Split
+set switchbuf=split
+autocmd FileType qf nnoremap <CR> <CR><C-w>L:cclose<CR>:cw<CR><C-W>k
+" Set wrap and show 10 quickfix lines by default
+autocmd FileType qf setlocal wrap
+autocmd FileType qf 10wincmd_
+
+" Random Go related things?
 let g:go_fmt_autosave=0
 let g:go_asmfmt_autosave=0
 let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
@@ -197,33 +239,31 @@ let g:syntastic_go_gometalinter_args = ['--disable-all', '--enable=errcheck']
 let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
 let g:go_list_type = "quickfix"
 
-autocmd FileType qf setlocal wrap
-autocmd FileType qf 10wincmd_
-
 function AdjustColors()
-  highlight! Visual               ctermfg=66     ctermbg=NONE  cterm=reverse
-  highlight! Search               ctermfg=230    ctermbg=NONE  cterm=reverse
+  highlight! Search               ctermfg=11     ctermbg=0     cterm=bold
+  highlight! Visual               ctermfg=75     ctermbg=NONE  cterm=reverse
 
-  highlight! Normal               ctermfg=252    ctermbg=234
+  highlight! Normal               ctermfg=252    ctermbg=235   cterm=NONE
+  highlight! NonText              ctermfg=252    ctermbg=235   cterm=NONE
+  highlight! SpecialKey           ctermfg=252    ctermbg=235   cterm=NONE
 
-  highlight! TabLineFill          ctermfg=NONE   ctermbg=235   cterm=NONE
-  highlight! TabLineSel           ctermfg=255    ctermbg=245   cterm=NONE
-  highlight! TabLine              ctermfg=243    ctermbg=235   cterm=NONE
+  highlight! TabLineFill          ctermfg=NONE   ctermbg=240   cterm=NONE
+  highlight! TabLineSel           ctermfg=0      ctermbg=245   cterm=NONE
+  highlight! TabLine              ctermfg=250    ctermbg=240   cterm=NONE
 
-  highlight! StatusLine           ctermfg=NONE   ctermbg=242   cterm=NONE
-  highlight! StatusLineNC         ctermfg=NONE   ctermbg=240   cterm=NONE
+  highlight! StatusLine           ctermfg=NONE   ctermbg=245   cterm=NONE
+  highlight! StatusLineNC         ctermfg=NONE   ctermbg=245   cterm=NONE
 
-  highlight! VertSplit            ctermfg=243    ctermbg=237   cterm=NONE
-  highlight! LineNr               ctermfg=243    ctermbg=236   cterm=NONE
+  highlight! VertSplit            ctermfg=243    ctermbg=245   cterm=NONE
+  highlight! LineNr               ctermfg=243    ctermbg=237   cterm=NONE
 
-  highlight! NonText              ctermfg=238    ctermbg=NONE  cterm=NONE
-  highlight! SpecialKey           ctermfg=238    ctermbg=NONE  cterm=NONE
+  highlight! CursorLine           ctermfg=NONE   ctermbg=237   cterm=underline
+  highlight! Comment              ctermfg=245    ctermbg=NONE  cterm=NONE
 
-  highlight! CursorLine           ctermbg=236    cterm=underline
-  highlight! Comment              ctermfg=244    ctermbg=NONE  cterm=NONE
-
-  highlight! IndentGuidesOdd  ctermbg=240
+  highlight! IndentGuidesOdd  ctermbg=241
   highlight! IndentGuidesEven ctermbg=239
+
+  highlight! QuickFixLine         ctermfg=NONE   ctermbg=NONE  cterm=bold
 
   " highlight! Scrollbar_Clear ctermfg=green ctermbg=black guifg=green guibg=black cterm=none
   " highlight! Scrollbar_Thumb ctermfg=darkgreen ctermbg=darkgreen guifg=darkgreen guibg=darkgreen cterm=reverse
@@ -235,22 +275,20 @@ function AdjustColors()
   AirlineRefresh
 endfunction
 
-"slatedark sierra carrot seti maui
-"stonewashed-256 py-darcula ayu sialoquent
-"zenburn sift
-
+" Syntax for yamls
 au BufNewFile,BufRead *.yaml,*.yml so ~/.vim/yaml.vim
 
-autocmd BufEnter *.rb                  colorscheme sierra        | call AdjustColors()
-autocmd BufEnter *.py                  colorscheme sialoquent    | call AdjustColors()
-autocmd BufEnter *.go                  colorscheme sialoquent    | call AdjustColors()
-autocmd BufEnter *.*rc                 colorscheme zenburn       | call AdjustColors()
-autocmd BufEnter *.yml,*.yaml          colorscheme sift          | call AdjustColors()
-autocmd BufEnter *.ts,*.tsx,*.js       colorscheme sift          | call AdjustColors()
+autocmd BufEnter *.rb                  colorscheme sierra     | call AdjustColors()
+autocmd BufEnter *.py                  colorscheme sialoquent | call AdjustColors()
+autocmd BufEnter *.go                  colorscheme sialoquent | call AdjustColors()
+autocmd BufEnter *.*rc                 colorscheme zenburn    | call AdjustColors()
+autocmd BufEnter *.yml,*.yaml          colorscheme sift       | call AdjustColors()
+autocmd BufEnter *.ts,*.tsx,*.js       colorscheme sift       | call AdjustColors()
 
+" Cool colors
+" slatedark sierra carrot seti maui
+" stonewashed-256 py-darcula ayu sialoquent
+" zenburn sift
 colorscheme sierra
 let g:colors_name = "sierra"
 autocmd! colorscheme * call AdjustColors()
-
-set backspace=indent,eol,start
-set cursorline
