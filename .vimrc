@@ -157,7 +157,7 @@ set pastetoggle=<C-P>
 " Using the native clipboard
 vnoremap <C-c> "*y
 " Paste on next line
-nnoremap <C-v> $<C-P>"*p<C-P>
+nnoremap <C-v> i<Esc>$<C-P>"*p<C-P>
 nnoremap <C-c> V"*y
 " Paste right here
 inoremap <C-v> <Space><Esc>v<C-P>"*p<C-P><Esc>i<Right>
@@ -192,10 +192,10 @@ nnoremap <c-c><c-c> :exec "color " .
 let g:colors_name = "sierra"
 
 " Use GoDef for Go definitions
-autocmd FileType go nnoremap " :GoDef<CR>
-autocmd FileType go nnoremap ? :vsp<CR>:GoDef<CR><C-w>L
-autocmd FileType ruby,python,javascript nnoremap " <C-]>
-autocmd FileType ruby,python,javascript nnoremap ? :vsp<CR><C-]><C-w>L
+autocmd FileType go nnoremap " :vsp<CR>:GoDef<CR><C-w>T
+autocmd FileType go nnoremap ? :vsp<CR>:GoDef<CR><C-w>r
+autocmd FileType ruby,python,javascript nnoremap " :vsp<CR><C-]><C-w>T
+autocmd FileType ruby,python,javascript nnoremap ? :vsp<CR><C-]><C-w>r
 
 " Seaching through the whole directory
 :command -nargs=+ GG execute 'silent Ggrep!' '<q-args>' | cw | redraw!
