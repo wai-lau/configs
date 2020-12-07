@@ -36,8 +36,7 @@ Plugin 'mxw/vim-jsx'
 Plugin 'junegunn/fzf'
 Plugin 'junegunn/fzf.vim'
 Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-" Put your non-Plugin stuff after this line
+Plugin 'vim-airline/vim-airline-themes' " Put your non-Plugin stuff after this line
 " Specify a directory for plugins
 " - For Neovim: ~/.local/share/nvim/plugged
 " - Avoid using standard Vim directory names like 'plugin'
@@ -67,9 +66,9 @@ let g:syntastic_check_on_wq = 0
 let g:syntastic_python_checkers=['flake8']
 
 let g:fzf_action = {
-  \ 'ctrl-i': 'split',
-  \ 'ctrl-t': 'vsplit',
-  \ 'ctrl-n': 'tab split' }
+	\ 'ctrl-i': 'split',
+	\ 'ctrl-t': 'vsplit',
+	\ 'ctrl-n': 'tab split' }
 
 " Autocomplete options
 set completeopt+=menuone
@@ -137,7 +136,7 @@ nnoremap <C-d> :q<CR>
 inoremap <C-d> <Esc>:q<CR>
 vnoremap <C-d> <Esc>:q<CR>
 
-" Going to the end/beginning of the line when selecting 
+" Going to the end/beginning of the line when selecting
 vnoremap j jg_
 vnoremap k k0
 vnoremap G Gg_
@@ -170,6 +169,8 @@ nnoremap ˇ :tabnew<CR>
 " Select forwards or back without reaching for the number 4/6
 vnoremap <Tab> $
 vnoremap <S-Tab> ^
+nnoremap d<Tab> d$
+nnoremap d<S-Tab> d^
 
 " Tab navigation, tbh idk how to get to tab 6
 noremap å 1gt
@@ -187,20 +188,19 @@ nnoremap ø <Tab>
 " The big GoVet
 nnoremap <C-g> :w<CR> :GoVet<CR>
 
-nnoremap <c-c><c-c> :exec "color " .
-  \ ((g:colors_name == "sierra") ? "sialoquent" : "sierra")<CR>
+nnoremap <c-c><c-c> :exec "color " . ((g:colors_name == "sierra") ? "sialoquent" : "sierra")<CR>
 let g:colors_name = "sierra"
 
 " Use GoDef for Go definitions
-autocmd FileType go nnoremap " :vsp<CR>:GoDef<CR><C-w>T
-autocmd FileType go nnoremap ? :vsp<CR>:GoDef<CR><C-w>r
-autocmd FileType ruby,python,javascript nnoremap " :vsp<CR><C-]><C-w>T
-autocmd FileType ruby,python,javascript nnoremap ? :vsp<CR><C-]><C-w>r
+autocmd FileType go nnoremap <buffer> " :vsp<CR>:GoDef<CR><C-w>T
+autocmd FileType go nnoremap <buffer> ? :vsp<CR>:GoDef<CR><C-w>x<C-w>l
+autocmd FileType ruby,python,javascript nnoremap <buffer> " :vsp<CR><C-]><C-w>T
+autocmd FileType ruby,python,javascript nnoremap <buffer> ? :vsp<CR><C-]><C-w>x<C-w>l
 
 " Seaching through the whole directory
-:command -nargs=+ GG execute 'silent Ggrep!' '<q-args>' | cw | redraw!
+:command -nargs=+ GG execute "silent Ggrep! ".shellescape(<q-args>) | cw | redraw!
 " Global Search Highlighted Text
-vnoremap <C-g> y/<C-R>"<CR>:GG <C-R>"<CR>
+vnoremap <C-g> y/<C-R>"<CR>:lclose<CR>:GG <C-R>"<CR>
 vnoremap <C-f> y/<C-R>"<CR>
 
 " Show diff between windows
@@ -222,27 +222,29 @@ let NERDSpaceDelims=1
 
 let g:indent_guides_enable_on_vim_startup = 1
 let g:indent_guides_auto_colors = 0
-"
+
 " Open Quickfix in Vertical Split
 set switchbuf=split
-autocmd FileType qf nnoremap <CR> <CR><C-w>L:cclose<CR>:cw<CR><C-W>k
+
 " Set wrap and show 10 quickfix lines by default
 autocmd FileType qf setlocal wrap
-autocmd FileType qf 10wincmd_
+autocmd FileType qf nnoremap <buffer> <CR> :call OpenQF()<CR>
+function OpenQF()
+	eval feedkeys(getwininfo(win_getid())[0]['loclist'] ? "\<CR>" : "\<CR>\<C-w>L:cclose\<CR>:cw\<CR>\<C-w>k0", 'n')
+endfunction
 
-" Random Go related things?
 let g:go_fmt_autosave=0
 let g:go_asmfmt_autosave=0
 let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
 let g:syntastic_go_checkers = ['golint', 'govet', 'golangci-lint']
 let g:syntastic_go_gometalinter_args = ['--disable-all', '--enable=errcheck']
 let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
-let g:go_list_type = "quickfix"
+" let g:go_list_type = "quickfix"
 
 
 function AdjustColors()
 	source ~/.vim/default_colors.vim
-  AirlineRefresh
+	AirlineRefresh
 endfunction
 
 " Syntax for yamls
