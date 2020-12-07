@@ -167,8 +167,8 @@ nnoremap † :vnew<CR>
 nnoremap ˇ :tabnew<CR>
 
 " Select forwards or back without reaching for the number 4/6
-vnoremap <Tab> $
-vnoremap <S-Tab> ^
+vnoremap <Tab> $h
+vnoremap <S-Tab> _
 nnoremap d<Tab> d$
 nnoremap d<S-Tab> d^
 
