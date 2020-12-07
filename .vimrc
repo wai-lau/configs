@@ -54,6 +54,9 @@ set term=screen-256color
 set t_ut=
 
 let g:airline_theme='fruit_punch'
+let g:airline_section_b = ''
+let g:airline_section_x = ''
+let g:airline_section_y = ''
 
 " Syntastic options
 set statusline+=%#warningmsg#
@@ -198,7 +201,7 @@ autocmd FileType ruby,python,javascript nnoremap <buffer> " :vsp<CR><C-]><C-w>T
 autocmd FileType ruby,python,javascript nnoremap <buffer> ? :vsp<CR><C-]><C-w>x<C-w>l
 
 " Seaching through the whole directory
-:command -nargs=+ GG execute "silent Ggrep! ".shellescape(<q-args>) | cw | redraw!
+:command -nargs=+ GG execute "silent Ggrep! ".shellescape(<q-args>)." -- '*.".expand('%:e')."'" | cw | redraw!
 " Global Search Highlighted Text
 vnoremap <C-g> y/<C-R>"<CR>:lclose<CR>:GG <C-R>"<CR>
 vnoremap <C-f> y/<C-R>"<CR>
@@ -230,7 +233,7 @@ set switchbuf=split
 autocmd FileType qf setlocal wrap
 autocmd FileType qf nnoremap <buffer> <CR> :call OpenQF()<CR>
 function OpenQF()
-	eval feedkeys(getwininfo(win_getid())[0]['loclist'] ? "\<CR>" : "\<CR>\<C-w>L:cclose\<CR>:cw\<CR>\<C-w>k0", 'n')
+	eval feedkeys(getwininfo(win_getid())[0]['loclist'] ? "\<CR>" : "\<CR>\<C-w>L:cclose\<CR>:lclose\<CR>:cw\<CR>\<C-w>kI\<Esc>l", 'n')
 endfunction
 
 let g:go_fmt_autosave=0
