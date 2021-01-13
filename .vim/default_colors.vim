@@ -26,6 +26,6 @@ highlight! QuickFixLine         ctermfg=NONE   ctermbg=NONE  cterm=bold
 " highlight! Scrollbar_Clear ctermfg=green ctermbg=black guifg=green guibg=black cterm=none
 " highlight! Scrollbar_Thumb ctermfg=darkgreen ctermbg=darkgreen guifg=darkgreen guibg=darkgreen cterm=reverse
 
-highlight! BonusLight ctermbg=196
+highlight! BonusLight ctermfg=10 cterm=reverse
 " match BonusLight /\s\+$\|binding.pry/
-match BonusLight /binding.pry/
+match BonusLight /binding.pry\|.*     \/\/····$/

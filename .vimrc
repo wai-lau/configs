@@ -143,7 +143,6 @@ vnoremap <C-d> <Esc>:q<CR>
 vnoremap j jg_
 vnoremap k k0
 vnoremap G Gg_
-nnoremap G Gg_
 
 " Commenting
 nmap <C-_> \ci
@@ -182,6 +181,12 @@ noremap ∂ 3gt
 noremap ƒ 4gt
 noremap © 5gt
 
+" Add/Remove tag lines
+nnoremap t A     //····<Esc>0
+nnoremap T V:s/\ \ \ \ \ \/\/····/<CR>:nohls<CR>
+nnoremap ¥ /.*\ \ \ \ \ \/\/····$<CR>
+nnoremap Á :%s/\ \ \ \ \ \/\/····$//g<CR>:nohls<CR>
+
 " Repeat
 nnoremap <Tab> .
 
@@ -189,7 +194,7 @@ nnoremap <Tab> .
 nnoremap ø <Tab>
 
 " The big GoVet
-nnoremap <C-g> :w<CR> :GoVet<CR>
+nnoremap <C-g> :w<CR>:GoVet<CR>:ccl<CR>:cw 12
 
 nnoremap <c-c><c-c> :exec "color " . ((g:colors_name == "sierra") ? "sialoquent" : "sierra")<CR>
 let g:colors_name = "sierra"
@@ -232,9 +237,11 @@ set switchbuf=split
 " Set wrap and show 10 quickfix lines by default
 autocmd FileType qf setlocal wrap
 autocmd FileType qf nnoremap <buffer> <CR> :call OpenQF()<CR>
+
 function OpenQF()
 	eval feedkeys(getwininfo(win_getid())[0]['loclist'] ? "\<CR>" : "\<CR>\<C-w>L:cclose\<CR>:lclose\<CR>:cw\<CR>\<C-w>kI\<Esc>l", 'n')
 endfunction
+
 
 let g:go_fmt_autosave=0
 let g:go_asmfmt_autosave=0
