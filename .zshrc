@@ -32,7 +32,7 @@ v () {
 }
 
 f () {
-  dev cd $*  && ls
+  dev cd $* && ls -G
 }
 
 alias snapfind='k get pods | grep snapshot | awk '\''{print $1}'\'''

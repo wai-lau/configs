@@ -182,10 +182,19 @@ noremap ƒ 4gt
 noremap © 5gt
 
 " Add/Remove tag lines
-nnoremap t A     //····<Esc>0
-nnoremap T V:s/\ \ \ \ \ \/\/····/<CR>:nohls<CR>
-nnoremap ¥ /.*\ \ \ \ \ \/\/····$<CR>
-nnoremap Á :%s/\ \ \ \ \ \/\/····$//g<CR>:nohls<CR>
+function HashTags()
+	nnoremap t A     #····<Esc>0
+	nnoremap T V:s/\ \ \ \ \ \#····/<CR>:nohls<CR>
+	nnoremap ¥ /.*\ \ \ \ \ \#····$<CR>
+	nnoremap Á :%s/\ \ \ \ \ \#····$//g<CR>:nohls<CR>
+endfunction
+
+function NormalTags()
+	nnoremap t A     //····<Esc>0
+	nnoremap T V:s/\ \ \ \ \ \/\/····/<CR>:nohls<CR>
+	nnoremap ¥ /.*\ \ \ \ \ \/\/····$<CR>
+	nnoremap Á :%s/\ \ \ \ \ \/\/····$//g<CR>:nohls<CR>
+endfunction
 
 " Repeat
 nnoremap <Tab> .
@@ -196,13 +205,15 @@ nnoremap ø <Tab>
 " The big GoVet
 nnoremap <C-g> :w<CR>:GoVet<CR>:ccl<CR>:cw 12
 
-nnoremap <c-c><c-c> :exec "color " . ((g:colors_name == "sierra") ? "sialoquent" : "sierra")<CR>
+nnoremap <c-c><c-c> :exec "color " . ((g:colors_name == "sierra") ? "sift" : "sierra")<CR>
 let g:colors_name = "sierra"
 
 " Use GoDef for Go definitions
-autocmd FileType go nnoremap <buffer> " :vsp<CR>:GoDef<CR><C-w>T
+autocmd FileType go nnoremap <buffer> } :vsp<CR>:GoDef<CR><C-w>T
+autocmd FileType go nnoremap <buffer> " :GoDef<CR>
 autocmd FileType go nnoremap <buffer> ? :vsp<CR>:GoDef<CR><C-w>x<C-w>l
-autocmd FileType ruby,python,javascript nnoremap <buffer> " :vsp<CR><C-]><C-w>T
+autocmd FileType ruby,python,javascript nnoremap <buffer> } :vsp<CR><C-]><C-w>T
+autocmd FileType ruby,python,javascript nnoremap <buffer> " <C-]>
 autocmd FileType ruby,python,javascript nnoremap <buffer> ? :vsp<CR><C-]><C-w>x<C-w>l
 
 " Seaching through the whole directory
@@ -251,7 +262,6 @@ let g:syntastic_go_gometalinter_args = ['--disable-all', '--enable=errcheck']
 let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
 " let g:go_list_type = "quickfix"
 
-
 function AdjustColors()
 	source ~/.vim/default_colors.vim
 	AirlineRefresh
@@ -260,9 +270,12 @@ endfunction
 " Syntax for yamls
 au BufNewFile,BufRead *.yaml,*.yml so ~/.vim/yaml.vim
 
-autocmd BufEnter *.rb                  colorscheme sierra     | call AdjustColors()
+call NormalTags()
+
+autocmd BufEnter *.rb                  colorscheme sierra     | call HashTags()     | call AdjustColors()
+autocmd BufLeave *.rb                  call NormalTags()
 autocmd BufEnter *.py                  colorscheme sialoquent | call AdjustColors()
-autocmd BufEnter *.go                  colorscheme sialoquent | call AdjustColors()
+autocmd BufEnter *.go                  colorscheme sift       | call AdjustColors()
 autocmd BufEnter *.*rc                 colorscheme zenburn    | call AdjustColors()
 autocmd BufEnter *.yml,*.yaml          colorscheme sift       | call AdjustColors()
 autocmd BufEnter *.ts,*.tsx,*.js       colorscheme sift       | call AdjustColors()

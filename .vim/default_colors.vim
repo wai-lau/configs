@@ -18,8 +18,8 @@ highlight! LineNr               ctermfg=243    ctermbg=237   cterm=NONE
 highlight! CursorLine           ctermfg=NONE   ctermbg=0     cterm=underline
 highlight! Comment              ctermfg=245    ctermbg=NONE  cterm=NONE
 
-highlight! IndentGuidesOdd  ctermbg=241
-highlight! IndentGuidesEven ctermbg=239
+highlight! IndentGuidesOdd      ctermbg=241    ctermfg=0
+highlight! IndentGuidesEven     ctermbg=239    ctermfg=0
 
 highlight! QuickFixLine         ctermfg=NONE   ctermbg=NONE  cterm=bold
 
@@ -27,5 +27,9 @@ highlight! QuickFixLine         ctermfg=NONE   ctermbg=NONE  cterm=bold
 " highlight! Scrollbar_Thumb ctermfg=darkgreen ctermbg=darkgreen guifg=darkgreen guibg=darkgreen cterm=reverse
 
 highlight! BonusLight ctermfg=10 cterm=reverse
+
+highlight! SpellBad               guifg=#ff0000  guibg=NONE     gui=undercurl  ctermfg=196    ctermbg=NONE  cterm=undercurl
+
 " match BonusLight /\s\+$\|binding.pry/
 match BonusLight /binding.pry\|.*     \/\/····$/
+match BonusLight /binding.pry\|.*     \/\/····$\|.*     \#····$/
