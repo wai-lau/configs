@@ -17,7 +17,9 @@ call vundle#begin()
 " alternatively, pass a path where Vundle should install plugins
 " call vundle#begin('~/some/path/here')
 
-" let Vundle manage Vundle, require Plugin 'VundleVim/Vundle.vim'
+" let Vundle manage Vundle (required)
+Plugin 'VundleVim/Vundle.vim'
+
 Plugin 'fatih/vim-go'
 Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'vim-scripts/indentpython.vim'
@@ -36,7 +38,10 @@ Plugin 'mxw/vim-jsx'
 Plugin 'junegunn/fzf'
 Plugin 'junegunn/fzf.vim'
 Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes' " Put your non-Plugin stuff after this line
+Plugin 'vim-airline/vim-airline-themes' 
+Plugin 'blueyed/vim-diminactive'
+
+" Put your non-Plugin stuff after this line
 " Specify a directory for plugins
 " - For Neovim: ~/.local/share/nvim/plugged
 " - Avoid using standard Vim directory names like 'plugin'

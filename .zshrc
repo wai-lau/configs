@@ -12,8 +12,6 @@ export PATH=/usr/local/bin:$PATH
 alias pip='pip3'
 alias python='python3'
 alias tags='ctags -R --exclude=.git --exclude=node_modules --exclude=.dev --exclude=app/assets/javascripts -o'
-alias consumer='dev cd internalrepo1'
-alias client='dev cd internalrepo1 && cd gems/elasticsearch-work-client'
 alias buddy='dev cd internalrepo2 && cd internalrepos'
 alias vim!='sudo vim'
 alias kk='kctx'

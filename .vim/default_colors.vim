@@ -28,6 +28,7 @@ highlight! QuickFixLine         ctermfg=NONE   ctermbg=NONE  cterm=bold
 
 highlight! BonusLight ctermfg=10 cterm=reverse
 
+highlight! ColorColumn            ctermbg=238
 highlight! SpellBad               guifg=#ff0000  guibg=NONE     gui=undercurl  ctermfg=196    ctermbg=NONE  cterm=undercurl
 
 " match BonusLight /\s\+$\|binding.pry/
