@@ -5,7 +5,6 @@
 'g:go_asmfmt_autosave'	vim-go.txt	/*'g:go_asmfmt_autosave'*
 'g:go_auto_sameids'	vim-go.txt	/*'g:go_auto_sameids'*
 'g:go_auto_type_info'	vim-go.txt	/*'g:go_auto_type_info'*
-'g:go_autodetect_gopath'	vim-go.txt	/*'g:go_autodetect_gopath'*
 'g:go_bin_path'	vim-go.txt	/*'g:go_bin_path'*
 'g:go_build_tags'	vim-go.txt	/*'g:go_build_tags'*
 'g:go_code_completion_enabled'	vim-go.txt	/*'g:go_code_completion_enabled'*
@@ -13,6 +12,8 @@
 'g:go_debug'	vim-go.txt	/*'g:go_debug'*
 'g:go_debug_address'	vim-go.txt	/*'g:go_debug_address'*
 'g:go_debug_log_output'	vim-go.txt	/*'g:go_debug_log_output'*
+'g:go_debug_mappings'	vim-go.txt	/*'g:go_debug_mappings'*
+'g:go_debug_preserve_layout'	vim-go.txt	/*'g:go_debug_preserve_layout'*
 'g:go_debug_windows'	vim-go.txt	/*'g:go_debug_windows'*
 'g:go_decls_includes'	vim-go.txt	/*'g:go_decls_includes'*
 'g:go_decls_mode'	vim-go.txt	/*'g:go_decls_mode'*
@@ -20,12 +21,14 @@
 'g:go_def_mode'	vim-go.txt	/*'g:go_def_mode'*
 'g:go_def_reuse_buffer'	vim-go.txt	/*'g:go_def_reuse_buffer'*
 'g:go_diagnostics_enabled'	vim-go.txt	/*'g:go_diagnostics_enabled'*
+'g:go_diagnostics_level'	vim-go.txt	/*'g:go_diagnostics_level'*
 'g:go_doc_height'	vim-go.txt	/*'g:go_doc_height'*
 'g:go_doc_keywordprg_enabled'	vim-go.txt	/*'g:go_doc_keywordprg_enabled'*
 'g:go_doc_popup_window'	vim-go.txt	/*'g:go_doc_popup_window'*
 'g:go_doc_url'	vim-go.txt	/*'g:go_doc_url'*
 'g:go_echo_command_info'	vim-go.txt	/*'g:go_echo_command_info'*
 'g:go_echo_go_info'	vim-go.txt	/*'g:go_echo_go_info'*
+'g:go_fillstruct_mode'	vim-go.txt	/*'g:go_fillstruct_mode'*
 'g:go_fmt_autosave'	vim-go.txt	/*'g:go_fmt_autosave'*
 'g:go_fmt_command'	vim-go.txt	/*'g:go_fmt_command'*
 'g:go_fmt_experimental'	vim-go.txt	/*'g:go_fmt_experimental'*
@@ -197,6 +200,7 @@
 :GoDebugStepOut	vim-go.txt	/*:GoDebugStepOut*
 :GoDebugStop	vim-go.txt	/*:GoDebugStop*
 :GoDebugTest	vim-go.txt	/*:GoDebugTest*
+:GoDebugTestFunc	vim-go.txt	/*:GoDebugTestFunc*
 :GoDecls	vim-go.txt	/*:GoDecls*
 :GoDeclsDir	vim-go.txt	/*:GoDeclsDir*
 :GoDef	vim-go.txt	/*:GoDef*

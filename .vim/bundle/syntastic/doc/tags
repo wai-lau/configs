@@ -300,7 +300,6 @@ syntastic-checkers-html	syntastic-checkers.txt	/*syntastic-checkers-html*
 syntastic-checkers-java	syntastic-checkers.txt	/*syntastic-checkers-java*
 syntastic-checkers-javascript	syntastic-checkers.txt	/*syntastic-checkers-javascript*
 syntastic-checkers-json	syntastic-checkers.txt	/*syntastic-checkers-json*
-syntastic-checkers-julia	syntastic-checkers.txt	/*syntastic-checkers-julia*
 syntastic-checkers-lang	syntastic-checkers.txt	/*syntastic-checkers-lang*
 syntastic-checkers-less	syntastic-checkers.txt	/*syntastic-checkers-less*
 syntastic-checkers-lex	syntastic-checkers.txt	/*syntastic-checkers-lex*
@@ -485,7 +484,6 @@ syntastic-javascript-standard	syntastic-checkers.txt	/*syntastic-javascript-stan
 syntastic-javascript-tern_lint	syntastic-checkers.txt	/*syntastic-javascript-tern_lint*
 syntastic-json-jsonlint	syntastic-checkers.txt	/*syntastic-json-jsonlint*
 syntastic-json-jsonval	syntastic-checkers.txt	/*syntastic-json-jsonval*
-syntastic-julia-lint	syntastic-checkers.txt	/*syntastic-julia-lint*
 syntastic-less-lessc	syntastic-checkers.txt	/*syntastic-less-lessc*
 syntastic-less-recess	syntastic-checkers.txt	/*syntastic-less-recess*
 syntastic-less-stylelint	syntastic-checkers.txt	/*syntastic-less-stylelint*
@@ -614,6 +612,7 @@ syntastic-text-textlint	syntastic-checkers.txt	/*syntastic-text-textlint*
 syntastic-trig-rapper	syntastic-checkers.txt	/*syntastic-trig-rapper*
 syntastic-turtle-rapper	syntastic-checkers.txt	/*syntastic-turtle-rapper*
 syntastic-turtle-ttl	syntastic-checkers.txt	/*syntastic-turtle-ttl*
+syntastic-twig-twigcs	syntastic-checkers.txt	/*syntastic-twig-twigcs*
 syntastic-twig-twiglint	syntastic-checkers.txt	/*syntastic-twig-twiglint*
 syntastic-typescript-eslint	syntastic-checkers.txt	/*syntastic-typescript-eslint*
 syntastic-typescript-lynt	syntastic-checkers.txt	/*syntastic-typescript-lynt*
