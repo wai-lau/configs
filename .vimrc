@@ -125,6 +125,9 @@ inoremap jk <Esc>
 nnoremap <Esc><Esc> :nohls<CR>
 vnoremap <Esc><Esc> <Esc>
 
+" replace currently selected text with default register without yanking it
+vnoremap p "_dP
+
 " Resize the vim windows
 nnoremap + 6<C-W>+
 nnoremap _ 6<C-W>-
@@ -223,6 +226,7 @@ autocmd FileType ruby,python,javascript nnoremap <buffer> ? :vsp<CR><C-]><C-w>x<
 
 " Seaching through the whole directory
 :command -nargs=+ GG execute "silent Ggrep! ".shellescape(<q-args>)." -- '*.".expand('%:e')."'" | cw | redraw!
+:command -nargs=+ GGG execute "silent Ggrep! ".shellescape(<q-args>) | cw | redraw!
 " Global Search Highlighted Text
 vnoremap <C-g> y/<C-R>"<CR>:lclose<CR>:GG <C-R>"<CR>
 vnoremap <C-f> y/<C-R>"<CR>
@@ -259,11 +263,11 @@ function OpenQF()
 endfunction
 
 
-let g:go_fmt_autosave=0
-let g:go_asmfmt_autosave=0
+let g:go_fmt_autosave=1
+let g:go_fmt_command = "goimports"
 let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
 let g:syntastic_go_checkers = ['golint', 'govet', 'golangci-lint']
-let g:syntastic_go_gometalinter_args = ['--disable-all', '--enable=errcheck']
+let g:syntastic_go_gometalinter_args = ['--enable=errcheck']
 let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
 " let g:go_list_type = "quickfix"
 

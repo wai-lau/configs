@@ -36,7 +36,9 @@ f () {
 alias snapfind='k get pods | grep snapshot | awk '\''{print $1}'\'''
 alias snap='k exec -it $(snapfind) -- sh --login'
 alias internalrepo3find='k get -n internalrepo2dies pods | grep internalrepo3 | awk '\''{print $1}'\'''
+alias searchdeploybuddyfind='k get -n internalrepo2dies pods | grep searchdeploybuddy | awk '\''{print $1}'\'''
 alias sblog='k logs -f $(internalrepo3find) -n internalrepo2dies'
+alias sdblog='k logs -f $(searchdeploybuddyfind) -n internalrepo2dies'
 
 export XDG_CONFIG_HOME=~/.config
 . /Users/wai/Library/Python/3.9/lib/python/site-packages/powerline/bindings/zsh/powerline.zsh
