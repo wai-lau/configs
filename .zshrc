@@ -1,4 +1,5 @@
 bindkey -e
+bindkey -r "^V"
 # load dev, but only if present and the shell is interactive
 if [[ -f /opt/dev/dev.sh ]] && [[ $- == *i* ]]; then
   source /opt/dev/dev.sh
@@ -39,10 +40,12 @@ alias internalrepo3find='k get -n internalrepo2dies pods | grep internalrepo3 | 
 alias searchdeploybuddyfind='k get -n internalrepo2dies pods | grep searchdeploybuddy | awk '\''{print $1}'\'''
 alias sblog='k logs -f $(internalrepo3find) -n internalrepo2dies'
 alias sdblog='k logs -f $(searchdeploybuddyfind) -n internalrepo2dies'
+alias dc='docker-compose'
+alias d='docker'
 
 export XDG_CONFIG_HOME=~/.config
-. /Users/wai/Library/Python/3.9/lib/python/site-packages/powerline/bindings/zsh/powerline.zsh
-export EDITOR=/usr/local/bin/vim
+. /usr/local/lib/python3.8/site-packages/powerline/bindings/zsh/powerline.zsh
+export EDITOR=/usr/bin/vim
 export SKIP_RAILGUN_CHECK=1
 alias k=kubectl
 alias g=git
@@ -51,7 +54,7 @@ zmodload -i zsh/complist
 
 bindkey "\e[3~" delete-char
 alias "dev testall"="source dev.sh && TERM=color dev test SUITE=all"
-export GOPATH=/Users/wai
+export GOPATH=/Users/wailau
 export FZF_DEFAULT_COMMAND="find . -path '*/\.*' -type d -prune -o -type f -print -o -type l -print 2> /dev/null | sed s/^..//"
 
 HISTFILE=~/.zsh_history
@@ -60,23 +63,26 @@ SAVEHIST=100000
 setopt appendhistory
 
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/wai/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/wai/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+if [ -f '/Users/wailau/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/wailau/Downloads/google-cloud-sdk/path.zsh.inc'; fi
 
 # The next line enables shell command completion for gcloud.
-if [ -f '/Users/wai/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/wai/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
+if [ -f '/Users/wailau/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/wailau/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
 
 export PATH=$GOPATH/bin:$PATH
 
 # cloudplatform: add work clusters to your local kubernetes config
-export KUBECONFIG=${KUBECONFIG:+$KUBECONFIG:}/Users/wai/.kube/config:/Users/wai/.kube/config.work.cloudplatform
-for file in /Users/wai/src/github.com/work/cloudplatform/workflow-utils/*.bash; do source ${file}; done
+export KUBECONFIG=${KUBECONFIG:+$KUBECONFIG:}/Users/wailau/.kube/config:/Users/wailau/.kube/config.work.cloudplatform
+for file in /Users/wailau/src/github.com/work/cloudplatform/workflow-utils/*.bash; do source ${file}; done
 
 export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"
 alias ls='ls -G'
 export PATH="/usr/local/sbin:$PATH"
+export PATH="/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin:$PATH"
 
 export LDFLAGS="-L/usr/local/opt/openssl@1.1/lib"
 export CPPFLAGS="-I/usr/local/opt/openssl@1.1/include"
 export PKG_CONFIG_PATH="PKG_CONFIG_PATH:/usr/local/opt/openssl@1.1/lib/pkgconfig"
 
-if [ -e /Users/wai/.nix-profile/etc/profile.d/nix.sh ]; then . /Users/wai/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+if [ -e /Users/wailau/.nix-profile/etc/profile.d/nix.sh ]; then . /Users/wailau/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+
+[[ -f /opt/dev/sh/chruby/chruby.sh ]] && type chruby >/dev/null 2>&1 || chruby () { source /opt/dev/sh/chruby/chruby.sh; chruby "$@"; }

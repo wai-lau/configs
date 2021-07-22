@@ -14,13 +14,6 @@
 " Convert to Canonical form:
 "map \c :%!python -c 'from yaml.redump import redump; import sys; print redump(sys.stdin.read()).rstrip()'
 
-if version < 600
-  syntax clear
-elseif exists("b:current_syntax")
-  finish
-endif
-syntax clear
-
 syn match yamlDelimiter	"[:,-]"
 syn match yamlBlock "[\[\]\{\}\|\>]"
 syn match yamlOperator "[?^+-]\|=>"

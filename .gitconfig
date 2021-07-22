@@ -7,7 +7,7 @@
 	email = user@example.com
 [core]
 	editor = /usr/local/bin/vim
-	excludesfile = /Users/wai/.gitignoreglobal
+	excludesfile = /Users/wailau/.gitignoreglobal
 	commitGraph = true
 [alias]
   fb = !git fetch && git rebase origin/master

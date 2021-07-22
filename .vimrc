@@ -38,8 +38,9 @@ Plugin 'mxw/vim-jsx'
 Plugin 'junegunn/fzf'
 Plugin 'junegunn/fzf.vim'
 Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes' 
+Plugin 'vim-airline/vim-airline-themes'
 Plugin 'blueyed/vim-diminactive'
+Plugin 'robbles/logstash.vim'
 
 " Put your non-Plugin stuff after this line
 " Specify a directory for plugins
@@ -276,9 +277,6 @@ function AdjustColors()
 	AirlineRefresh
 endfunction
 
-" Syntax for yamls
-au BufNewFile,BufRead *.yaml,*.yml so ~/.vim/yaml.vim
-
 call NormalTags()
 
 autocmd BufEnter *.rb                  colorscheme sierra     | call HashTags()     | call AdjustColors()
@@ -286,8 +284,9 @@ autocmd BufLeave *.rb                  call NormalTags()
 autocmd BufEnter *.py                  colorscheme sialoquent | call AdjustColors()
 autocmd BufEnter *.go                  colorscheme sift       | call AdjustColors()
 autocmd BufEnter *.*rc                 colorscheme zenburn    | call AdjustColors()
-autocmd BufEnter *.yml,*.yaml          colorscheme sift       | call AdjustColors()
+autocmd BufEnter *.yml,*.yaml          colorscheme sift       | call AdjustColors() | so ~/.vim/yaml.vim
 autocmd BufEnter *.ts,*.tsx,*.js       colorscheme sift       | call AdjustColors()
+autocmd BufEnter *.conf                colorscheme sift       | call AdjustColors() | so ~/.vim/syntax/logstash.vim
 
 " Cool colors
 " slatedark sierra carrot seti maui
@@ -296,3 +295,10 @@ autocmd BufEnter *.ts,*.tsx,*.js       colorscheme sift       | call AdjustColor
 colorscheme sierra
 let g:colors_name = "sierra"
 autocmd! colorscheme * call AdjustColors()
+
+" Add spaces after comment delimiters by default
+let g:NERDSpaceDelims = 1
+" Use compact syntax for prettified multi-line comments
+let g:NERDCompactSexyComs = 1
+let g:NERDCustomDelimiters = { 'logstash': { 'left': '#','right': '' } }
+

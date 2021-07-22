@@ -1,9 +1,6 @@
 hs.hotkey.bind({"option"}, "`", function()
     alacritty = hs.application.find('alacritty')
-    if alacritty then
-      awin = alacritty:mainWindow()
-    end
-    if awin and alacritty and alacritty:isFrontmost() then
+    if alacritty ~= nil and alacritty:isFrontmost() then
       alacritty:hide()
     else
       hs.application.launchOrFocus("/Applications/Alacritty.app")
