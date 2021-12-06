@@ -1,7 +1,7 @@
-# ~/.vim/bundle
+# ~/.vim/bundle 
 Vundle.vim
 indentpython.vim       
-nerdcommenter         
+nerdcommenter
 nerdtree     
 syntastic            
 vim-colorschemes   

@@ -6,7 +6,7 @@ if [[ -f /opt/dev/dev.sh ]] && [[ $- == *i* ]]; then
 fi
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-eval "$(shadowenv init zsh)"
+# eval "$(shadowenv init zsh)"
 
 export PATH=/usr/local/bin:$PATH
 
@@ -44,7 +44,6 @@ alias dc='docker-compose'
 alias d='docker'
 
 export XDG_CONFIG_HOME=~/.config
-. /usr/local/lib/python3.8/site-packages/powerline/bindings/zsh/powerline.zsh
 export EDITOR=/usr/bin/vim
 export SKIP_RAILGUN_CHECK=1
 alias k=kubectl
@@ -68,11 +67,11 @@ if [ -f '/Users/wailau/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/User
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/wailau/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/wailau/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
 
-export PATH=$GOPATH/bin:$PATH
-
 # cloudplatform: add work clusters to your local kubernetes config
 export KUBECONFIG=${KUBECONFIG:+$KUBECONFIG:}/Users/wailau/.kube/config:/Users/wailau/.kube/config.work.cloudplatform
 for file in /Users/wailau/src/github.com/work/cloudplatform/workflow-utils/*.bash; do source ${file}; done
+
+export PATH=$GOPATH/bin:$PATH
 
 export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"
 alias ls='ls -G'
@@ -86,3 +85,9 @@ export PKG_CONFIG_PATH="PKG_CONFIG_PATH:/usr/local/opt/openssl@1.1/lib/pkgconfig
 if [ -e /Users/wailau/.nix-profile/etc/profile.d/nix.sh ]; then . /Users/wailau/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
 
 [[ -f /opt/dev/sh/chruby/chruby.sh ]] && type chruby >/dev/null 2>&1 || chruby () { source /opt/dev/sh/chruby/chruby.sh; chruby "$@"; }
+
+[[ -x /usr/local/bin/brew ]] && eval $(/usr/local/bin/brew shellenv)
+
+[[ -x /opt/homebrew/bin/brew ]] && eval $(/opt/homebrew/bin/brew shellenv)
+
+PROMPT='%F{blue}%1~ >%F{white}%F{bold} '

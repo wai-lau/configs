@@ -32,5 +32,5 @@ highlight! ColorColumn            ctermbg=238
 highlight! SpellBad               guifg=#ff0000  guibg=NONE     gui=undercurl  ctermfg=196    ctermbg=NONE  cterm=undercurl
 
 " match BonusLight /\s\+$\|binding.pry/
-match BonusLight /binding.pry\|.*     \/\/····$/
-match BonusLight /binding.pry\|.*     \/\/····$\|.*     \#····$/
+match BonusLight /binding.pry\|.*     \/\/····$\|.*     \#····$\|\s\+$\|\t\+$/
+
