@@ -10,8 +10,9 @@
 !.vim/*
 !.vim/**/*
 
-!.hammerspoon
-!.hammerspoon/*
-!.hammerspoon/**/*
+!.config
+!.config/karabiner
+!.config/karabiner/**/*
 
-!.config/alacritty/*
+!.config/iterm2
+!.config/iterm2/**/*
