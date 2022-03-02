@@ -3,6 +3,7 @@ source $HOME/.local.zsh    # load environment variables and secret keys
 
 # load cb-zsh
 [ -f $(brew --prefix cb-zsh 2>/dev/null)/config.zsh ] && source $(brew --prefix cb-zsh)/config.zsh
+
 # load fuzzyhub
 [ -f $(brew --prefix fuzzyhub 2>/dev/null)/fuzzyhub.zsh ] && source $(brew --prefix fuzzyhub)/fuzzyhub.zsh
 
