@@ -1,6 +1,7 @@
 # Ignore everything
 *
 !.gitignore
+!.gitignoreglobal
 !.gitconfig
 !.vimrc
 !.zshrc

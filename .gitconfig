@@ -5,12 +5,13 @@
 [user]
 	name = Wai Lau
 	email = user@example.com
+	signingkey = 54C7BFC2822628F6
 [core]
 	editor = /usr/bin/vim
-	excludesfile = /Users/wailau/.gitignoreglobal
+	excludesfile = /Users/wai/.gitignoreglobal
 	commitGraph = true
 [alias]
-  fb = !git fetch && git rebase origin/master
+	p = !git pull upstream master --rebase
   fp = !git push --force-with-lease origin $(git rev-parse --abbrev-ref HEAD)
   f = !git add -A && git commit --amend --no-edit
   ff = !git f && git fp
@@ -24,13 +25,9 @@
   l = !git log --oneline --graph
 [gc]
 	writeCommitGraph = true
-[url "https://github.com/work/"]
-	insteadOf = git@github.com:work/
-	insteadOf = git@github.com:work/
-	insteadOf = ssh://git@github.com/work/
-	insteadOf = ssh://git@github.com/work/
-[credential]
-	helper = 
-	helper = store --file /opt/dev/var/private/git_credential_store
 [pull]
 	rebase = true
+[url "git@github.example.com:"]
+  insteadOf = https://github.example.com/
+[commit]
+	gpgsign = true

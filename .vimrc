@@ -263,7 +263,6 @@ function OpenQF()
 	eval feedkeys(getwininfo(win_getid())[0]['loclist'] ? "\<CR>" : "\<CR>\<C-w>L:cclose\<CR>:lclose\<CR>:cw\<CR>\<C-w>kI\<Esc>l", 'n')
 endfunction
 
-
 let g:go_fmt_autosave=1
 let g:go_fmt_command = "goimports"
 let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
