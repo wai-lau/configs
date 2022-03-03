@@ -12,3 +12,4 @@
 *.p12
 *.pfx
 *.pem
+.local.zsh

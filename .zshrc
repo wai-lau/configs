@@ -61,3 +61,7 @@ export PATH=$GOPATH/bin:$PATH
 
 export MONOREPO_PATH="/Users/wai/src/repo"
 source $MONOREPO_PATH/scripts/rc/rc.sh
+
+eval "$($(go env GOPATH)/bin/assume-role -init)"
+export GOPATH=$HOME/go
+export PATH=$GOPATH/bin:$PATH
