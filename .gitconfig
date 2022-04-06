@@ -11,7 +11,7 @@
 	excludesfile = /Users/wai/.gitignoreglobal
 	commitGraph = true
 [alias]
-	p = !git pull upstream master --rebase
+  p = !git pull upstream master --rebase
   fp = !git push --force-with-lease origin $(git rev-parse --abbrev-ref HEAD)
   f = !git add -A && git commit --amend --no-edit
   ff = !git f && git fp

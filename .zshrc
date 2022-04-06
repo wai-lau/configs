@@ -12,7 +12,6 @@ bindkey -r "^V"
 bindkey "\e[3~" delete-char
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-# eval "$(shadowenv init zsh)"
 
 export PATH=/usr/local/bin:$PATH
 
@@ -29,7 +28,6 @@ alias dc='docker-compose'
 
 export XDG_CONFIG_HOME=~/.config
 export EDITOR=/usr/bin/vim
-export SKIP_RAILGUN_CHECK=1
 
 autoload -U compinit && compinit
 zmodload -i zsh/complist
@@ -49,6 +47,7 @@ export FZF_DEFAULT_COMMAND="find . -path '*/\.*' -type d -prune -o -type f -prin
 eval "$(rbenv init -)"
 
 # Go
+eval "$($(go env GOPATH)/bin/assume-role -init)"
 export GO111MODULE=on
 export GOPROXY=https://gomodules.example.com/
 export GONOSUMDB=github.example.com
@@ -61,7 +60,4 @@ export PATH=$GOPATH/bin:$PATH
 
 export MONOREPO_PATH="/Users/wai/src/repo"
 source $MONOREPO_PATH/scripts/rc/rc.sh
-
-eval "$($(go env GOPATH)/bin/assume-role -init)"
-export GOPATH=$HOME/go
-export PATH=$GOPATH/bin:$PATH
+eval "ssh-add -A 2>/dev/null;"
