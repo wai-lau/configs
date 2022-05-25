@@ -59,5 +59,6 @@ export PATH=$GOPATH/bin:$PATH
 [ -f $GOPATH/bin/assume-role ] && eval "$($GOPATH/bin/assume-role -init)"
 
 export MONOREPO_PATH="/Users/wai/src/repo"
+export MY_JIRA_BOARD="https://jira.example.com/secure/RapidBoard.jspa?rapidView=1505&projectKey=DEPLOY"
 source $MONOREPO_PATH/scripts/rc/rc.sh
 eval "ssh-add -A 2>/dev/null;"

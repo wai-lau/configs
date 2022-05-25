@@ -31,3 +31,7 @@
   insteadOf = https://github.example.com/
 [commit]
 	gpgsign = true
+[color]
+	ui = true
+[push]
+	default = simple

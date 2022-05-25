@@ -13,3 +13,4 @@
 *.pfx
 *.pem
 .local.zsh
+*.idea
