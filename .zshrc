@@ -28,6 +28,7 @@ alias dc='docker-compose'
 
 export XDG_CONFIG_HOME=~/.config
 export EDITOR=/usr/bin/vim
+export GITHUB_USER=wailun-lau
 
 autoload -U compinit && compinit
 zmodload -i zsh/complist
@@ -53,6 +54,8 @@ export GOPROXY=https://gomodules.example.com/
 export GONOSUMDB=github.example.com
 export GOPATH=$HOME/go
 export PATH=$GOPATH/bin:$PATH
+
+ssh-add /Users/wai/.ssh/work_key
 
 # assume-role
 # ———————————
