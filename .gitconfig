@@ -14,7 +14,8 @@
   p = !git pull upstream master --rebase
   fp = !git push --force-with-lease origin $(git rev-parse --abbrev-ref HEAD)
   f = !git add -A && git commit --amend --no-edit
-  ff = !git f && git fp
+  m = !git fetch upstream master && git merge upstream/master --no-edit
+	ff = !git m && git push --set-upstream origin $(git rev-parse --abbrev-ref HEAD)
   d1 = !git diff HEAD~1 HEAD
   d = !git diff
   fbf = !git f && git fb && git fp
