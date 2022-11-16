@@ -14,6 +14,7 @@ bindkey "\e[3~" delete-char
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 export PATH=/usr/local/bin:$PATH
+export PATH=$HOME/go/bin:$PATH
 
 alias pip='pip3'
 alias python='python3'
