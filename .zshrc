@@ -16,7 +16,20 @@ bindkey "\e[3~" delete-char
 export PATH=/usr/local/bin:$PATH
 export PATH=$HOME/go/bin:$PATH
 
+bufcreate () {
+  buf beta registry repository create $1 --visibility public
+}
+bufdel() {
+  buf beta registry repository delete $1 --force
+}
+acct () {
+  cd ~/src/aws-resources
+  git grep $1| grep account_id | awk -F'/' '{print $2}' | awk -F'.' '{print $1}'
+  cd - > /dev/null
+}
+
 alias pip='pip3'
+alias spec='bundle exec rspec'
 alias python='python3'
 alias vim!='sudo vim'
 alias kk='kctx'
@@ -26,6 +39,11 @@ alias alacon='vim ~/.config/alacritty/alacritty.yml'
 alias g=git
 alias k=kubectl
 alias dc='docker-compose'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
+alias klv='top -l 1 | grep dlv | awk "{print $1;}" | xargs kill'
 
 export XDG_CONFIG_HOME=~/.config
 export EDITOR=/usr/bin/vim
@@ -64,5 +82,7 @@ ssh-add /Users/wai/.ssh/work_key
 
 export MONOREPO_PATH="/Users/wai/src/repo"
 export MY_JIRA_BOARD="https://jira.example.com/secure/RapidBoard.jspa?rapidView=1505&projectKey=DEPLOY"
-source $MONOREPO_PATH/scripts/rc/rc.sh
 eval "ssh-add -A 2>/dev/null;"
+
+ulimit -n 10240
+
