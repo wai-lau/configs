@@ -82,7 +82,18 @@ ssh-add /Users/wai/.ssh/work_key
 
 export MONOREPO_PATH="/Users/wai/src/repo"
 export MY_JIRA_BOARD="https://jira.example.com/secure/RapidBoard.jspa?rapidView=1505&projectKey=DEPLOY"
+source $MONOREPO_PATH/scripts/rc/rc.sh
 eval "ssh-add -A 2>/dev/null;"
 
 ulimit -n 10240
 
+source $HOME/.alias.zsh    # load aliases
+source $HOME/.local.zsh    # load environment variables and secret keys
+
+# Brew
+# ————
+export PATH=/opt/homebrew/bin:$PATH
+
+# Work
+# ————————
+export PATH="$HOME/.local/bin:$PATH"
