@@ -124,6 +124,7 @@ noremap : ;
 
 " Stop it vim
 inoremap jk <Esc>
+vnoremap jk <Esc>
 nnoremap <Esc><Esc> :nohls<CR>
 vnoremap <Esc><Esc> <Esc>
 

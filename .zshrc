@@ -31,8 +31,36 @@ alias ....='cd ../../..'
 alias .....='cd ../../../..'
 alias klv='top -l 1 | grep dlv | awk "{print $1;}" | xargs kill'
 alias version:='echo $(zsh --version)'
+alias swp='find . -name ".*.swp"; find . -name ".*.swo"; find . -name "**/.*.swp"; find . -name "**/.*.swo"'
+alias swp!='find . -name ".*.swp" -delete; find . -name ".*.swo" -delete; find . -name "**/.*.swp" -delete; find . -name "**/.*.swo" -delete'
 
-export XDG_CONFIG_HOME=~/.config
+swo () {
+  found=$(find . -name ".*.swp")
+  found=$found\ $(find . -name ".*.swo")
+  found=$found\ $(find . -name "**/.*.swp")
+  found=$found\ $(find . -name "**/.*.swo")
+  local original
+  while IFS= read -r swp; do
+    echo "Recovering: $swp"
+    swp="${swp//$'\n'/}"
+    swp="${swp//$'\r'/}"
+    swp="${swp// /}"
+    base=$(basename $swp)
+    vim -r "$swp" -c "wq" </dev/tty > /dev/null 2>&1
+    rm $swp
+
+    dir=$(dirname $swp)
+    base="${base%.*}"
+    if [[ -e "$dir/$base" ]]; then
+    echo "File exists. Performing something..."
+    else
+      base="${base:1}"
+    fi
+    original="$original $dir/$base"
+  done <<< "$found"
+  vim -O -- ${${${original//$'\n'/ }:1}[@]}
+}
+
 export EDITOR=/usr/bin/vim
 export GITHUB_USER=wailun-lau
 
@@ -144,14 +172,14 @@ trig () {
 
 logs () {
   if [ -z "$@" ]; then
-		k logs -f $(kubectl get pods --sort-by=.status.startTime --no-headers | awk -v n=1 'NR == n { print $1 }')
+    k logs -f $(kubectl get pods --sort-by=.status.startTime --no-headers | awk -v n=1 'NR == n { print $1 }')
   else
-		k logs -f $(kubectl get pods --sort-by=.status.startTime --no-headers | awk -v n=$@ 'NR == n { print $1 }')
+    k logs -f $(kubectl get pods --sort-by=.status.startTime --no-headers | awk -v n=$@ 'NR == n { print $1 }')
   fi
 }
 
 gofix() {
-	golangci-lint run --fix
-	git commit -am "golangci-lint run --fix"
+  golangci-lint run --fix
+  git commit -am "golangci-lint run --fix"
 }
 
