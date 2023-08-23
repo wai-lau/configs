@@ -41,6 +41,7 @@ Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'blueyed/vim-diminactive'
 Plugin 'robbles/logstash.vim'
+Bundle 'uarun/vim-protobuf'
 
 " Put your non-Plugin stuff after this line
 " Specify a directory for plugins
@@ -123,6 +124,7 @@ noremap : ;
 
 " Stop it vim
 inoremap jk <Esc>
+vnoremap jk <Esc>
 nnoremap <Esc><Esc> :nohls<CR>
 vnoremap <Esc><Esc> <Esc>
 
@@ -214,8 +216,8 @@ nnoremap ø <Tab>
 " The big GoVet
 nnoremap <C-g> :w<CR>:GoVet<CR>:ccl<CR>:cw 12
 
-nnoremap <c-c><c-c> :exec "color " . ((g:colors_name == "sierra") ? "sift" : "sierra")<CR>
-let g:colors_name = "sierra"
+nnoremap <c-c><c-c> :exec "color " . ((g:colors_name == "zenburn") ? "sift" : "zenburn")<CR>
+let g:colors_name = "zenburn"
 
 " Use GoDef for Go definitions
 autocmd FileType go nnoremap <buffer> } :vsp<CR>:GoDef<CR><C-w>T
@@ -228,6 +230,7 @@ autocmd FileType ruby,python,javascript nnoremap <buffer> ? :vsp<CR><C-]><C-w>x<
 " Seaching through the whole directory
 :command -nargs=+ GG execute "silent Ggrep! ".shellescape(<q-args>)." -- '*.".expand('%:e')."'" | cw | redraw!
 :command -nargs=+ GGG execute "silent Ggrep! ".shellescape(<q-args>) | cw | redraw!
+:command GGGG execute "silent Ggrep! ".shellescape('#····') | cw | redraw!
 " Global Search Highlighted Text
 vnoremap <C-g> y/<C-R>"<CR>:lclose<CR>:GG <C-R>"<CR>
 vnoremap <C-f> y/<C-R>"<CR>
@@ -278,7 +281,7 @@ endfunction
 
 call NormalTags()
 
-autocmd BufEnter *.rb                  colorscheme sierra     | call HashTags()     | call AdjustColors()
+autocmd BufEnter *.rb                  colorscheme zenburn    | call HashTags()     | call AdjustColors()
 autocmd BufLeave *.rb                  call NormalTags()
 autocmd BufEnter *.py                  colorscheme sialoquent | call AdjustColors()
 autocmd BufEnter *.go                  colorscheme sift       | call AdjustColors()
@@ -291,8 +294,8 @@ autocmd BufEnter *.conf                colorscheme sift       | call AdjustColor
 " slatedark sierra carrot seti maui
 " stonewashed-256 py-darcula ayu sialoquent
 " zenburn sift
-colorscheme sierra
-let g:colors_name = "sierra"
+colorscheme zenburn
+let g:colors_name = "zenburn"
 autocmd! colorscheme * call AdjustColors()
 
 " Add spaces after comment delimiters by default
@@ -301,3 +304,4 @@ let g:NERDSpaceDelims = 1
 let g:NERDCompactSexyComs = 1
 let g:NERDCustomDelimiters = { 'logstash': { 'left': '#','right': '' } }
 
+set cmdheight=1
