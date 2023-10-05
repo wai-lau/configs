@@ -58,7 +58,7 @@ swo () {
     fi
     original="$original $dir/$base"
   done <<< "$found"
-  vim -O -- ${${${original//$'\n'/ }:1}[@]}
+  vim -O ${${${original//$'\n'/ }:1}[@]}
 }
 
 export EDITOR=/usr/bin/vim
