@@ -3,9 +3,9 @@
 [protocol]
 	version = 2
 [user]
-	name = Wai Lau
+	name = Wai Lun Lau
 	email = user@example.com
-	signingkey = 54C7BFC2822628F6
+	signingKey = 535875D6728DD492
 [core]
 	editor = /usr/bin/vim
 	excludesfile = /Users/wai/.gitignoreglobal
@@ -30,7 +30,7 @@
 [pull]
 	rebase = true
 [url "git@github.example.com:"]
-  insteadOf = https://github.example.com/
+	insteadOf = https://github.example.com/
 [commit]
 	gpgsign = true
 [color]
@@ -41,4 +41,4 @@
 	insteadOf = https://github.com/
 	insteadOf = https://github.com/
 [gpg]
-	program = /usr/local/bin/gpg
+	program = /opt/homebrew/bin/gpg
