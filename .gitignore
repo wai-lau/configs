@@ -20,6 +20,10 @@
 
 !.alias.zsh
 !.local.zsh
-!src/repo/scripts/rc/rc.sh
 
+!src/
+!src/repo/
+!src/repo/scripts/
+!src/repo/scripts/rc/
+!src/repo/scripts/rc/rc.sh
 
