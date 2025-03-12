@@ -17,3 +17,9 @@
 
 !.config/iterm2
 !.config/iterm2/**/*
+
+!.alias.zsh
+!.local.zsh
+!src/repo/scripts/rc/rc.sh
+
+
