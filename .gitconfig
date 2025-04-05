@@ -3,9 +3,9 @@
 [protocol]
 	version = 2
 [user]
-	name = Wai Lun Lau
+	name = wailun-lau
 	email = user@example.com
-	signingKey = 535875D6728DD492
+	signingKey = 741C7ECBBC37E71C
 [core]
 	editor = /usr/bin/vim
 	excludesfile = /Users/wai/.gitignoreglobal

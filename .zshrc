@@ -183,3 +183,41 @@ gofix() {
   git commit -am "golangci-lint run --fix"
 }
 
+
+# Brew
+# ————
+export PATH=/opt/homebrew/bin:$PATH
+
+# Work
+# ————
+export PATH="$HOME/.local/bin:$PATH"
+
+# Ruby
+# ————
+export PATH="$HOME/.rbenv/shims:$PATH"
+eval "$(rbenv init -)"
+
+# Python
+# ——————
+export PATH="$HOME/.pyenv/shims:$PATH"
+eval "$(pyenv init -)"
+
+# Go
+# ——
+export GO111MODULE=on
+export GOPROXY=https://gomodules.example.com/
+export GONOSUMDB=github.example.com
+export GOPATH=$HOME/go
+export PATH=$GOPATH/bin:$PATH
+export TERM=screen-256color
+
+
+# assume-role
+# ———————————
+[ -f $GOPATH/bin/assume-role ] && eval "$($GOPATH/bin/assume-role -init)"
+
+export JAVA_HOME=$(/usr/libexec/java_home -v 17)
+
+eval "$(direnv hook zsh)"
+
+export PATH="/opt/homebrew/opt/zip/bin:$PATH"
