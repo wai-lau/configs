@@ -21,7 +21,7 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 
 Plugin 'fatih/vim-go'
-Plugin 'christoomey/vim-tmux-navigator'
+" Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'vim-scripts/indentpython.vim'
 Plugin 'vim-syntastic/syntastic'
 Plugin 'nvie/vim-flake8'
@@ -60,7 +60,7 @@ syntax enable
 set term=screen-256color
 set t_ut=
 
-let g:airline_theme='fruit_punch'
+let g:airline_theme='bubblegum'
 let g:airline_section_b = ''
 let g:airline_section_x = ''
 let g:airline_section_y = ''
@@ -76,9 +76,9 @@ let g:syntastic_check_on_wq = 0
 let g:syntastic_python_checkers=['flake8']
 
 let g:fzf_action = {
-	\ 'ctrl-i': 'split',
-	\ 'ctrl-t': 'vsplit',
-	\ 'ctrl-n': 'tab split' }
+  \ 'ctrl-i': 'split',
+  \ 'ctrl-t': 'vsplit',
+  \ 'ctrl-n': 'tab split' }
 
 " Autocomplete options
 set completeopt+=menuone
@@ -193,17 +193,17 @@ noremap © 5gt
 
 " Add/Remove tag lines
 function HashTags()
-	nnoremap t A     #····<Esc>0
-	nnoremap T V:s/\ \ \ \ \ \#····/<CR>:nohls<CR>
-	nnoremap ¥ /.*\ \ \ \ \ \#····$<CR>
-	nnoremap Á :%s/\ \ \ \ \ \#····$//g<CR>:nohls<CR>
+  nnoremap t A     #····<Esc>0
+  nnoremap T V:s/\ \ \ \ \ \#····/<CR>:nohls<CR>
+  nnoremap ¥ /.*\ \ \ \ \ \#····$<CR>
+  nnoremap Á :%s/\ \ \ \ \ \#····$//g<CR>:nohls<CR>
 endfunction
 
 function NormalTags()
-	nnoremap t A     //····<Esc>0
-	nnoremap T V:s/\ \ \ \ \ \/\/····/<CR>:nohls<CR>
-	nnoremap ¥ /.*\ \ \ \ \ \/\/····$<CR>
-	nnoremap Á :%s/\ \ \ \ \ \/\/····$//g<CR>:nohls<CR>
+  nnoremap t A     //····<Esc>0
+  nnoremap T V:s/\ \ \ \ \ \/\/····/<CR>:nohls<CR>
+  nnoremap ¥ /.*\ \ \ \ \ \/\/····$<CR>
+  nnoremap Á :%s/\ \ \ \ \ \/\/····$//g<CR>:nohls<CR>
 endfunction
 
 " Repeat
@@ -262,7 +262,7 @@ autocmd FileType qf setlocal wrap
 autocmd FileType qf nnoremap <buffer> <CR> :call OpenQF()<CR>
 
 function OpenQF()
-	eval feedkeys(getwininfo(win_getid())[0]['loclist'] ? "\<CR>" : "\<CR>\<C-w>L:cclose\<CR>:lclose\<CR>:cw\<CR>\<C-w>kI\<Esc>l", 'n')
+  eval feedkeys(getwininfo(win_getid())[0]['loclist'] ? "\<CR>" : "\<CR>\<C-w>L:cclose\<CR>:lclose\<CR>:cw\<CR>\<C-w>kI\<Esc>l", 'n')
 endfunction
 
 let g:go_fmt_autosave=1
@@ -274,8 +274,8 @@ let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
 " let g:go_list_type = "quickfix"
 
 function AdjustColors()
-	source ~/.vim/default_colors.vim
-	AirlineRefresh
+  source ~/.vim/default_colors.vim
+  AirlineRefresh
 endfunction
 
 call NormalTags()
@@ -305,8 +305,21 @@ let g:NERDCustomDelimiters = { 'logstash': { 'left': '#','right': '' } }
 
 set cmdheight=1
 
-let g:tmux_navigator_no_mappings = 1
-nnoremap ˙ :TmuxNavigateLeft<CR>
-nnoremap ∆ :TmuxNavigateDown<CR>
-nnoremap ˚ :TmuxNavigateUp<CR>
-nnoremap ¬ :TmuxNavigateRight<CR>
+function! N(dir)
+  let prev = winnr()
+  execute "wincmd " . a:dir
+  if winnr() == prev
+    let dmap = {'h': '-L', 'j': '-D', 'k': '-U', 'l': '-R'}
+    if has('nvim')
+      call jobstart(['tmux', 'select-pane', dmap[a:dir]])
+    else
+      call job_start(['tmux', 'select-pane', dmap[a:dir]])
+    endif
+  endif
+endfunction
+
+nnoremap ˙ :call N('h')<CR>
+nnoremap ∆ :call N('j')<CR>
+nnoremap ˚ :call N('k')<CR>
+nnoremap ¬ :call N('l')<CR>
+
