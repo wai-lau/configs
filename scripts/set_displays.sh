@@ -33,7 +33,7 @@ fi
 # Run your displayplacer config with dynamic external ID
 # Replace the below command with your actual desired config
 /opt/homebrew/bin/displayplacer \
-  "id:$EXTERNAL_ID res:2560x1067 hz:60 color_depth:8 enabled:true scaling:on origin:(0,0) degree:0" \
+	"id:$EXTERNAL_ID res:2560x1067 hz:60 color_depth:8 enabled:true scaling:on origin:(0,0) degree:0" \
   "id:37D8832A-2D66-02CA-B9F7-8F30A301B230 res:1352x878 hz:120 color_depth:8 enabled:true scaling:on origin:(-1352,189) degree:0" \
-  "id:AC3244C3-7411-4FEF-85D2-559A9ED73ECF res:1080x1920 hz:50 color_depth:8 enabled:true scaling:off origin:(2560,-573) degree:90"
+	"id:AC3244C3-7411-4FEF-85D2-559A9ED73ECF res:1080x1920 hz:50 color_depth:8 enabled:true scaling:off origin:(2560,-416) degree:90"
 

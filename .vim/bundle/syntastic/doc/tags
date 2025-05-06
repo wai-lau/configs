@@ -133,13 +133,13 @@
 'g:syntastic_ocaml_use_ocamlbuild'	syntastic-checkers.txt	/*'g:syntastic_ocaml_use_ocamlbuild'*
 'g:syntastic_ocaml_use_ocamlc'	syntastic-checkers.txt	/*'g:syntastic_ocaml_use_ocamlc'*
 'g:syntastic_pc_lint_config_file'	syntastic-checkers.txt	/*'g:syntastic_pc_lint_config_file'*
-'g:syntastic_perl6_lib_path'	syntastic-checkers.txt	/*'g:syntastic_perl6_lib_path'*
 'g:syntastic_perl_interpreter'	syntastic-checkers.txt	/*'g:syntastic_perl_interpreter'*
 'g:syntastic_perl_lib_path'	syntastic-checkers.txt	/*'g:syntastic_perl_lib_path'*
 'g:syntastic_perl_perlcritic_thres'	syntastic-checkers.txt	/*'g:syntastic_perl_perlcritic_thres'*
 'g:syntastic_python_python_use_codec'	syntastic-checkers.txt	/*'g:syntastic_python_python_use_codec'*
 'g:syntastic_r_lintr_cache'	syntastic-checkers.txt	/*'g:syntastic_r_lintr_cache'*
 'g:syntastic_r_lintr_linters'	syntastic-checkers.txt	/*'g:syntastic_r_lintr_linters'*
+'g:syntastic_raku_lib_path'	syntastic-checkers.txt	/*'g:syntastic_raku_lib_path'*
 'g:syntastic_rst_sphinx_config_dir'	syntastic-checkers.txt	/*'g:syntastic_rst_sphinx_config_dir'*
 'g:syntastic_rst_sphinx_source_dir'	syntastic-checkers.txt	/*'g:syntastic_rst_sphinx_source_dir'*
 'g:syntastic_ruby_exec'	syntastic-checkers.txt	/*'g:syntastic_ruby_exec'*
@@ -316,7 +316,6 @@ syntastic-checkers-objc	syntastic-checkers.txt	/*syntastic-checkers-objc*
 syntastic-checkers-objcpp	syntastic-checkers.txt	/*syntastic-checkers-objcpp*
 syntastic-checkers-ocaml	syntastic-checkers.txt	/*syntastic-checkers-ocaml*
 syntastic-checkers-perl	syntastic-checkers.txt	/*syntastic-checkers-perl*
-syntastic-checkers-perl6	syntastic-checkers.txt	/*syntastic-checkers-perl6*
 syntastic-checkers-php	syntastic-checkers.txt	/*syntastic-checkers-php*
 syntastic-checkers-po	syntastic-checkers.txt	/*syntastic-checkers-po*
 syntastic-checkers-pod	syntastic-checkers.txt	/*syntastic-checkers-pod*
@@ -326,6 +325,7 @@ syntastic-checkers-python	syntastic-checkers.txt	/*syntastic-checkers-python*
 syntastic-checkers-qml	syntastic-checkers.txt	/*syntastic-checkers-qml*
 syntastic-checkers-r	syntastic-checkers.txt	/*syntastic-checkers-r*
 syntastic-checkers-racket	syntastic-checkers.txt	/*syntastic-checkers-racket*
+syntastic-checkers-raku	syntastic-checkers.txt	/*syntastic-checkers-raku*
 syntastic-checkers-rmd	syntastic-checkers.txt	/*syntastic-checkers-rmd*
 syntastic-checkers-rnc	syntastic-checkers.txt	/*syntastic-checkers-rnc*
 syntastic-checkers-rst	syntastic-checkers.txt	/*syntastic-checkers-rst*
@@ -485,7 +485,6 @@ syntastic-json-jsonlint	syntastic-checkers.txt	/*syntastic-json-jsonlint*
 syntastic-json-jsonval	syntastic-checkers.txt	/*syntastic-json-jsonval*
 syntastic-less-lessc	syntastic-checkers.txt	/*syntastic-less-lessc*
 syntastic-less-recess	syntastic-checkers.txt	/*syntastic-less-recess*
-syntastic-less-stylelint	syntastic-checkers.txt	/*syntastic-less-stylelint*
 syntastic-lex-flex	syntastic-checkers.txt	/*syntastic-lex-flex*
 syntastic-license	syntastic.txt	/*syntastic-license*
 syntastic-limbo-limbo	syntastic-checkers.txt	/*syntastic-limbo-limbo*
@@ -515,7 +514,6 @@ syntastic-ocaml-camlp4o	syntastic-checkers.txt	/*syntastic-ocaml-camlp4o*
 syntastic-perl-perl	syntastic-checkers.txt	/*syntastic-perl-perl*
 syntastic-perl-perlcritic	syntastic-checkers.txt	/*syntastic-perl-perlcritic*
 syntastic-perl-podchecker	syntastic-checkers.txt	/*syntastic-perl-podchecker*
-syntastic-perl6-perl6	syntastic-checkers.txt	/*syntastic-perl6-perl6*
 syntastic-php-php	syntastic-checkers.txt	/*syntastic-php-php*
 syntastic-php-phpcs	syntastic-checkers.txt	/*syntastic-php-phpcs*
 syntastic-php-phplint	syntastic-checkers.txt	/*syntastic-php-phplint*
@@ -550,6 +548,7 @@ syntastic-r-lintr	syntastic-checkers.txt	/*syntastic-r-lintr*
 syntastic-r-svtools	syntastic-checkers.txt	/*syntastic-r-svtools*
 syntastic-racket-code-ayatollah	syntastic-checkers.txt	/*syntastic-racket-code-ayatollah*
 syntastic-racket-racket	syntastic-checkers.txt	/*syntastic-racket-racket*
+syntastic-raku-raku	syntastic-checkers.txt	/*syntastic-raku-raku*
 syntastic-recommended	syntastic.txt	/*syntastic-recommended*
 syntastic-rmd-lintr	syntastic-checkers.txt	/*syntastic-rmd-lintr*
 syntastic-rnc-rnv	syntastic-checkers.txt	/*syntastic-rnc-rnv*
@@ -576,7 +575,6 @@ syntastic-scss-sass	syntastic-checkers.txt	/*syntastic-scss-sass*
 syntastic-scss-sass_lint	syntastic-checkers.txt	/*syntastic-scss-sass_lint*
 syntastic-scss-sassc	syntastic-checkers.txt	/*syntastic-scss-sassc*
 syntastic-scss-scss_lint	syntastic-checkers.txt	/*syntastic-scss-scss_lint*
-syntastic-scss-stylelint	syntastic-checkers.txt	/*syntastic-scss-stylelint*
 syntastic-sessions	syntastic.txt	/*syntastic-sessions*
 syntastic-sh-bashate	syntastic-checkers.txt	/*syntastic-sh-bashate*
 syntastic-sh-checkbashisms	syntastic-checkers.txt	/*syntastic-sh-checkbashisms*

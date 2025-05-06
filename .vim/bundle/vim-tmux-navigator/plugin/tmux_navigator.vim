@@ -1,5 +1,4 @@
-" Maps <C-h/j/k/l> to switch vim splits in the given direction. If there are
-" no more windows in that direction, forwards the operation to tmux.
+" Maps <C-h/j/k/l> to switch vim splits in the given direction. If there are no more windows in that direction, forwards the operation to tmux.
 " Additionally, <C-\> toggles between last active vim splits/tmux panes.
 
 if exists("g:loaded_tmux_navigator") || &cp || v:version < 700
@@ -16,11 +15,29 @@ function! s:VimNavigate(direction)
 endfunction
 
 if !get(g:, 'tmux_navigator_no_mappings', 0)
-  nnoremap <silent> <c-h> :TmuxNavigateLeft<cr>
-  nnoremap <silent> <c-j> :TmuxNavigateDown<cr>
-  nnoremap <silent> <c-k> :TmuxNavigateUp<cr>
-  nnoremap <silent> <c-l> :TmuxNavigateRight<cr>
-  nnoremap <silent> <c-\> :TmuxNavigatePrevious<cr>
+  nnoremap <silent> <c-h> :<C-U>TmuxNavigateLeft<cr>
+  nnoremap <silent> <c-j> :<C-U>TmuxNavigateDown<cr>
+  nnoremap <silent> <c-k> :<C-U>TmuxNavigateUp<cr>
+  nnoremap <silent> <c-l> :<C-U>TmuxNavigateRight<cr>
+  nnoremap <silent> <c-\> :<C-U>TmuxNavigatePrevious<cr>
+
+  if !empty($TMUX)
+    function! IsFZF()
+      return &ft == 'fzf'
+    endfunction
+    tnoremap <expr> <silent> <C-h> IsFZF() ? "\<C-h>" : "\<C-w>:\<C-U> TmuxNavigateLeft\<cr>"
+    tnoremap <expr> <silent> <C-j> IsFZF() ? "\<C-j>" : "\<C-w>:\<C-U> TmuxNavigateDown\<cr>"
+    tnoremap <expr> <silent> <C-k> IsFZF() ? "\<C-k>" : "\<C-w>:\<C-U> TmuxNavigateUp\<cr>"
+    tnoremap <expr> <silent> <C-l> IsFZF() ? "\<C-l>" : "\<C-w>:\<C-U> TmuxNavigateRight\<cr>"
+  endif
+
+  if !get(g:, 'tmux_navigator_disable_netrw_workaround', 0)
+    if !exists('g:Netrw_UserMaps')
+      let g:Netrw_UserMaps = [['<C-l>', '<C-U>TmuxNavigateRight<cr>']]
+    else
+      echohl ErrorMsg | echo 'vim-tmux-navigator conflicts with netrw <C-l> mapping. See https://github.com/christoomey/vim-tmux-navigator#netrw or add `let g:tmux_navigator_disable_netrw_workaround = 1` to suppress this warning.' | echohl None
+    endif
+  endif
 endif
 
 if empty($TMUX)
@@ -45,6 +62,16 @@ endif
 if !exists("g:tmux_navigator_disable_when_zoomed")
   let g:tmux_navigator_disable_when_zoomed = 0
 endif
+
+if !exists("g:tmux_navigator_preserve_zoom")
+  let g:tmux_navigator_preserve_zoom = 0
+endif
+
+if !exists("g:tmux_navigator_no_wrap")
+  let g:tmux_navigator_no_wrap = 0
+endif
+
+let s:pane_position_from_direction = {'h': 'left', 'j': 'bottom', 'k': 'top', 'l': 'right'}
 
 function! s:TmuxOrTmateExecutable()
   return (match($TMUX, 'tmate') != -1 ? 'tmate' : 'tmux')
@@ -90,6 +117,7 @@ function! s:ShouldForwardNavigationBackToTmux(tmux_last_pane, at_tab_page_edge)
   return a:tmux_last_pane || a:at_tab_page_edge
 endfunction
 
+
 function! s:TmuxAwareNavigate(direction)
   let nr = winnr()
   let tmux_last_pane = (a:direction == 'p' && s:tmux_is_last_pane)
@@ -113,6 +141,12 @@ function! s:TmuxAwareNavigate(direction)
       endtry
     endif
     let args = 'select-pane -t ' . shellescape($TMUX_PANE) . ' -' . tr(a:direction, 'phjkl', 'lLDUR')
+    if g:tmux_navigator_preserve_zoom == 1
+      let l:args .= ' -Z'
+    endif
+    if g:tmux_navigator_no_wrap == 1
+      let args = 'if -F "#{pane_at_' . s:pane_position_from_direction[a:direction] . '}" "" "' . args . '"'
+    endif
     silent call s:TmuxCommand(args)
     if s:NeedsVitalityRedraw()
       redraw!

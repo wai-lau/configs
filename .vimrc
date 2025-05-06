@@ -124,7 +124,6 @@ noremap : ;
 
 " Stop it vim
 inoremap jk <Esc>
-vnoremap jk <Esc>
 nnoremap <Esc><Esc> :nohls<CR>
 vnoremap <Esc><Esc> <Esc>
 
@@ -305,3 +304,9 @@ let g:NERDCompactSexyComs = 1
 let g:NERDCustomDelimiters = { 'logstash': { 'left': '#','right': '' } }
 
 set cmdheight=1
+
+let g:tmux_navigator_no_mappings = 1
+nnoremap ˙ :TmuxNavigateLeft<CR>
+nnoremap ∆ :TmuxNavigateDown<CR>
+nnoremap ˚ :TmuxNavigateUp<CR>
+nnoremap ¬ :TmuxNavigateRight<CR>

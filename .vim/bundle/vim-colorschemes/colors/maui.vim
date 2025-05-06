@@ -52,7 +52,7 @@ hi CursorColumn term=reverse guibg=#303030 ctermbg=236
 hi CursorLine term=none gui=none cterm=none guibg=#000000 ctermbg=233
 hi ColorColumn term=none guibg=#303030 ctermbg=236
 hi MatchParen term=reverse gui=bold cterm=bold guifg=#121212 ctermfg=233 guibg=#ff8700 ctermbg=208
-hi Normal guifg=#d0d0d0 ctermfg=252 guibg=#151515 ctermbg=236
+hi Normal guifg=#d0d0d0 ctermfg=252 guibg=#151515 ctermbg=233
 hi Cursor guifg=#151515 ctermfg=16 guibg=#dadada ctermbg=253
 hi Comment guifg=#585858 ctermfg=240
 hi Constant term=underline gui=bold cterm=bold guifg=#df005f ctermfg=161
@@ -96,8 +96,8 @@ hi link gitKeyword Function
 hi link gitIdentity Title
 hi link gitDate PreProc
 
-hi IndentGuidesOdd guibg=#151515 ctermbg=239
-hi IndentGuidesEven guibg=#080808 ctermbg=238
+hi IndentGuidesOdd guibg=#151515 ctermbg=233
+hi IndentGuidesEven guibg=#080808 ctermbg=232
 
 hi SyntasticError term=reverse gui=bold,underline cterm=bold,underline guifg=#ffafff ctermfg=219 guibg=#303030 ctermbg=236
 hi SyntasticWarning term=standout gui=bold,underline cterm=bold,underline guifg=#ff00af ctermfg=199 guibg=#262626 ctermbg=235
@@ -110,37 +110,3 @@ hi SyntasticErrorSign ctermfg=red guibg=#121212 ctermbg=233
 set bg=dark "bg switches to light for some reason
 
 " vim:set fdm=marker
-
-
-highlight! Visual                 guifg=#5f8787  guibg=NONE     gui=reverse    ctermfg=66     ctermbg=NONE    cterm=reverse
-highlight! Search               guifg=#ffffdf  guibg=NONE     gui=reverse  ctermfg=230   ctermbg=NONE  cterm=reverse
-
-highlight! Normal               guifg=#e4e4e4  guibg=#303030  gui=NONE     ctermfg=251   ctermbg=236   cterm=NONE
-highlight! TabLineFill          guifg=NONE     guibg=#262626  gui=NONE     ctermfg=NONE  ctermbg=235   cterm=NONE
-
-highlight! CursorLine           guifg=NONE     guibg=#3a3a3a  gui=NONE     ctermfg=NONE  ctermbg=237   cterm=NONE
-highlight! CursorColumn         guifg=NONE     guibg=#3a3a3a  gui=NONE     ctermfg=NONE  ctermbg=237   cterm=NONE
-highlight! ColorColumn          guifg=NONE     guibg=#3a3a3a  gui=NONE     ctermfg=NONE  ctermbg=237   cterm=NONE
-
-highlight! StatusLine           guifg=#eeeeee  guibg=#262626  gui=NONE     ctermfg=255   ctermbg=235   cterm=NONE
-highlight! TabLineSel           guifg=#eeeeee  guibg=#262626  gui=NONE     ctermfg=255   ctermbg=235   cterm=NONE
-highlight! PmenuSel             guifg=#eeeeee  guibg=#262626  gui=NONE     ctermfg=255   ctermbg=235   cterm=NONE
-
-highlight! StatusLineNC         guifg=#767676  guibg=#262626  gui=NONE     ctermfg=243   ctermbg=235   cterm=NONE
-highlight! VertSplit            guifg=#767676  guibg=#262626  gui=NONE     ctermfg=243   ctermbg=235   cterm=NONE
-highlight! TabLine              guifg=#767676  guibg=#262626  gui=NONE     ctermfg=243   ctermbg=235   cterm=NONE
-highlight! Pmenu                guifg=#767676  guibg=#262626  gui=NONE     ctermfg=243   ctermbg=235   cterm=NONE
-highlight! LineNr               guifg=#767676  guibg=#262626  gui=NONE     ctermfg=243   ctermbg=235   cterm=NONE
-
-highlight! NonText              guifg=#444444  guibg=NONE     gui=NONE     ctermfg=238   ctermbg=NONE  cterm=NONE
-highlight! SpecialKey           guifg=#444444  guibg=NONE     gui=NONE     ctermfg=238   ctermbg=NONE  cterm=NONE
-
-highlight! PmenuSbar            guifg=#262626  guibg=#262626  gui=NONE     ctermfg=235   ctermbg=235   cterm=NONE
-highlight! PmenuThumb           guifg=#262626  guibg=#262626  gui=NONE     ctermfg=235   ctermbg=235   cterm=NONE
-
-highlight! Comment              guifg=#767676  guibg=NONE     gui=NONE     ctermfg=243   ctermbg=NONE  cterm=NONE
-highlight! Folded               guifg=#767676  guibg=NONE     gui=NONE     ctermfg=243   ctermbg=NONE  cterm=NONE
-
-highlight! IndentGuidesOdd  ctermbg=239 ctermfg=235
-highlight! IndentGuidesEven ctermbg=238 ctermfg=235
-highlight! BadWhitespace ctermbg=196

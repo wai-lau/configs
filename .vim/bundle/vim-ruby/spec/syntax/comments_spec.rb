@@ -40,6 +40,24 @@ describe "Syntax highlighting" do
     EOF
   end
 
+  specify "magic comments with -" do
+    assert_correct_highlighting <<~'EOF', 'frozen-string-literal', 'rubyMagicComment'
+      # frozen-string-literal: true
+    EOF
+  end
+
+  specify "magic comments with - and _" do
+    assert_correct_highlighting <<~'EOF', 'frozen-string_literal', 'rubyMagicComment'
+      # frozen-string_literal: true
+    EOF
+  end
+
+  specify "magic comments - shareable_constant_value" do
+    assert_correct_highlighting <<~'EOF', 'shareable_constant_value', 'rubyMagicComment'
+      # shareable_constant_value: literal
+    EOF
+  end
+
   specify "TODO comments" do
     assert_correct_highlighting <<~'EOF', 'TODO', 'rubyTodo'
       # TODO: turn off the oven

@@ -23,21 +23,26 @@ function! go#rename#Rename(bang, ...) abort
   let l:bin = go#config#RenameCommand()
 
   " return with a warning if the bin doesn't exist
-  let bin_path = go#path#CheckBinPath(l:bin)
+  let bin_path = go#path#CheckBinPath(substitute(l:bin, 'gopls rename$', 'gopls', ''))
   if empty(bin_path)
+    return
+  endif
+
+  if l:bin == 'gopls'
+    call go#lsp#Rename(to_identifier)
     return
   endif
 
   let fname = expand('%:p')
   let pos = go#util#OffsetCursor()
-  let offset = printf('%s:#%d', fname, pos)
 
   let args = []
   if l:bin == 'gorename'
+    let offset = printf('%s:#%d', fname, pos)
     let l:args = extend(l:args, ['-tags', go#config#BuildTags(), '-offset', offset, '-to', to_identifier])
-  elseif l:bin == 'gopls'
-    " TODO(bc): use -tags when gopls supports it
-    let l:args = extend(l:args, ['rename', '-w', l:offset, to_identifier])
+  elseif l:bin == 'gopls rename'
+    let offset = printf('%s:#%d', fname, pos)
+    let l:args = extend(l:args, ['rename', '-write', offset, to_identifier])
   else
     call go#util#EchoWarning('unexpected rename command')
   endif

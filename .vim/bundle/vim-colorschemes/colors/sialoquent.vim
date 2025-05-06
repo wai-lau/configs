@@ -40,7 +40,7 @@ let s:lightTan         = { "gui": "#ECE1C8", "cterm": "230" }
 
 " Custom
 let s:almostBlack      = { "gui": "#393f4c", "cterm": "233" }
-let s:middleYellow     = { "gui": "#EBCB8B", "cterm": "123" }
+let s:middleYellow     = { "gui": "#EBCB8B", "cterm": "149" }
 let s:lightGreen       = { "gui": "#A3BE8C", "cterm": "157" }
 let s:cyan             = { "gui": "#00838F", "cterm": "800" }
 
@@ -184,4 +184,5 @@ hi! link helpSectionDelim    Comment
 hi! link helpHyperTextEntry  Statement
 hi! link helpHyperTextJump   Underlined
 hi! link helpURL             Underlined
+
 

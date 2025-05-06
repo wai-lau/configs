@@ -3,16 +3,14 @@
 
 " Colors {{{
 let s:dark_gray       = ['#303030', 236]
-let s:med_gray_hi     = ['#444444', 245]
+let s:med_gray_hi     = ['#444444', 238]
 let s:med_gray_lo     = ['#3a3a3a', 237]
-let s:light_gray      = ['#b2b2b2', 253]
+let s:light_gray      = ['#b2b2b2', 249]
 let s:pretty_pink     = ['#f29db4', 217]
 let s:banana_smoothie = ['#fce78d', 222]
 let s:faded_red       = ['#f97070', 203]
 let s:icy_sky         = ['#79e5e0', 116]
 let s:orangarine      = ['#e8a15a', 179]
-let s:black           = ['', 0]
-let s:whiteish        = ['', 253]
 "}}}
 
 " Init {{{
@@ -25,8 +23,8 @@ let g:airline#themes#fruit_punch#palette = {}
 "}}}
 
 " Normal mode {{{
-let s:airline_a_normal = s:gen_def(s:dark_gray, s:whiteish)
-let s:airline_c_normal = s:gen_def(s:black, s:med_gray_hi)
+let s:airline_a_normal = s:gen_def(s:dark_gray, s:pretty_pink)
+let s:airline_c_normal = s:gen_def(s:pretty_pink, s:med_gray_hi)
 let g:airline#themes#fruit_punch#palette.normal =
       \ airline#themes#generate_color_map(s:airline_a_normal
       \ , s:bar_main, s:airline_c_normal)
@@ -57,7 +55,7 @@ let g:airline#themes#fruit_punch#palette.replace =
 "}}}
 
 " Inactive color {{{
-let s:airline_inactive = s:gen_def(s:dark_gray, s:med_gray_hi)
+let s:airline_inactive = s:gen_def(s:light_gray, s:med_gray_hi)
 let g:airline#themes#fruit_punch#palette.inactive =
       \ airline#themes#generate_color_map(s:airline_inactive
       \ , s:airline_inactive, s:airline_inactive)
