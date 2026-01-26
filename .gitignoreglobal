@@ -18,3 +18,7 @@
 tags
 .idea/codeStyles/Project.xml
 .idea/codeStyles/LocalStack.xml
+.cursor
+.idea/dataSources.xml
+.idea/
+*.code-workspace

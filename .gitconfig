@@ -1,22 +1,23 @@
-[diff]
-	algorithm = patience
 [protocol]
-	version = 2
+  version = 2
 [user]
-	name = wailun-lau
-	email = user@example.com
-	signingKey = 741C7ECBBC37E71C
+  name = wailun-lau
+  email = user@example.com
+  signingKey = 741C7ECBBC37E71C
 [core]
-	editor = /usr/bin/vim
-	excludesfile = /Users/wai/.gitignoreglobal
-	commitGraph = true
+  editor = /usr/bin/vim
+  excludesfile = /Users/wai/.gitignoreglobal
+  commitGraph = true
 [alias]
   fp = !git push --force-with-lease origin $(git rev-parse --abbrev-ref HEAD)
   f = !git add -A && git commit --amend --no-edit
   r = !git reset
   R = !git reset --hard
-  m = !git fetch origin master && git merge origin/master --no-edit
-	ff = !git m && git push --set-upstream origin $(git rev-parse --abbrev-ref HEAD)
+  ff = "!f() { \
+    branch=$(git remote show origin | sed -n '/HEAD branch/s/.*: //p'); \
+    git fetch origin $branch && git rebase origin/$branch && \
+    git push --force-with-lease --set-upstream origin $(git rev-parse --abbrev-ref HEAD); \
+  }; f"
   d1 = !git diff HEAD~1 HEAD
   d = !git diff
   fbf = !git f && git fb && git fp
@@ -26,19 +27,19 @@
   bb = !git checkout -b
   l = !git log --oneline --graph
 [gc]
-	writeCommitGraph = true
+  writeCommitGraph = true
 [pull]
-	rebase = true
+  rebase = true
 [url "git@github.example.com:"]
-	insteadOf = https://github.example.com/
+  insteadOf = https://github.example.com/
 [commit]
-	gpgsign = true
+  gpgsign = true
 [color]
-	ui = true
+  ui = true
 [push]
-	default = simple
+  default = simple
 [url "git@github.com:"]
-	insteadOf = https://github.com/
-	insteadOf = https://github.com/
+  insteadOf = https://github.com/
+  insteadOf = https://github.com/
 [gpg]
-	program = /opt/homebrew/bin/gpg
+  program = /opt/homebrew/bin/gpg

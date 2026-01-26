@@ -62,5 +62,7 @@ alias fl='fh view-local'
 alias tags='ctags -R .'
 alias g='git'
 
+alias scr='~/scripts/set_displays.sh'
+
 alias vpnwifi='networksetup -setdhcp Wi-Fi'
 alias vpndata='networksetup -setmanual Wi-Fi 172.20.10.3 255.255.255.240 172.20.10.1'
