@@ -1,12 +1,12 @@
 [protocol]
   version = 2
 [user]
-  name = wailun-lau
-  email = user@example.com
-  signingKey = 741C7ECBBC37E71C
+  name = wai-lau
+  email = wl.wailau@gmail.com
+  signingKey = /home/wai/.ssh/id_ed25519.pub
 [core]
   editor = /usr/bin/vim
-  excludesfile = /Users/wai/.gitignoreglobal
+  excludesfile = /home/wai/.gitignoreglobal
   commitGraph = true
 [alias]
   fp = !git push --force-with-lease origin $(git rev-parse --abbrev-ref HEAD)
@@ -30,8 +30,6 @@
   writeCommitGraph = true
 [pull]
   rebase = true
-[url "git@github.example.com:"]
-  insteadOf = https://github.example.com/
 [commit]
 	gpgsign = false
 [color]

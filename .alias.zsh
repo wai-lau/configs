@@ -39,12 +39,12 @@ alias el="$EDITOR ~/.local.zsh"   # alias for Edit Local
   if [ -z "$pr_number" ]
   then
     if [[ $(git config remote.origin.url) == $(git config remote.origin.url) ]]; then
-      open https://github.example.com/$upstream_repo_name/compare/$(git rev-parse --abbrev-ref HEAD)\?expand=1
+      open https://github.com/$upstream_repo_name/compare/$(git rev-parse --abbrev-ref HEAD)\?expand=1
     else
-      open https://github.example.com/$upstream_repo_name/compare/master...$GITHUB_USER:$(git rev-parse --abbrev-ref HEAD)\?expand=1
+      open https://github.com/$upstream_repo_name/compare/master...$GITHUB_USER:$(git rev-parse --abbrev-ref HEAD)\?expand=1
     fi
   else
-    open https://github.example.com/$upstream_repo_name/pull/$pr_number
+    open https://github.com/$upstream_repo_name/pull/$pr_number
   fi
 }
 

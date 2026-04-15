@@ -1,4 +1,4 @@
-export PS1="[%D{%H:%M}] $(basename $(dirname "$PWD"))/$(basename "$PWD") ✨ "
+export PS1="%F{yellow}[%D{%H:%M}]%f %2~ %F{blue}✦%f "
 
 source $HOME/.alias.zsh    # load aliases
 source $HOME/.local.zsh    # load environment variables and secret keys
@@ -91,18 +91,7 @@ fpath[1,0]="/opt/homebrew/share/zsh/site-functions";
 [ -z "${MANPATH-}" ] || export MANPATH=":${MANPATH#:}";
 export INFOPATH="/opt/homebrew/share/info:${INFOPATH:-}";
 
-ssh-add /Users/wai/.ssh/work_key 2>/dev/null
 ulimit -n 10240
-
-# Work
-# ————————
-export PATH="$HOME/.local/bin:$PATH"
-
-acct () {
-  cd ~/src/aws-resources
-  git grep $1| grep account_id | awk -F'/' '{print $2}' | awk -F'.' '{print $1}'
-  cd - > /dev/null
-}
 
 # kdev () {
   # assume-role core-codeflow-dev-use1 sudo-dev
@@ -171,8 +160,6 @@ acct () {
 
 # Go
 export GO111MODULE=on
-export GOPROXY=https://gomodules.example.com/
-export GONOSUMDB=github.example.com
 export GOPATH=$HOME/go
 export PATH=$GOPATH/bin:$PATH
 export TERM=screen-256color
@@ -208,8 +195,6 @@ done
 }
 
 export GITHUB_TOKEN=REDACTED_GITHUB_TOKEN
-export GITHUB_API_URL=https://github.example.com/api/v3
-export GITHUB_GRAPHQL_URL=https://github.example.com/api/graphql
 export PATH=:/Users/wai/.rbenv/shims:/Users/wai/.rbenv/bin:/opt/homebrew/opt/zip/bin:/Users/wai/go/bin:/Users/wai/.local/bin:/opt/homebrew/bin:/Users/wai/go/bin:/usr/local/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/usr/local/munki:/opt/salt:/Applications/iTerm.app/Contents/Resources/utilities
 export PATH="$HOME/.local/bin:$PATH"
 
