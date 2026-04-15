@@ -33,7 +33,7 @@
 [url "git@github.example.com:"]
   insteadOf = https://github.example.com/
 [commit]
-  gpgsign = true
+	gpgsign = false
 [color]
   ui = true
 [push]

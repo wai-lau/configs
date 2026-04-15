@@ -1,3 +1,5 @@
+export PS1="[%D{%H:%M}] $(basename $(dirname "$PWD"))/$(basename "$PWD") ✨ "
+
 source $HOME/.alias.zsh    # load aliases
 source $HOME/.local.zsh    # load environment variables and secret keys
 
@@ -179,12 +181,8 @@ export TERM=screen-256color
 # ———————————
 [ -f $GOPATH/bin/assume-role ] && eval "$($GOPATH/bin/assume-role -init)"
 
-export JAVA_HOME=$(/usr/libexec/java_home -v 17)
-eval "$(direnv hook zsh)"
 export PATH="/opt/homebrew/opt/zip/bin:$PATH"
-
 export PATH="$HOME/.rbenv/bin:$PATH"
-eval "$(rbenv init -)"
 
 rubylint () {
 FILES=()
@@ -213,3 +211,4 @@ export GITHUB_TOKEN=REDACTED_GITHUB_TOKEN
 export GITHUB_API_URL=https://github.example.com/api/v3
 export GITHUB_GRAPHQL_URL=https://github.example.com/api/graphql
 export PATH=:/Users/wai/.rbenv/shims:/Users/wai/.rbenv/bin:/opt/homebrew/opt/zip/bin:/Users/wai/go/bin:/Users/wai/.local/bin:/opt/homebrew/bin:/Users/wai/go/bin:/usr/local/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/usr/local/munki:/opt/salt:/Applications/iTerm.app/Contents/Resources/utilities
+export PATH="$HOME/.local/bin:$PATH"
