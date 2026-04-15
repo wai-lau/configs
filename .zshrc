@@ -212,3 +212,4 @@ export GITHUB_API_URL=https://github.example.com/api/v3
 export GITHUB_GRAPHQL_URL=https://github.example.com/api/graphql
 export PATH=:/Users/wai/.rbenv/shims:/Users/wai/.rbenv/bin:/opt/homebrew/opt/zip/bin:/Users/wai/go/bin:/Users/wai/.local/bin:/opt/homebrew/bin:/Users/wai/go/bin:/usr/local/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/usr/local/munki:/opt/salt:/Applications/iTerm.app/Contents/Resources/utilities
 export PATH="$HOME/.local/bin:$PATH"
+
