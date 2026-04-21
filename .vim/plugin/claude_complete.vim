@@ -11,13 +11,18 @@ var spinner_idx: number = 0
 const spinner_frames = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏']
 
 def SpinnerTick(_timer: number)
-  echon "\rClaude " .. spinner_frames[spinner_idx % len(spinner_frames)]
+  if !pumvisible()
+    StopSpinner()
+    return
+  endif
+  const frame = spinner_frames[spinner_idx % len(spinner_frames)]
+  complete(trigger_col, [{word: '', abbr: 'Claude ' .. frame, menu: 'waiting...'}])
   spinner_idx += 1
 enddef
 
 def StartSpinner()
   spinner_idx = 0
-  SpinnerTick(0)
+  complete(trigger_col, [{word: '', abbr: 'Claude ' .. spinner_frames[0], menu: 'waiting...'}])
   spinner_timer = timer_start(100, SpinnerTick, {repeat: -1})
 enddef
 
@@ -26,7 +31,6 @@ def StopSpinner()
     timer_stop(spinner_timer)
     spinner_timer = -1
   endif
-  echo ''
 enddef
 
 def TriggerClaude()
