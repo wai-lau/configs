@@ -16,7 +16,7 @@ export PATH=$HOME/.local/bin:$PATH
 
 # Environment
 export EDITOR=/usr/bin/vim
-export GITHUB_USER=wailun-lau
+export GITHUB_USER=wai-lau
 export GO111MODULE=on
 export TERM=screen-256color
 
