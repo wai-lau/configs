@@ -1,6 +1,11 @@
 vim9script
 
-prop_type_add('ghost_text', {highlight: 'Comment', override: true})
+if !hlexists('GhostText')
+  highlight GhostText ctermfg=240 guifg=#585858
+endif
+if empty(prop_type_get('ghost_text'))
+  prop_type_add('ghost_text', {highlight: 'GhostText', override: true})
+endif
 
 var ghost_timer: number = -1
 var ghost_prop_lnum: number = 0
@@ -35,9 +40,11 @@ def FindMatch(prefix: string): string
     endif
     for bline in getbufline(buf, 1, '$')
       for word in split(bline, '\W\+')
-        if word !=# prefix && len(word) > len(prefix)
-            && word[: len(prefix) - 1] ==# prefix
-            && len(word) > len(best)
+        var matches = word !=# prefix
+          && len(word) > len(prefix)
+          && word[: len(prefix) - 1] ==# prefix
+          && len(word) > len(best)
+        if matches
           best = word
         endif
       endfor
@@ -46,20 +53,18 @@ def FindMatch(prefix: string): string
   return best
 enddef
 
-def ShowGhost(_timer: number)
+def ShowGhost(_t: number)
   ghost_timer = -1
   ClearGhost()
-
   const prefix = GetPrefix()
   const match = FindMatch(prefix)
   if empty(match)
     return
   endif
-
   const lnum = line('.')
   const col = col('.')
   ghost_prop_lnum = lnum
-  ghost_text = match[len(prefix):]
+  ghost_text = match[len(prefix) :]
   prop_add(lnum, max([1, col - 1]), {
     type: 'ghost_text',
     text: ghost_text,
@@ -84,12 +89,6 @@ def AcceptGhost(): string
   return accepted
 enddef
 
-augroup ghost_complete
-  autocmd!
-  autocmd InsertLeave * ClearGhost()
-  autocmd TextChangedI * OnTextChanged()
-augroup END
-
 def TabComplete(): string
   if pumvisible()
     return "\<C-n>"
@@ -100,6 +99,12 @@ def TabComplete(): string
   endif
   return "\<Tab>"
 enddef
+
+augroup ghost_complete
+  autocmd!
+  autocmd InsertLeave * ClearGhost()
+  autocmd TextChangedI * OnTextChanged()
+augroup END
 
 inoremap <expr> <Tab> TabComplete()
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
