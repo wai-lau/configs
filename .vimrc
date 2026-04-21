@@ -288,7 +288,7 @@ let g:ale_set_quickfix = 0
 
 function AdjustColors()
   source ~/.vim/default_colors.vim
-  AirlineRefresh
+  silent! AirlineRefresh
 endfunction
 
 call NormalTags()
