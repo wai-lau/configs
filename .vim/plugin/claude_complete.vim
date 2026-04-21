@@ -38,16 +38,16 @@ def TriggerClaude()
   const lnum = line('.')
   const col = col('.')
   trigger_col = col
-  const start_line = max([1, lnum - 20])
+  const start_line = max([1, lnum - 50])
   var ctx_lines = getline(start_line, lnum)
   ctx_lines[-1] = ctx_lines[-1][ : col - 2]
   const context = join(ctx_lines, "\n")
 
   const payload = json_encode({
     'model': g:claude_complete_model,
-    'max_tokens': 512,
-    'system': 'You are a code completion engine. Return ONLY a JSON array of exactly 5 different possible completions. No explanation, no markdown fences. Example: ["name", "name.upper()", "str(name)", "name or \"default\"", "repr(name)"]',
-    'messages': [{'role': 'user', 'content': "Give 5 completions for:\n" .. context}]
+    'max_tokens': 1024,
+    'system': 'You are a code completion engine. Return ONLY a JSON array of exactly 5 different completions ranked best-first. Completions may span multiple lines — use \n for newlines. Match the indentation and style of the surrounding code. No explanation, no markdown fences.',
+    'messages': [{'role': 'user', 'content': "Complete this code (cursor is at the end):\n" .. context}]
   })
 
   response_lines = []
@@ -85,7 +85,11 @@ def ShowCompletions()
       echom 'Claude: could not parse completions'
       return
     endif
-    const items = mapnew(options, (_, v) => ({word: v, menu: '[Claude]'}))
+    const items = mapnew(options, (_, v) => ({
+      word: v,
+      abbr: substitute(v, '\n.*', '…', ''),
+      menu: '[Claude]'
+    }))
     complete(trigger_col, items)
   catch
     echom 'Claude error: ' .. v:exception
