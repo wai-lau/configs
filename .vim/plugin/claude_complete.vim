@@ -16,13 +16,13 @@ def SpinnerTick(_timer: number)
     return
   endif
   const frame = spinner_frames[spinner_idx % len(spinner_frames)]
-  complete(trigger_col, [{word: '', abbr: 'Claude ' .. frame, menu: 'waiting...'}])
+  complete(trigger_col, [{word: '', abbr: frame, menu: 'Claude'}])
   spinner_idx += 1
 enddef
 
 def StartSpinner()
   spinner_idx = 0
-  complete(trigger_col, [{word: '', abbr: 'Claude ' .. spinner_frames[0], menu: 'waiting...'}])
+  complete(trigger_col, [{word: '', abbr: spinner_frames[0], menu: 'Claude'}])
   spinner_timer = timer_start(100, SpinnerTick, {repeat: -1})
 enddef
 
