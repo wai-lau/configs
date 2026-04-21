@@ -166,7 +166,6 @@ nnoremap @ orequire 'pry'; binding.pry<Esc>
 " Refresh the buffer
 nnoremap <C-e> :edit!<CR>
 
-set pastetoggle=<C-P>
 " Using the native clipboard
 vnoremap <C-c> "*y
 " Paste on next line
