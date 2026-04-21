@@ -24,8 +24,8 @@ def TriggerClaude()
   const payload = json_encode({
     'model': g:claude_complete_model,
     'max_tokens': 2048,
-    'system': "You are a code completion engine. Provide exactly 3 completions separated by the delimiter\n<<<NEXT>>>\nEach completion should be substantial — complete the function body, block, or logical chunk. Match indentation and style exactly. No explanation, no markdown, no preamble. Output only the completions and delimiters.",
-    'messages': [{'role': 'user', 'content': "Complete this code (cursor at end):\n" .. context}]
+    'system': 'Complete the code at the cursor. Output ONLY the raw completion text — no markdown, no code fences, no explanation, no preamble. Match the indentation and style exactly. The completion may be multiple lines.',
+    'messages': [{'role': 'user', 'content': context}]
   })
 
   response_lines = []
@@ -39,39 +39,34 @@ def TriggerClaude()
       '-H', 'anthropic-version: 2023-06-01',
       '-d', payload],
     {
-      out_cb: (_, line) => add(response_lines, line),
-      close_cb: (_) => ShowCompletions()
+      out_cb: (_, ln) => add(response_lines, ln),
+      close_cb: (_) => ShowCompletion()
     }
   )
 enddef
 
-def ShowCompletions()
+def ShowCompletion()
   try
     const resp = json_decode(join(response_lines, ''))
     if type(resp) != v:t_dict || !has_key(resp, 'content')
       echom 'Claude: unexpected response - ' .. join(response_lines, '')[ : 120]
       return
     endif
-    const raw = resp['content'][0]['text']
-    if empty(raw)
+    var text = resp['content'][0]['text']
+    if empty(text)
       echom 'Claude: empty response'
       return
     endif
-    const words = filter(
-      map(split(raw, '<<<NEXT>>>'), (_, v) => trim(v)),
-      (_, v) => !empty(v)
-    )
-    if empty(words)
-      echom 'Claude: no completions found'
-      return
-    endif
+    # Strip any markdown fences Claude ignores instructions about
+    text = substitute(text, '^```[^\n]*\n', '', '')
+    text = substitute(text, '\n```$', '', '')
+    text = trim(text)
     echom ''
-    const items = mapnew(words, (_, v) => ({
-      word: v,
-      abbr: substitute(v, '\n.*', '…', ''),
+    complete(trigger_col, [{
+      word: text,
+      abbr: substitute(text, '\n.*', '…', ''),
       menu: '[Claude]'
-    }))
-    complete(trigger_col, items)
+    }])
   catch
     echom 'Claude error: ' .. v:exception
   endtry
