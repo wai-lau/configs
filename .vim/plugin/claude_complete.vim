@@ -6,6 +6,28 @@ endif
 
 var response_lines: list<string> = []
 var trigger_col: number = 0
+var spinner_timer: number = -1
+var spinner_idx: number = 0
+const spinner_frames = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏']
+
+def SpinnerTick(_timer: number)
+  echon "\rClaude " .. spinner_frames[spinner_idx % len(spinner_frames)]
+  spinner_idx += 1
+enddef
+
+def StartSpinner()
+  spinner_idx = 0
+  SpinnerTick(0)
+  spinner_timer = timer_start(100, SpinnerTick, {repeat: -1})
+enddef
+
+def StopSpinner()
+  if spinner_timer != -1
+    timer_stop(spinner_timer)
+    spinner_timer = -1
+  endif
+  echo ''
+enddef
 
 def TriggerClaude()
   if empty($ANTHROPIC_API_KEY)
@@ -29,7 +51,7 @@ def TriggerClaude()
   })
 
   response_lines = []
-  echom 'Claude...'
+  StartSpinner()
 
   job_start(
     ['curl', '-s', '-X', 'POST',
@@ -46,6 +68,7 @@ def TriggerClaude()
 enddef
 
 def ShowCompletions()
+  StopSpinner()
   try
     const resp = json_decode(join(response_lines, ''))
     if type(resp) != v:t_dict || !has_key(resp, 'content')
@@ -62,7 +85,6 @@ def ShowCompletions()
       echom 'Claude: could not parse completions'
       return
     endif
-    echom ''
     const items = mapnew(options, (_, v) => ({word: v, menu: '[Claude]'}))
     complete(trigger_col, items)
   catch
