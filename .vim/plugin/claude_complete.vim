@@ -23,9 +23,9 @@ def TriggerClaude()
 
   const payload = json_encode({
     'model': g:claude_complete_model,
-    'max_tokens': 1024,
-    'system': 'You are a code completion engine. Respond with ONLY a raw JSON array of 5 strings, nothing else. No markdown, no code fences, no explanation. Each string is a completion. Use \\n for newlines within strings. Example output: ["x + 1", "x - 1", "x * 2", "str(x)", "len(x)"]',
-    'messages': [{'role': 'user', 'content': "Complete this code (cursor is at the end):\n" .. context}]
+    'max_tokens': 2048,
+    'system': "You are a code completion engine. Provide exactly 3 completions separated by the delimiter\n<<<NEXT>>>\nEach completion should be substantial — complete the function body, block, or logical chunk. Match indentation and style exactly. No explanation, no markdown, no preamble. Output only the completions and delimiters.",
+    'messages': [{'role': 'user', 'content': "Complete this code (cursor at end):\n" .. context}]
   })
 
   response_lines = []
@@ -52,31 +52,17 @@ def ShowCompletions()
       echom 'Claude: unexpected response - ' .. join(response_lines, '')[ : 120]
       return
     endif
-    var raw = resp['content'][0]['text']
+    const raw = resp['content'][0]['text']
     if empty(raw)
       echom 'Claude: empty response'
       return
     endif
-    # Strip markdown code fences
-    raw = substitute(raw, '^```\w*\n', '', '')
-    raw = substitute(raw, '\n```$', '', '')
-    raw = trim(raw)
-    const parsed = json_decode(raw)
-    if type(parsed) != v:t_list || empty(parsed)
-      echom 'Claude: could not parse completions'
-      return
-    endif
-    # Accept both ["str", ...] and [{"completion": "str"}, ...]
-    var words: list<string> = []
-    for item in parsed
-      if type(item) == v:t_string
-        words->add(item)
-      elseif type(item) == v:t_dict
-        words->add(get(item, 'completion', get(item, 'text', '')))
-      endif
-    endfor
+    const words = filter(
+      map(split(raw, '<<<NEXT>>>'), (_, v) => trim(v)),
+      (_, v) => !empty(v)
+    )
     if empty(words)
-      echom 'Claude: no completions extracted'
+      echom 'Claude: no completions found'
       return
     endif
     echom ''
