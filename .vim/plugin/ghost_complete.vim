@@ -65,11 +65,7 @@ def ShowGhost(_t: number)
   const col = col('.')
   ghost_prop_lnum = lnum
   ghost_text = match[len(prefix) :]
-  prop_add(lnum, max([1, col - 1]), {
-    type: 'ghost_text',
-    text: ghost_text,
-    text_align: 'after'
-  })
+  prop_add(lnum, col, {type: 'ghost_text', text: ghost_text})
 enddef
 
 def OnTextChanged()
