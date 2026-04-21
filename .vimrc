@@ -346,8 +346,4 @@ nnoremap <M-h> :call N('h')<CR>
 nnoremap <M-j> :call N('j')<CR>
 nnoremap <M-k> :call N('k')<CR>
 nnoremap <M-l> :call N('l')<CR>
-inoremap <M-h> <Esc>h
-inoremap <M-j> <Esc>j
-inoremap <M-k> <Esc>k
-inoremap <M-l> <Esc>l
 
