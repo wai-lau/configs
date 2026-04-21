@@ -24,7 +24,7 @@ def TriggerClaude()
   const payload = json_encode({
     'model': g:claude_complete_model,
     'max_tokens': 1024,
-    'system': 'You are a code completion engine. Return ONLY a JSON array of exactly 5 different completions ranked best-first. Completions may span multiple lines — use \n for newlines. Match the indentation and style of the surrounding code. No explanation, no markdown fences.',
+    'system': 'You are a code completion engine. Respond with ONLY a raw JSON array of 5 strings, nothing else. No markdown, no code fences, no explanation. Each string is a completion. Use \\n for newlines within strings. Example output: ["x + 1", "x - 1", "x * 2", "str(x)", "len(x)"]',
     'messages': [{'role': 'user', 'content': "Complete this code (cursor is at the end):\n" .. context}]
   })
 
@@ -52,18 +52,35 @@ def ShowCompletions()
       echom 'Claude: unexpected response - ' .. join(response_lines, '')[ : 120]
       return
     endif
-    const text = resp['content'][0]['text']
-    if empty(text)
+    var raw = resp['content'][0]['text']
+    if empty(raw)
       echom 'Claude: empty response'
       return
     endif
-    const options = json_decode(text)
-    if type(options) != v:t_list || empty(options)
+    # Strip markdown code fences
+    raw = substitute(raw, '^```\w*\n', '', '')
+    raw = substitute(raw, '\n```$', '', '')
+    raw = trim(raw)
+    const parsed = json_decode(raw)
+    if type(parsed) != v:t_list || empty(parsed)
       echom 'Claude: could not parse completions'
       return
     endif
+    # Accept both ["str", ...] and [{"completion": "str"}, ...]
+    var words: list<string> = []
+    for item in parsed
+      if type(item) == v:t_string
+        words->add(item)
+      elseif type(item) == v:t_dict
+        words->add(get(item, 'completion', get(item, 'text', '')))
+      endif
+    endfor
+    if empty(words)
+      echom 'Claude: no completions extracted'
+      return
+    endif
     echom ''
-    const items = mapnew(options, (_, v) => ({
+    const items = mapnew(words, (_, v) => ({
       word: v,
       abbr: substitute(v, '\n.*', '…', ''),
       menu: '[Claude]'
