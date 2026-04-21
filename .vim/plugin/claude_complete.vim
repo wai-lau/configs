@@ -22,8 +22,10 @@ enddef
 
 def StartSpinner()
   spinner_idx = 0
-  complete(trigger_col, [{word: '', abbr: spinner_frames[0], menu: 'Claude'}])
-  spinner_timer = timer_start(100, SpinnerTick, {repeat: -1})
+  timer_start(0, (_) => {
+    complete(trigger_col, [{word: '', abbr: spinner_frames[0], menu: 'Claude'}])
+    spinner_timer = timer_start(100, SpinnerTick, {repeat: -1})
+  })
 enddef
 
 def StopSpinner()
