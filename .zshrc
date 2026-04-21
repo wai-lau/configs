@@ -3,6 +3,7 @@ export PS1="%F{#FFB5C8}[%D{%H:%M}]%f %F{#F5EDD8}%2~%f %F{blue}✦%f "
 [[ "$(uname)" == "Linux" ]] && eval "$(dircolors -b)"
 source $HOME/.alias.zsh    # load aliases
 source $HOME/.local.zsh    # load environment variables and secret keys
+[ -f ~/.secrets ] && source ~/.secrets
 
 # load cb-zsh
 [ -f $(brew --prefix cb-zsh 2>/dev/null)/config.zsh ] && source $(brew --prefix cb-zsh)/config.zsh
