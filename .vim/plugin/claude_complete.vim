@@ -5,29 +5,7 @@ if !exists('g:claude_complete_model')
   g:claude_complete_model = 'claude-haiku-4-5-20251001'
 endif
 
-var tab_count = 0
-var tab_timer = -1
 var response_lines: list<string> = []
-
-# Called on every Tab press in insert mode.
-# First press: starts a 250ms timer, swallows the Tab.
-# Second press within 250ms: cancels the timer, triggers Claude.
-# Timer fires alone (single Tab): sends a real Tab via feedkeys.
-def OnTab(): string
-  tab_count += 1
-  if tab_count == 1
-    tab_timer = timer_start(250, (_) => {
-      tab_count = 0
-      feedkeys("\t", 'in')
-    })
-    return ''
-  else
-    timer_stop(tab_timer)
-    tab_count = 0
-    timer_start(0, (_) => TriggerClaude())
-    return ''
-  endif
-enddef
 
 def TriggerClaude()
   if empty($ANTHROPIC_API_KEY)
@@ -85,4 +63,4 @@ def InsertCompletion()
   endtry
 enddef
 
-inoremap <expr> <Tab> OnTab()
+inoremap <C-Space> <Cmd>call TriggerClaude()<CR>
