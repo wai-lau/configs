@@ -24,7 +24,7 @@ def TriggerClaude()
   const payload = json_encode({
     'model': g:claude_complete_model,
     'max_tokens': 2048,
-    'system': 'Complete the code at the cursor. Output ONLY the raw completion text — no markdown, no code fences, no explanation, no preamble. Match the indentation and style exactly. The completion may be multiple lines.',
+    'system': "Complete the code at the cursor. Output exactly 3 different completions separated by a line containing only ---\nEach completion is raw code, may be multiple lines, matches indentation exactly. No markdown, no fences, no explanation.",
     'messages': [{'role': 'user', 'content': context}]
   })
 
@@ -58,15 +58,19 @@ def ShowCompletion()
       return
     endif
     # Strip any markdown fences Claude ignores instructions about
-    text = substitute(text, '^```[^\n]*\n', '', '')
-    text = substitute(text, '\n```$', '', '')
-    text = trim(text)
+    # Strip any markdown fences
+    text = substitute(text, '```[^\n]*\n', '', 'g')
+    text = substitute(text, '\n```', '', 'g')
+    const words = filter(
+      map(split(text, '\n---\n'), (_, v) => trim(v)),
+      (_, v) => !empty(v)
+    )
     echom ''
-    complete(trigger_col, [{
-      word: text,
-      abbr: substitute(text, '\n.*', '…', ''),
+    complete(trigger_col, mapnew(words, (_, v) => ({
+      word: v,
+      abbr: substitute(v, '\n.*', '…', ''),
       menu: '[Claude]'
-    }])
+    })))
   catch
     echom 'Claude error: ' .. v:exception
   endtry

@@ -104,4 +104,5 @@ augroup END
 
 inoremap <expr> <Tab> TabComplete()
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
 inoremap <expr> <Right> AcceptGhost()
