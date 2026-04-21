@@ -12,6 +12,7 @@ export PATH=/usr/local/bin:$PATH
 export PATH=$HOME/go/bin:$PATH
 export PATH=$HOME/.vim/bundle/fzf/bin:$PATH
 export PATH=$HOME/.rbenv/bin:$PATH
+export PATH=$HOME/bin:$PATH
 export PATH=$HOME/.local/bin:$PATH
 
 # Environment
