@@ -90,4 +90,17 @@ augroup ghost_complete
   autocmd TextChangedI * OnTextChanged()
 augroup END
 
+def TabComplete(): string
+  if pumvisible()
+    return "\<C-n>"
+  elseif !empty(ghost_text)
+    const accepted = ghost_text
+    ClearGhost()
+    return accepted
+  endif
+  return "\<Tab>"
+enddef
+
+inoremap <expr> <Tab> TabComplete()
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 inoremap <expr> <Right> AcceptGhost()
