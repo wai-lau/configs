@@ -3,6 +3,7 @@
 !.gitignore
 !.gitignoreglobal
 !.gitconfig
+!CLAUDE.md
 !.vimrc
 !.zshrc
 !.tmux.conf
@@ -10,13 +11,6 @@
 !.vim
 !.vim/*
 !.vim/**/*
-
-!.config
-!.config/karabiner
-!.config/karabiner/**/*
-
-!.config/iterm2
-!.config/iterm2/**/*
 
 !.alias.zsh
 !.local.zsh

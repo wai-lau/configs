@@ -52,11 +52,6 @@ Plugin 'dense-analysis/ale'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 
-" source /Users/wai/.vim/vim-scrollbar/plugin/scrollbar.vim
-" Default characters to use in the scrollbar.
-" let g:scrollbar_thumb='#'
-" let g:scrollbar_clear='|'
-
 syntax enable
 set term=screen-256color
 set t_ut=
@@ -89,9 +84,6 @@ set shortmess+=c   " Shut off completion messages
 set belloff+=ctrlg " If Vim beeps during completion
 set noinfercase
 set ignorecase
-" The following line assumes `brew install llvm` in macOS
-let g:clang_library_path = '/usr/local/opt/llvm/lib/libclang.dylib'
-let g:clang_user_options = '-std=c++14'
 
 let g:go_highlight_structs = 1
 let g:go_highlight_methods = 1
@@ -174,10 +166,9 @@ nnoremap <C-c> V"*y
 " Paste right here
 inoremap <C-v> <Space><Esc>v<C-P>"*p<C-P><Esc>i<Right>
 
-" Alt-T
-nnoremap † :vnew<CR>
-" Alt-Shift-T
-nnoremap ˇ :tabnew<CR>
+" Alt-T / Alt-Shift-T
+nnoremap <M-t> :vnew<CR>
+nnoremap <M-T> :tabnew<CR>
 
 " Select forwards or back without reaching for the number 4/6
 vnoremap <Tab> $h
@@ -185,12 +176,12 @@ vnoremap <S-Tab> _
 nnoremap d<Tab> d$
 nnoremap d<S-Tab> d^
 
-" Tab navigation, tbh idk how to get to tab 6
-noremap å 1gt
-noremap ß 2gt
-noremap ∂ 3gt
-noremap ƒ 4gt
-noremap © 5gt
+" Tab navigation
+noremap <M-1> 1gt
+noremap <M-2> 2gt
+noremap <M-3> 3gt
+noremap <M-4> 4gt
+noremap <M-5> 5gt
 
 " Add/Remove tag lines
 function HashTags()
@@ -211,7 +202,7 @@ endfunction
 nnoremap <Tab> .
 
 " Alt-O to undo Ctrl-O
-nnoremap ø <Tab>
+nnoremap <M-o> <Tab>
 
 " The big GoVet
 nnoremap <C-g> :w<CR>:GoVet<CR>:ccl<CR>:cw 12
@@ -333,10 +324,6 @@ function! N(dir)
   endif
 endfunction
 
-nnoremap ˙ :call N('h')<CR>
-nnoremap ∆ :call N('j')<CR>
-nnoremap ˚ :call N('k')<CR>
-nnoremap ¬ :call N('l')<CR>
 if !has('gui_running') && !has('nvim')
   execute "set <M-h>=\033h"
   execute "set <M-j>=\033j"

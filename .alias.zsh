@@ -39,30 +39,18 @@ alias el="$EDITOR ~/.local.zsh"   # alias for Edit Local
   if [ -z "$pr_number" ]
   then
     if [[ $(git config remote.origin.url) == $(git config remote.origin.url) ]]; then
-      open https://github.com/$upstream_repo_name/compare/$(git rev-parse --abbrev-ref HEAD)\?expand=1
+      wslview https://github.com/$upstream_repo_name/compare/$(git rev-parse --abbrev-ref HEAD)\?expand=1
     else
-      open https://github.com/$upstream_repo_name/compare/master...$GITHUB_USER:$(git rev-parse --abbrev-ref HEAD)\?expand=1
+      wslview https://github.com/$upstream_repo_name/compare/master...$GITHUB_USER:$(git rev-parse --abbrev-ref HEAD)\?expand=1
     fi
   else
-    open https://github.com/$upstream_repo_name/pull/$pr_number
+    wslview https://github.com/$upstream_repo_name/pull/$pr_number
   fi
 }
 
-alias dash="~/dash"
 alias sz='exec zsh'
 alias ls='ls --color=auto'
-
-alias fco='fh checkout'
-alias fcop='fh checkout-pr'
-alias fsm='fh sync-master'
-alias fpr='fh view-pr'
-alias fm='fh view-master'
-alias fl='fh view-local'
 
 alias tags='ctags -R .'
 alias g='git'
 
-alias scr='~/scripts/set_displays.sh'
-
-alias vpnwifi='networksetup -setdhcp Wi-Fi'
-alias vpndata='networksetup -setmanual Wi-Fi 172.20.10.3 255.255.255.240 172.20.10.1'
