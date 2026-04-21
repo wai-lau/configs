@@ -42,6 +42,7 @@ Plugin 'vim-airline/vim-airline-themes'
 Plugin 'blueyed/vim-diminactive'
 Plugin 'robbles/logstash.vim'
 Bundle 'uarun/vim-protobuf'
+Plugin 'dense-analysis/ale'
 
 " Put your non-Plugin stuff after this line
 " Specify a directory for plugins
@@ -223,9 +224,9 @@ let g:colors_name = "zenburn"
 autocmd FileType go nnoremap <buffer> } :vsp<CR>:GoDef<CR><C-w>T
 autocmd FileType go nnoremap <buffer> " :GoDef<CR>
 autocmd FileType go nnoremap <buffer> ? :vsp<CR>:GoDef<CR><C-w>x<C-w>l
-autocmd FileType ruby,python,javascript nnoremap <buffer> } :vsp<CR><C-]><C-w>T
-autocmd FileType ruby,python,javascript nnoremap <buffer> " <C-]>
-autocmd FileType ruby,python,javascript nnoremap <buffer> ? :vsp<CR><C-]><C-w>x<C-w>l
+autocmd FileType ruby,python,javascript,typescript nnoremap <buffer> } :ALEGoToDefinition -tab<CR>
+autocmd FileType ruby,python,javascript,typescript nnoremap <buffer> " :ALEGoToDefinition<CR>
+autocmd FileType ruby,python,javascript,typescript nnoremap <buffer> ? :ALEGoToDefinition -vsplit<CR>
 
 " Seaching through the whole directory
 :command -nargs=+ GG execute "silent Ggrep! ".shellescape(<q-args>)." -- '*.".expand('%:e')."'" | cw | redraw!
@@ -268,11 +269,22 @@ endfunction
 
 let g:go_fmt_autosave=1
 let g:go_fmt_command = "goimports"
-let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
+let g:syntastic_mode_map = { 'mode': 'passive' }
 let g:syntastic_go_checkers = ['golint', 'govet', 'golangci-lint']
 let g:syntastic_go_gometalinter_args = ['--enable=errcheck']
-let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
 " let g:go_list_type = "quickfix"
+
+" ALE (replaces syntastic for Python/Ruby/JS)
+let g:ale_linters = {
+  \ 'python': ['pylsp'],
+  \ 'ruby': ['solargraph'],
+  \ 'javascript': ['tsserver'],
+  \ 'typescript': ['tsserver'],
+  \ }
+let g:ale_fixers = {}
+let g:ale_fix_on_save = 0
+let g:ale_set_loclist = 0
+let g:ale_set_quickfix = 0
 
 function AdjustColors()
   source ~/.vim/default_colors.vim
@@ -297,6 +309,7 @@ autocmd BufEnter *.conf                colorscheme sift       | call AdjustColor
 colorscheme zenburn
 let g:colors_name = "zenburn"
 autocmd! colorscheme * call AdjustColors()
+call AdjustColors()
 
 " Add spaces after comment delimiters by default
 let g:NERDSpaceDelims = 1
@@ -323,4 +336,14 @@ nnoremap ˙ :call N('h')<CR>
 nnoremap ∆ :call N('j')<CR>
 nnoremap ˚ :call N('k')<CR>
 nnoremap ¬ :call N('l')<CR>
+if !has('gui_running') && !has('nvim')
+  execute "set <M-h>=\033h"
+  execute "set <M-j>=\033j"
+  execute "set <M-k>=\033k"
+  execute "set <M-l>=\033l"
+endif
+nnoremap <M-h> :call N('h')<CR>
+nnoremap <M-j> :call N('j')<CR>
+nnoremap <M-k> :call N('k')<CR>
+nnoremap <M-l> :call N('l')<CR>
 

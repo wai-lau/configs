@@ -1,9 +1,9 @@
 highlight! Search               ctermfg=11     ctermbg=0     cterm=bold
 highlight! Visual               ctermfg=75     ctermbg=NONE  cterm=reverse
 
-highlight! Normal               ctermfg=252    ctermbg=235   cterm=NONE
-highlight! NonText              ctermfg=252    ctermbg=235   cterm=NONE
-highlight! SpecialKey           ctermfg=252    ctermbg=235   cterm=NONE
+highlight! Normal               ctermfg=252    ctermbg=NONE  cterm=NONE
+highlight! NonText              ctermfg=245    ctermbg=236   cterm=NONE
+highlight! SpecialKey           ctermfg=252    ctermbg=NONE  cterm=NONE
 
 highlight! TabLineFill          ctermfg=NONE   ctermbg=240   cterm=NONE
 highlight! TabLineSel           ctermfg=0      ctermbg=245   cterm=NONE

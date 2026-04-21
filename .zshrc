@@ -1,5 +1,6 @@
-export PS1="%F{yellow}[%D{%H:%M}]%f %2~ %F{blue}✦%f "
+export PS1="%F{#FFB5C8}[%D{%H:%M}]%f %F{#F5EDD8}%2~%f %F{blue}✦%f "
 
+[[ "$(uname)" == "Linux" ]] && eval "$(dircolors -b)"
 source $HOME/.alias.zsh    # load aliases
 source $HOME/.local.zsh    # load environment variables and secret keys
 
@@ -198,3 +199,5 @@ export GITHUB_TOKEN=REDACTED_GITHUB_TOKEN
 export PATH=:/Users/wai/.rbenv/shims:/Users/wai/.rbenv/bin:/opt/homebrew/opt/zip/bin:/Users/wai/go/bin:/Users/wai/.local/bin:/opt/homebrew/bin:/Users/wai/go/bin:/usr/local/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/usr/local/munki:/opt/salt:/Applications/iTerm.app/Contents/Resources/utilities
 export PATH="$HOME/.local/bin:$PATH"
 
+alias pbc='/mnt/c/Windows/System32/clip.exe'
+alias obsidian='/mnt/c/Users/wailu/AppData/Local/Programs/Obsidian/Obsidian.com'

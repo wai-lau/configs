@@ -50,7 +50,7 @@ alias el="$EDITOR ~/.local.zsh"   # alias for Edit Local
 
 alias dash="~/dash"
 alias sz='exec zsh'
-alias ls='ls -G'
+alias ls='ls --color=auto'
 
 alias fco='fh checkout'
 alias fcop='fh checkout-pr'
