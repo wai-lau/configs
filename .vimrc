@@ -1,27 +1,13 @@
+" ── Plugins ──────────────────────────────────────────────────────────────
 set nocompatible
 set encoding=utf-8
 filetype indent plugin on
 
-" set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
-" To ignore plugin indent changes, instead use:
-" filetype plugin on
-" Brief help
-" :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just
-" :PluginUpdate
-" :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to
-" auto-approve removal
-" alternatively, pass a path where Vundle should install plugins
-" call vundle#begin('~/some/path/here')
 
-" let Vundle manage Vundle (required)
 Plugin 'VundleVim/Vundle.vim'
-
 Plugin 'fatih/vim-go'
-" Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'vim-scripts/indentpython.vim'
 Plugin 'vim-syntastic/syntastic'
 Plugin 'nvie/vim-flake8'
@@ -32,7 +18,7 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'tpope/vim-endwise'
 Plugin 'tpope/vim-rbenv'
-Plugin 'tpope/vim-bundler' " see :h vundle for more details or wiki for FAQ
+Plugin 'tpope/vim-bundler'
 Plugin 'pangloss/vim-javascript'
 Plugin 'mxw/vim-jsx'
 Plugin 'junegunn/fzf'
@@ -44,24 +30,49 @@ Plugin 'robbles/logstash.vim'
 Bundle 'uarun/vim-protobuf'
 Plugin 'dense-analysis/ale'
 
-" Put your non-Plugin stuff after this line
-" Specify a directory for plugins
-" - For Neovim: ~/.local/share/nvim/plugged
-" - Avoid using standard Vim directory names like 'plugin'
+call vundle#end()
 
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
-
+" ── Settings ──────────────────────────────────────────────────────────────
 syntax enable
 set term=screen-256color
 set t_ut=
+set cmdheight=1
+set number
+set norelativenumber
+set nowrap
+set cursorline
+set hls
+set ignorecase
+set noinfercase
+set backspace=indent,eol,start
+set fillchars=""
+set switchbuf=split
 
+set tabstop     =2
+set softtabstop =2
+set shiftwidth  =2
+set expandtab
+
+" set listchars+=space:·
+set listchars+=eol:\
+set listchars+=tab:⌐\
+set list
+
+set completeopt+=menuone
+set completeopt-=preview
+set completeopt+=longest,menuone,noselect
+set shortmess+=c
+set belloff+=ctrlg
+
+" ── Plugin Config ─────────────────────────────────────────────────────────
+
+" Airline
 let g:airline_theme='bubblegum'
 let g:airline_section_b = ''
 let g:airline_section_x = ''
 let g:airline_section_y = ''
 
-" Syntastic options
+" Syntastic
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
@@ -69,202 +80,12 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
-let g:syntastic_python_checkers=['flake8']
-
-let g:fzf_action = {
-  \ 'ctrl-i': 'split',
-  \ 'ctrl-t': 'vsplit',
-  \ 'ctrl-n': 'tab split' }
-
-" Autocomplete options
-set completeopt+=menuone
-set completeopt-=preview
-set completeopt+=longest,menuone,noselect
-set shortmess+=c   " Shut off completion messages
-set belloff+=ctrlg " If Vim beeps during completion
-set noinfercase
-set ignorecase
-
-let g:go_highlight_structs = 1
-let g:go_highlight_methods = 1
-let g:go_highlight_functions = 1
-let g:go_highlight_operators = 1
-let g:go_highlight_build_constraints = 1
-
-" set listchars+=space:·
-set listchars+=eol:\ 
-set listchars+=tab:⌐\ 
-set list
-"
-" tabstop:          Width of tab character
-" softtabstop:      Fine tunes the amount of white space to be added
-" shiftwidth:       Determines the amount of whitespace to add in normal mode
-" expandtab:        When on uses space instead of tabs
-set tabstop     =2
-set softtabstop =2
-set shiftwidth  =2
-set expandtab
-set number
-set nowrap
-set fillchars=""
-set norelativenumber
-set backspace=indent,eol,start
-set hls
-set cursorline
-
-" No shift for commands
-noremap ; :
-noremap : ;
-
-" Stop it vim
-inoremap jk <Esc>
-nnoremap <Esc><Esc> :nohls<CR>
-vnoremap <Esc><Esc> <Esc>
-
-" replace currently selected text with default register without yanking it
-vnoremap p "_dP
-
-" Resize the vim windows
-nnoremap + 6<C-W>+
-nnoremap _ 6<C-W>-
-nnoremap - 12<c-w><
-nnoremap = 12<c-w>>
-
-" Add or remove indent
-nnoremap < v<<Esc>
-nnoremap > v><Esc>
-
-" Move window to left/right
-nnoremap <C-a> <C-w>H
-nnoremap <C-z> <C-w>L
-
-" Ctrl+d to quit
-nnoremap <C-d> :q<CR>
-inoremap <C-d> <Esc>:q<CR>
-vnoremap <C-d> <Esc>:q<CR>
-
-" Going to the end/beginning of the line when selecting
-vnoremap j jg_
-vnoremap k k0
-vnoremap G Gg_
-
-" Commenting
-nmap <C-_> \ci
-vmap <C-_> \ci
-
-" Pry
-nnoremap @ orequire 'pry'; binding.pry<Esc>
-
-" Refresh the buffer
-nnoremap <C-e> :edit!<CR>
-
-" Using the native clipboard
-vnoremap <C-c> "*y
-" Paste on next line
-nnoremap <C-v> i<Esc>$<C-P>"*p<C-P>
-nnoremap <C-c> V"*y
-" Paste right here
-inoremap <C-v> <Space><Esc>v<C-P>"*p<C-P><Esc>i<Right>
-
-" Alt-T / Alt-Shift-T
-nnoremap <M-t> :vnew<CR>
-nnoremap <M-T> :tabnew<CR>
-
-" Select forwards or back without reaching for the number 4/6
-vnoremap <Tab> $h
-vnoremap <S-Tab> _
-nnoremap d<Tab> d$
-nnoremap d<S-Tab> d^
-
-" Tab navigation
-noremap <M-1> 1gt
-noremap <M-2> 2gt
-noremap <M-3> 3gt
-noremap <M-4> 4gt
-noremap <M-5> 5gt
-
-" Add/Remove tag lines
-function HashTags()
-  nnoremap t A     #····<Esc>0
-  nnoremap T V:s/\ \ \ \ \ \#····/<CR>:nohls<CR>
-  nnoremap ¥ /.*\ \ \ \ \ \#····$<CR>
-  nnoremap Á :%s/\ \ \ \ \ \#····$//g<CR>:nohls<CR>
-endfunction
-
-function NormalTags()
-  nnoremap t A     //····<Esc>0
-  nnoremap T V:s/\ \ \ \ \ \/\/····/<CR>:nohls<CR>
-  nnoremap ¥ /.*\ \ \ \ \ \/\/····$<CR>
-  nnoremap Á :%s/\ \ \ \ \ \/\/····$//g<CR>:nohls<CR>
-endfunction
-
-" Repeat
-nnoremap <Tab> .
-
-" Alt-O to undo Ctrl-O
-nnoremap <M-o> <Tab>
-
-" The big GoVet
-nnoremap <C-g> :w<CR>:GoVet<CR>:ccl<CR>:cw 12
-
-nnoremap <c-c><c-c> :exec "color " . ((g:colors_name == "zenburn") ? "sift" : "zenburn")<CR>
-let g:colors_name = "zenburn"
-
-" Use GoDef for Go definitions
-autocmd FileType go nnoremap <buffer> } :vsp<CR>:GoDef<CR><C-w>T
-autocmd FileType go nnoremap <buffer> " :GoDef<CR>
-autocmd FileType go nnoremap <buffer> ? :vsp<CR>:GoDef<CR><C-w>x<C-w>l
-autocmd FileType ruby,python,javascript,typescript nnoremap <buffer> } :ALEGoToDefinition -tab<CR>
-autocmd FileType ruby,python,javascript,typescript nnoremap <buffer> " :ALEGoToDefinition<CR>
-autocmd FileType ruby,python,javascript,typescript nnoremap <buffer> ? :ALEGoToDefinition -vsplit<CR>
-
-" Seaching through the whole directory
-:command -nargs=+ GG execute "silent Ggrep! ".shellescape(<q-args>)." -- '*.".expand('%:e')."'" | cw | redraw!
-:command -nargs=+ GGG execute "silent Ggrep! ".shellescape(<q-args>) | cw | redraw!
-:command GGGG execute "silent Ggrep! ".shellescape('#····') | cw | redraw!
-" Global Search Highlighted Text
-vnoremap <C-g> y/<C-R>"<CR>:lclose<CR>:GG <C-R>"<CR>
-vnoremap <C-f> y/<C-R>"<CR>
-
-" Show diff between windows
-:command DIFF execute 'windo diffthis'
-:command DOFF execute 'windo diffoff'
-
-" NERDTree settings
-let NERDTreeShowHidden=1
-let g:NERDTreeWinPos = "left"
-let g:NERDTreeWinSize=35
-nnoremap <C-@> :NERDTreeToggle<CR>
-nnoremap <C-n> :NERDTreeFind<CR>
-" Quit NERDTree if last pane
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-let NERDTreeMapOpenSplit="<C-i>"
-let NERDTreeMapOpenVSplit="<C-t>"
-let NERDTreeMapOpenInTab="<C-n>"
-let NERDSpaceDelims=1
-
-let g:indent_guides_enable_on_vim_startup = 1
-let g:indent_guides_auto_colors = 0
-
-" Open Quickfix in Vertical Split
-set switchbuf=split
-
-" Set wrap and show 10 quickfix lines by default
-autocmd FileType qf setlocal wrap
-autocmd FileType qf nnoremap <buffer> <CR> :call OpenQF()<CR>
-
-function OpenQF()
-  eval feedkeys(getwininfo(win_getid())[0]['loclist'] ? "\<CR>" : "\<CR>\<C-w>L:cclose\<CR>:lclose\<CR>:cw\<CR>\<C-w>kI\<Esc>l", 'n')
-endfunction
-
-let g:go_fmt_autosave=1
-let g:go_fmt_command = "goimports"
+let g:syntastic_python_checkers = ['flake8']
 let g:syntastic_mode_map = { 'mode': 'passive' }
 let g:syntastic_go_checkers = ['golint', 'govet', 'golangci-lint']
 let g:syntastic_go_gometalinter_args = ['--enable=errcheck']
-" let g:go_list_type = "quickfix"
 
-" ALE (replaces syntastic for Python/Ruby/JS)
+" ALE
 let g:ale_linters = {
   \ 'python': ['pylsp'],
   \ 'ruby': ['solargraph'],
@@ -278,52 +99,84 @@ let g:ale_set_quickfix = 0
 let g:ale_completion_enabled = 1
 let g:ale_completion_delay = 500
 
-function AdjustColors()
-  source ~/.vim/default_colors.vim
-  silent! AirlineRefresh
-endfunction
+" vim-go
+let g:go_highlight_structs = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_build_constraints = 1
+let g:go_fmt_autosave = 1
+let g:go_fmt_command = "goimports"
 
-call NormalTags()
+" NERDTree
+let NERDTreeShowHidden = 1
+let g:NERDTreeWinPos = "left"
+let g:NERDTreeWinSize = 35
+let NERDTreeMapOpenSplit = "<C-i>"
+let NERDTreeMapOpenVSplit = "<C-t>"
+let NERDTreeMapOpenInTab = "<C-n>"
+let NERDSpaceDelims = 1
 
-autocmd BufEnter *.rb                  colorscheme zenburn    | call HashTags()     | call AdjustColors()
-autocmd BufLeave *.rb                  call NormalTags()
-autocmd BufEnter *.py                  colorscheme sialoquent | call AdjustColors()
-autocmd BufEnter *.go                  colorscheme sift       | call AdjustColors()
-autocmd BufEnter *.*rc                 colorscheme zenburn    | call AdjustColors()
-autocmd BufEnter *.yml,*.yaml          colorscheme sift       | call AdjustColors() | so ~/.vim/yaml.vim
-autocmd BufEnter *.ts,*.tsx,*.js       colorscheme sift       | call AdjustColors()
-autocmd BufEnter *.conf                colorscheme sift       | call AdjustColors() | so ~/.vim/syntax/logstash.vim
+" NERDCommenter
+let g:NERDSpaceDelims = 1
+let g:NERDCompactSexyComs = 1
+let g:NERDCustomDelimiters = { 'logstash': { 'left': '#','right': '' } }
 
-" Cool colors
+" fzf
+let g:fzf_action = {
+  \ 'ctrl-i': 'split',
+  \ 'ctrl-t': 'vsplit',
+  \ 'ctrl-n': 'tab split' }
+
+" indent-guides
+let g:indent_guides_enable_on_vim_startup = 1
+let g:indent_guides_auto_colors = 0
+
+" ── Colors ────────────────────────────────────────────────────────────────
 " slatedark sierra carrot seti maui
 " stonewashed-256 py-darcula ayu sialoquent
 " zenburn sift
 colorscheme zenburn
 let g:colors_name = "zenburn"
-autocmd! colorscheme * call AdjustColors()
-call AdjustColors()
 
-" Add spaces after comment delimiters by default
-let g:NERDSpaceDelims = 1
-" Use compact syntax for prettified multi-line comments
-let g:NERDCompactSexyComs = 1
-let g:NERDCustomDelimiters = { 'logstash': { 'left': '#','right': '' } }
+" ── Keymaps ───────────────────────────────────────────────────────────────
 
-set cmdheight=1
+" Remaps
+noremap ; :
+noremap : ;
+inoremap jk <Esc>
+nnoremap <Esc><Esc> :nohls<CR>
+vnoremap <Esc><Esc> <Esc>
 
-function! N(dir)
-  let prev = winnr()
-  execute "wincmd " . a:dir
-  if winnr() == prev
-    let dmap = {'h': '-L', 'j': '-D', 'k': '-U', 'l': '-R'}
-    if has('nvim')
-      call jobstart(['tmux', 'select-pane', dmap[a:dir]])
-    else
-      call job_start(['tmux', 'select-pane', dmap[a:dir]])
-    endif
-  endif
-endfunction
+" Editing
+vnoremap p "_dP
+nnoremap < v<<Esc>
+nnoremap > v><Esc>
+nmap <C-_> \ci
+vmap <C-_> \ci
+nnoremap @ orequire 'pry'; binding.pry<Esc>
+nnoremap <C-e> :edit!<CR>
 
+" Clipboard
+vnoremap <C-c> "*y
+nnoremap <C-c> V"*y
+nnoremap <C-v> i<Esc>$<C-P>"*p<C-P>
+inoremap <C-v> <Space><Esc>v<C-P>"*p<C-P><Esc>i<Right>
+
+" Window management
+nnoremap + 6<C-W>+
+nnoremap _ 6<C-W>-
+nnoremap - 12<c-w><
+nnoremap = 12<c-w>>
+nnoremap <C-a> <C-w>H
+nnoremap <C-z> <C-w>L
+nnoremap <C-d> :q<CR>
+inoremap <C-d> <Esc>:q<CR>
+vnoremap <C-d> <Esc>:q<CR>
+nnoremap <M-t> :vnew<CR>
+nnoremap <M-T> :tabnew<CR>
+
+" Pane navigation (vim + tmux)
 if !has('gui_running') && !has('nvim')
   execute "set <M-h>=\033h"
   execute "set <M-j>=\033j"
@@ -339,3 +192,108 @@ inoremap <M-j> <Esc>:call N('j')<CR>
 inoremap <M-k> <Esc>:call N('k')<CR>
 inoremap <M-l> <Esc>:call N('l')<CR>
 
+" NERDTree
+nnoremap <C-@> :NERDTreeToggle<CR>
+nnoremap <C-n> :NERDTreeFind<CR>
+
+" Tab navigation
+noremap <M-1> 1gt
+noremap <M-2> 2gt
+noremap <M-3> 3gt
+noremap <M-4> 4gt
+noremap <M-5> 5gt
+
+" Visual selection
+vnoremap j jg_
+vnoremap k k0
+vnoremap G Gg_
+vnoremap <Tab> $h
+vnoremap <S-Tab> _
+nnoremap d<Tab> d$
+nnoremap d<S-Tab> d^
+
+" Repeat / jump
+nnoremap <Tab> .
+nnoremap <M-o> <Tab>
+
+" Search / grep
+vnoremap <C-g> y/<C-R>"<CR>:lclose<CR>:GG <C-R>"<CR>
+vnoremap <C-f> y/<C-R>"<CR>
+nnoremap <C-g> :w<CR>:GoVet<CR>:ccl<CR>:cw 12
+nnoremap <c-c><c-c> :exec "color " . ((g:colors_name == "zenburn") ? "sift" : "zenburn")<CR>
+
+" Go to definition
+autocmd FileType go nnoremap <buffer> } :vsp<CR>:GoDef<CR><C-w>T
+autocmd FileType go nnoremap <buffer> " :GoDef<CR>
+autocmd FileType go nnoremap <buffer> ? :vsp<CR>:GoDef<CR><C-w>x<C-w>l
+autocmd FileType ruby,python,javascript,typescript nnoremap <buffer> } :ALEGoToDefinition -tab<CR>
+autocmd FileType ruby,python,javascript,typescript nnoremap <buffer> " :ALEGoToDefinition<CR>
+autocmd FileType ruby,python,javascript,typescript nnoremap <buffer> ? :ALEGoToDefinition -vsplit<CR>
+
+" ── Commands ──────────────────────────────────────────────────────────────
+:command -nargs=+ GG execute "silent Ggrep! ".shellescape(<q-args>)." -- '*.".expand('%:e')."'" | cw | redraw!
+:command -nargs=+ GGG execute "silent Ggrep! ".shellescape(<q-args>) | cw | redraw!
+:command GGGG execute "silent Ggrep! ".shellescape('#····') | cw | redraw!
+:command DIFF execute 'windo diffthis'
+:command DOFF execute 'windo diffoff'
+
+" ── Functions ─────────────────────────────────────────────────────────────
+function! N(dir)
+  let prev = winnr()
+  execute "wincmd " . a:dir
+  if winnr() == prev
+    let dmap = {'h': '-L', 'j': '-D', 'k': '-U', 'l': '-R'}
+    if has('nvim')
+      call jobstart(['tmux', 'select-pane', dmap[a:dir]])
+    else
+      call job_start(['tmux', 'select-pane', dmap[a:dir]])
+    endif
+  endif
+endfunction
+
+function HashTags()
+  nnoremap t A     #····<Esc>0
+  nnoremap T V:s/\ \ \ \ \ \#····/<CR>:nohls<CR>
+  nnoremap ¥ /.*\ \ \ \ \ \#····$<CR>
+  nnoremap Á :%s/\ \ \ \ \ \#····$//g<CR>:nohls<CR>
+endfunction
+
+function NormalTags()
+  nnoremap t A     //····<Esc>0
+  nnoremap T V:s/\ \ \ \ \ \/\/····/<CR>:nohls<CR>
+  nnoremap ¥ /.*\ \ \ \ \ \/\/····$<CR>
+  nnoremap Á :%s/\ \ \ \ \ \/\/····$//g<CR>:nohls<CR>
+endfunction
+
+function AdjustColors()
+  source ~/.vim/default_colors.vim
+  silent! AirlineRefresh
+endfunction
+
+function OpenQF()
+  eval feedkeys(getwininfo(win_getid())[0]['loclist'] ? "\<CR>" : "\<CR>\<C-w>L:cclose\<CR>:lclose\<CR>:cw\<CR>\<C-w>kI\<Esc>l", 'n')
+endfunction
+
+" ── Autocommands ──────────────────────────────────────────────────────────
+
+" Filetype colors
+autocmd BufEnter *.rb                  colorscheme zenburn    | call HashTags()     | call AdjustColors()
+autocmd BufLeave *.rb                  call NormalTags()
+autocmd BufEnter *.py                  colorscheme sialoquent | call AdjustColors()
+autocmd BufEnter *.go                  colorscheme sift       | call AdjustColors()
+autocmd BufEnter *.*rc                 colorscheme zenburn    | call AdjustColors()
+autocmd BufEnter *.yml,*.yaml          colorscheme sift       | call AdjustColors() | so ~/.vim/yaml.vim
+autocmd BufEnter *.ts,*.tsx,*.js       colorscheme sift       | call AdjustColors()
+autocmd BufEnter *.conf                colorscheme sift       | call AdjustColors() | so ~/.vim/syntax/logstash.vim
+autocmd! colorscheme * call AdjustColors()
+
+" NERDTree
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+" Quickfix
+autocmd FileType qf setlocal wrap
+autocmd FileType qf nnoremap <buffer> <CR> :call OpenQF()<CR>
+
+" ── Init ──────────────────────────────────────────────────────────────────
+call NormalTags()
+call AdjustColors()
