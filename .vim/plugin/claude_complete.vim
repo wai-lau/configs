@@ -63,4 +63,4 @@ def InsertCompletion()
   endtry
 enddef
 
-inoremap <C-Space> <Cmd>call TriggerClaude()<CR>
+inoremap <Nul> <Cmd>call TriggerClaude()<CR>
