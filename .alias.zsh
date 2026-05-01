@@ -2,8 +2,12 @@ export EDITOR='vim'
 
 # editing config
 alias ez="$EDITOR ~/.zshrc"       # alias for Edit Zshrc
+alias sz="source ~/.zshrc"
 alias ea="$EDITOR ~/.alias.zsh"   # alias for Edit Alias
 alias el="$EDITOR ~/.local.zsh"   # alias for Edit Local
+
+alias @x="ssh -t root@wai-lau.net 'tmux new-session -As shared'"
+
 
 @() {
   if [ -z "$@" ]
@@ -48,7 +52,7 @@ alias el="$EDITOR ~/.local.zsh"   # alias for Edit Local
   fi
 }
 
-alias sz='exec zsh'
+
 alias ls='ls --color=auto'
 
 alias tags='ctags -R .'
