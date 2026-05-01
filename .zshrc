@@ -1,4 +1,4 @@
-export PS1="%F{#FFB5C8}[%D{%H:%M}]%f %F{#F5EDD8}%2~%f %F{blue}✦%f "
+export PS1='%F{#FFB5C8}[%D{%H:%M}]%f ${SSH_CLIENT+"%F{yellow}[ssh:%m]%f "}%F{#F5EDD8}%2~%f %F{blue}✦%f '
 
 # Sources
 [[ "$(uname)" == "Linux" ]] && eval "$(dircolors -b)"

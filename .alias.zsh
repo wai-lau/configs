@@ -7,6 +7,7 @@ alias ea="$EDITOR ~/.alias.zsh"   # alias for Edit Alias
 alias el="$EDITOR ~/.local.zsh"   # alias for Edit Local
 
 alias @x="ssh -t root@wai-lau.net 'tmux new-session -As shared'"
+alias @z="mosh root@wai-lau.net -- zsh"
 
 
 @() {
