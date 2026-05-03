@@ -15,6 +15,9 @@
 !.alias.zsh
 !.local.zsh
 
+!.claude
+!.claude/statusline-command.sh
+
 !src/
 !src/repo/
 !src/repo/scripts/
