@@ -1,7 +1,16 @@
 precmd() {
+  local ec=$?
   local ssh_part=""
   [[ -n "$SSH_CLIENT" ]] && ssh_part="%F{yellow}[ssh:%m]%f "
-  PS1="%F{#FFB5C8}[%D{%H:%M}]%f ${ssh_part}%F{#F5EDD8}%2~%f %F{blue}✦%f "
+  local star
+  if (( ec == 0 )); then
+    star="%F{green}✦%f"
+  elif (( ec == 1 )); then
+    star="%F{red}✦%f"
+  else
+    star="%F{red}${ec}✦%f"
+  fi
+  PS1="%F{#FFB5C8}[%D{%H:%M}]%f ${ssh_part}%F{#F5EDD8}%2~%f ${star} "
 }
 
 # Sources
@@ -123,3 +132,21 @@ done
 ulimit -n 10240
 export BROWSER="/mnt/c/Program Files/Google/Chrome/Application/chrome.exe"
 export COLORTERM=truecolor
+export GH_TOKEN=$(pass show github/token)
+
+# Inject ~/.claude/private.md as appended system prompt for interactive
+# claude sessions only. Skip for `claude -p` / `claude --print`.
+claude() {
+    local arg has_p=0
+    for arg in "$@"; do
+        if [[ "$arg" == "-p" || "$arg" == "--print" ]]; then
+            has_p=1
+            break
+        fi
+    done
+    if (( has_p )) || [[ ! -r "$HOME/.claude/private.md" ]]; then
+        command claude "$@"
+    else
+        command claude --append-system-prompt "$(<"$HOME/.claude/private.md")" "$@"
+    fi
+}
