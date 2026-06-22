@@ -155,3 +155,6 @@ claude() {
 # Ollama (for aider, etc.)
 export OLLAMA_API_BASE=http://127.0.0.1:11434
 export OLLAMA_CONTEXT_LENGTH=8192
+
+# caveman plugin default intensity (highest-priority resolver source)
+export CAVEMAN_DEFAULT_MODE=ultra
