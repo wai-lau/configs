@@ -151,3 +151,7 @@ claude() {
         command claude --append-system-prompt "$(<"$HOME/.claude/private.md")" "$@"
     fi
 }
+
+# Ollama (for aider, etc.)
+export OLLAMA_API_BASE=http://127.0.0.1:11434
+export OLLAMA_CONTEXT_LENGTH=8192
