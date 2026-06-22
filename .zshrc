@@ -27,6 +27,7 @@ export PATH=$HOME/.vim/bundle/fzf/bin:$PATH
 export PATH=$HOME/.rbenv/bin:$PATH
 export PATH=$HOME/bin:$PATH
 export PATH=$HOME/.local/bin:$PATH
+export PATH=/home/linuxbrew/.linuxbrew/bin:$PATH
 
 # Environment
 export EDITOR=/usr/bin/vim
