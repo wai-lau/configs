@@ -109,6 +109,12 @@ To remove: delete the `Plugin` line, `git submodule deinit` + `git rm`, then `:P
 
 Always invoke `/caveman:caveman-commit` skill before writing commit messages.
 
+## Pushing
+
+Always `git push` after committing in this repo — never leave commits
+sitting locally. Both hosts (WSL-local + droplet) track `master` and
+pull from origin, so unpushed commits strand the other host.
+
 ## Shell Functions
 
 - `@` — `cd ~/src` or `cd ~/src/<fuzzy-match>`
