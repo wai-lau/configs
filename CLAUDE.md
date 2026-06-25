@@ -1,5 +1,13 @@
 # CLAUDE.md
 
+> **Scope:** Applies ONLY to the dotfiles repo rooted at `$HOME`
+> (`/home/wai`) — editing `.vimrc`, `.zshrc`, `.tmux.conf`, Vim
+> submodules, etc. Claude Code loads this file for any cwd under
+> `/home/wai` (parent-dir traversal), but it does NOT apply to
+> subdirectory projects like `~/src/*`. If cwd is a distinct
+> project (its own git repo / package), IGNORE this file and use
+> that project's own instructions.
+
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## What This Repo Is
@@ -19,6 +27,28 @@ Personal dotfiles for a WSL2/Linux + tmux + Vim environment. Tracked files are w
 | `.vim/bundle/*` | Vim plugins as git submodules (managed by Vundle) |
 | `.config/karabiner/` | macOS key remapping |
 | `.config/iterm2/` | iTerm2 prefs |
+
+## Host Gating (shared master across hosts)
+
+One `master` branch is shared by two hosts — no branch-per-host:
+
+- **WSL-local** workstation (`/mnt/c` present, `$SSH_CONNECTION` empty)
+- **Droplet** `root@wai-lau.net` (over ssh/mosh, `$SSH_CONNECTION` set)
+
+Config is mostly shared; diverge ONLY where intentional, and gate
+every host-specific thing so it never runs on the wrong host:
+
+| Mechanism | Use for |
+|-----------|---------|
+| `[[ -d /mnt/c ]]` | WSL/Windows-interop only (`clip.exe`, Windows `$BROWSER`, Obsidian) |
+| `[ -z "$SSH_CONNECTION" ]` | outer-host-only tmux (nested `M-q` toggle) |
+| `[[ -d <path> ]]` presence | optional tooling (linuxbrew, project dirs) |
+| `~/.local.zsh` (gitignored) | machine-local env / secrets |
+| `~`-relative paths | shared paths that resolve per-host (`~/bin/...`, gitconfig keys) |
+
+Never hardcode `/home/wai` in tracked config — droplet home is `/root`.
+Project tooling (e.g. `voice`/hosaka) does NOT belong here; it lives in
+its own repo, symlinked into `~/bin` for global use.
 
 ## Adding a New Dotfile to Tracking
 

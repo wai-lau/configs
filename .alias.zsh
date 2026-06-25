@@ -54,7 +54,7 @@ alias @z="mosh root@wai-lau.net -- zsh"
 }
 
 
-alias ls='ls --color=auto'
+alias ls='ls -a --color=auto'
 
 alias tags='ctags -R .'
 alias g='git'

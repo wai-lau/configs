@@ -27,7 +27,7 @@ export PATH=$HOME/.vim/bundle/fzf/bin:$PATH
 export PATH=$HOME/.rbenv/bin:$PATH
 export PATH=$HOME/bin:$PATH
 export PATH=$HOME/.local/bin:$PATH
-export PATH=/home/linuxbrew/.linuxbrew/bin:$PATH
+[[ -d /home/linuxbrew ]] && export PATH=/home/linuxbrew/.linuxbrew/bin:$PATH
 
 # Environment
 export EDITOR=/usr/bin/vim
@@ -75,8 +75,11 @@ alias klv='top -l 1 | grep dlv | awk "{print $1;}" | xargs kill'
 alias version:='echo $(zsh --version)'
 alias swp='find . -name ".*.swp"; find . -name ".*.swo"; find . -name "**/.*.swp"; find . -name "**/.*.swo"'
 alias swp!='find . -name ".*.swp" -delete; find . -name ".*.swo" -delete; find . -name "**/.*.swp" -delete; find . -name "**/.*.swo" -delete'
-alias pbc='/mnt/c/Windows/System32/clip.exe'
-alias obsidian='/mnt/c/Users/wailu/AppData/Local/Programs/Obsidian/Obsidian.com'
+# WSL-only: Windows interop via /mnt/c (absent on droplet)
+if [[ -d /mnt/c ]]; then
+  alias pbc='/mnt/c/Windows/System32/clip.exe'
+  alias obsidian='/mnt/c/Users/wailu/AppData/Local/Programs/Obsidian/Obsidian.com'
+fi
 
 # Functions
 swo () {
@@ -131,7 +134,8 @@ done
 
 # System
 ulimit -n 10240
-export BROWSER="/mnt/c/Program Files/Google/Chrome/Application/chrome.exe"
+# WSL-only: Windows Chrome as $BROWSER (absent on droplet)
+[[ -d /mnt/c ]] && export BROWSER="/mnt/c/Program Files/Google/Chrome/Application/chrome.exe"
 export COLORTERM=truecolor
 export GH_TOKEN=$(pass show github/token)
 
