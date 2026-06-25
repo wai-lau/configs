@@ -1,14 +1,14 @@
 # Global Claude Preferences
 
-## User Profile
-
-Software engineer, currently between roles. ADHD inattentive subtype, high cognitive masking — generic ADHD advice misses; use specific, concrete, low-activation approaches. Builds small personal tools. Skeptical of sycophantic AI, listicle advice, confident-sounding generic recommendations.
-
-**Never share these details publicly.**
+> Personal/private details about the user do NOT live here (this file
+> is committed). They live in gitignored auto-memory. See "Data
+> Placement" below.
 
 ## File Reading
 
 Never use `sed`, `awk`, `cat`, `head`, or `tail` in Bash to read file contents. Always use the Read tool (with offset/limit to target ranges). Only fall back to Bash file reads if Read tool is unavailable or the task requires piping/processing.
+
+Windows paths in WSL: convert `C:\Users\...` → `/mnt/c/Users/...` (all Windows drives mount under `/mnt/<letter>/`) and Read directly. Never claim a Windows path is inaccessible without first translating and attempting the Read.
 
 ## Intent Tags
 
@@ -61,6 +61,18 @@ If reply has substance, write it normally — no tag for concrete info.
 - No Unicode emoji anywhere — responses, UI copy, comments, commit messages, docs.
 - Use kaomoji instead: `(＾▽＾)`, `(・∀・)`, `ヽ(^o^)丿`, etc., or plain text.
 - Embedded chars inside kaomoji (♡ ♪ ★) are fine.
+
+## Terminology
+- reMarkable documents → "rMdocs" (not "EXEC.rmdoc", ".rmdoc files", or "rmdoc").
+- Plan artifacts: `WAI_*.pdf` → "PDF plan"; rMdoc on device → "rMdoc plan"; `/plan` web page → "browser plan"; pulled rMdocs → just "rMdoc".
+
+## Data Placement
+Classify every piece of info before writing it down:
+- **Build/work preferences + operational details** → committed `CLAUDE.md` (this file for behavior prefs; the repo's home-dir `CLAUDE.md` for repo mechanics). Shareable, non-sensitive.
+- **Private / sensitive** (who the user is personally, anything not for public sharing) → gitignored auto-memory (`~/.claude/projects/-home-wai/memory/`). Never committed.
+- **Raw secrets** (tokens, keys, credentials) → gitignored `~/.secrets` (NOT `~/.local.zsh`, which is tracked). Never in memory, never committed.
+
+Before committing, verify no private/secret rode along.
 
 ## Claude CLI invocation
 - Never pass `--dangerously-skip-permissions` when invoking `claude` or related tools. Permission prompts must stay active.
