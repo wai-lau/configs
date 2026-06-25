@@ -56,4 +56,8 @@ suffix=""
 [ -n "$reset_in" ] && [ "$reset_in" != "-" ] && suffix="${suffix} \033[38;5;157m(${reset_in})\033[0m"
 [ -n "$seven_day" ] && [ "$seven_day" != "-" ] && suffix="${suffix} \033[36m7d:${seven_day}%%\033[0m"
 
-printf "\033[33m[$(date +%H:%M)]\033[0m %s${suffix} \033[34m✦\033[0m" "$two_parts"
+claude_total=$(pgrep -xc claude 2>/dev/null || echo 0)
+others=$((claude_total - 1))
+[ "$others" -gt 0 ] && suffix="${suffix} \033[38;5;208malts:${others}\033[0m"
+
+printf "\033[38;2;255;181;200m[$(date +%H:%M)]\033[0m \033[38;2;245;237;216m%s\033[0m${suffix}" "$two_parts"
