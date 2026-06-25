@@ -21,7 +21,7 @@ Personal dotfiles for a WSL2/Linux + tmux + Vim environment. Tracked files are w
 | `.vimrc` | Vim config — Vundle plugins, keymaps, ALE/syntastic, per-filetype color schemes |
 | `.zshrc` | Shell — PATH, Go env, rbenv, FZF, compinit |
 | `.alias.zsh` | Aliases and shell functions (`@`, `@pr`, `rubylint`, `swo`) |
-| `.local.zsh` | Machine-local env vars (empty/gitignored content) |
+| `.local.zsh` | Tracked machine-local env vars (non-secret; empty by default). Secrets go in gitignored `~/.secrets`, not here. |
 | `.tmux.conf` | Tmux — Alt+hjkl pane nav shared with Vim, window bindings, colors |
 | `.gitconfig` | Git aliases (`g ff`, `g f`, `g fp`, `g l`) |
 | `.vim/bundle/*` | Vim plugins as git submodules (managed by Vundle) |
@@ -41,12 +41,22 @@ every host-specific thing so it never runs on the wrong host:
 | `[[ -d /mnt/c ]]` | WSL/Windows-interop only (`clip.exe`, Windows `$BROWSER`, Obsidian) |
 | `[ -z "$SSH_CONNECTION" ]` | outer-host-only tmux (nested `M-q` toggle) |
 | `[[ -d <path> ]]` presence | optional tooling (linuxbrew, project dirs) |
-| `~/.local.zsh` (gitignored) | machine-local env / secrets |
+| `command -v <tool>` | tool-dependent lines (`pass`/`GH_TOKEN`) |
+| `~/.secrets` (gitignored) | raw secrets / credentials (sourced by `.zshrc`) |
 | `~`-relative paths | shared paths that resolve per-host (`~/bin/...`, gitconfig keys) |
 
 Never hardcode `/home/wai` in tracked config — droplet home is `/root`.
 Project tooling (e.g. `voice`/hosaka) does NOT belong here; it lives in
 its own repo, symlinked into `~/bin` for global use.
+
+## Reference Docs
+
+Operational deep-dives for this environment live in `docs/` (committed):
+
+- [`docs/clipboard-osc52.md`](docs/clipboard-osc52.md) — drag-copy /
+  OSC52 through WT + nested tmux + SSH; why `~/bin/tmux-osc52` exists.
+- [`docs/shift-enter-csiu.md`](docs/shift-enter-csiu.md) — Shift+Enter
+  via CSI u through WT + tmux + SSH.
 
 ## Adding a New Dotfile to Tracking
 

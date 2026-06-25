@@ -19,6 +19,9 @@
 !.claude
 !.claude/statusline-command.sh
 
+!docs/
+!docs/*
+
 !src/
 !src/repo/
 !src/repo/scripts/
