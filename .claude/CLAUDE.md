@@ -30,6 +30,7 @@ If reply has substance, write it normally — no tag for concrete info.
 ## Commits
 - Always invoke `/caveman:caveman-commit` skill before writing commit messages.
 - Commit after every logical change. Group related files; don't bundle unrelated. No piling up.
+- Before every commit, check if `ARCHITECTURE.md` and `CLAUDE.md` (any level) need updating to match the change. If the change alters behavior/structure/data flow/conventions those docs describe, update them in the same commit. Docs drift silently.
 
 ## Code snippets in chat
 - Always fenced code blocks. Never inline code in prose.
@@ -41,10 +42,7 @@ If reply has substance, write it normally — no tag for concrete info.
 - Easier to review, syntax-highlight, and avoids per-line approval.
 
 ## Clipboard
-- Default: run commands directly via Bash. Don't copy to clipboard for the user to run.
-- Use `clip.exe` only for: interactive terminals, sudo prompts, browser auth flows.
-- If clipboard is genuinely needed, pre-load it before telling user to paste.
-- Never put passwords / private keys / secrets in clipboard unless user explicitly asks.
+- Never use the clipboard / `clip.exe`. Tmux handles copy; clipboard integration is set up there.
 - Never print secrets to Bash output (transcript logs them) — chain via shell vars.
 
 ## Suppression of warnings/errors

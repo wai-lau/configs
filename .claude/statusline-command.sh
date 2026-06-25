@@ -50,9 +50,9 @@ short_cwd="${cwd/#$HOME/~}"
 two_parts=$(echo "$short_cwd" | awk -F/ '{if(NF<=2) print $0; else print $(NF-1)"/"$NF}')
 
 suffix=""
-[ -n "$remaining" ] && [ "$remaining" != "-" ] && suffix="${suffix} \033[38;5;217mctx:${remaining}%%\033[0m"
+[ -n "$remaining" ] && [ "$remaining" != "-" ] && suffix="${suffix} \033[97mctx:${remaining}%%\033[0m"
 [ -n "$overhead_pct" ] && [ "$overhead_pct" != "-" ] && suffix="${suffix} \033[38;5;245m(base:${overhead_pct}%%)\033[0m"
-[ -n "$five_hour" ] && [ "$five_hour" != "-" ] && suffix="${suffix} \033[97m5h:${five_hour}%%\033[0m"
+[ -n "$five_hour" ] && [ "$five_hour" != "-" ] && suffix="${suffix} \033[38;5;217m5h:${five_hour}%%\033[0m"
 [ -n "$reset_in" ] && [ "$reset_in" != "-" ] && suffix="${suffix} \033[38;5;157m(${reset_in})\033[0m"
 [ -n "$seven_day" ] && [ "$seven_day" != "-" ] && suffix="${suffix} \033[36m7d:${seven_day}%%\033[0m"
 
