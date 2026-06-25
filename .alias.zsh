@@ -69,6 +69,4 @@ alias ls='ls -a --color=auto'
 
 alias tags='ctags -R .'
 alias g='git'
-# droplet-only: moltbook heartbeat lives at /molt (absent on WSL-local)
-[[ -d /molt ]] && alias molt='HEARTBEAT_DEBUG=1 /molt/moltbook-heartbeat.sh'
 
