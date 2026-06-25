@@ -9,8 +9,6 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'fatih/vim-go'
 Plugin 'vim-scripts/indentpython.vim'
-Plugin 'vim-syntastic/syntastic'
-Plugin 'nvie/vim-flake8'
 Plugin 'nathanaelkane/vim-indent-guides'
 Plugin 'flazz/vim-colorschemes'
 Plugin 'vim-ruby/vim-ruby'
@@ -27,7 +25,7 @@ Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'blueyed/vim-diminactive'
 Plugin 'robbles/logstash.vim'
-Bundle 'uarun/vim-protobuf'
+Plugin 'uarun/vim-protobuf'
 Plugin 'dense-analysis/ale'
 
 call vundle#end()
@@ -72,19 +70,6 @@ let g:airline_section_b = ''
 let g:airline_section_x = ''
 let g:airline_section_y = ''
 
-" Syntastic
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-let g:syntastic_python_checkers = ['flake8']
-let g:syntastic_mode_map = { 'mode': 'passive' }
-let g:syntastic_go_checkers = ['golint', 'govet', 'golangci-lint']
-let g:syntastic_go_gometalinter_args = ['--enable=errcheck']
-
 " ALE
 let g:ale_linters = {
   \ 'python': ['pylsp'],
@@ -115,7 +100,6 @@ let g:NERDTreeWinSize = 35
 let NERDTreeMapOpenSplit = "<C-i>"
 let NERDTreeMapOpenVSplit = "<C-t>"
 let NERDTreeMapOpenInTab = "<C-n>"
-let NERDSpaceDelims = 1
 
 " NERDCommenter
 let g:NERDSpaceDelims = 1
