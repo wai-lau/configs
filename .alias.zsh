@@ -21,6 +21,17 @@ alias @z="mosh root@wai-lau.net -- zsh"
 
 @pr() {
   local upstream_repo_name
+  # Browser opener per host: WSL-local (/mnt/c) → Windows browser via
+  # wslview; local Linux desktop → xdg-open; over SSH / headless droplet
+  # → print the URL to copy (no usable local browser there).
+  local -a opener
+  if [[ -d /mnt/c ]]; then
+    opener=(wslview)
+  elif [[ -z "$SSH_CONNECTION" ]] && command -v xdg-open >/dev/null; then
+    opener=(xdg-open)
+  else
+    opener=(print -r --)
+  fi
   if [[ $(git config remote.origin.url) == *"@"* ]]; then
     if [[ $(git config remote.origin.url) == *".git" ]]; then
       upstream_repo_name=${"$(cut -d ':' -f 2- <<< "$(git config remote.origin.url)")": :(-4)}
@@ -44,12 +55,12 @@ alias @z="mosh root@wai-lau.net -- zsh"
   if [ -z "$pr_number" ]
   then
     if [[ $(git config remote.origin.url) == $(git config remote.origin.url) ]]; then
-      wslview https://github.com/$upstream_repo_name/compare/$(git rev-parse --abbrev-ref HEAD)\?expand=1
+      ${opener[@]} https://github.com/$upstream_repo_name/compare/$(git rev-parse --abbrev-ref HEAD)\?expand=1
     else
-      wslview https://github.com/$upstream_repo_name/compare/master...$GITHUB_USER:$(git rev-parse --abbrev-ref HEAD)\?expand=1
+      ${opener[@]} https://github.com/$upstream_repo_name/compare/master...$GITHUB_USER:$(git rev-parse --abbrev-ref HEAD)\?expand=1
     fi
   else
-    wslview https://github.com/$upstream_repo_name/pull/$pr_number
+    ${opener[@]} https://github.com/$upstream_repo_name/pull/$pr_number
   fi
 }
 
