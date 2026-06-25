@@ -30,6 +30,8 @@ If reply has substance, write it normally — no tag for concrete info.
 ## Commits
 - Always invoke `/caveman:caveman-commit` skill before writing commit messages.
 - Commit after every logical change. Group related files; don't bundle unrelated. No piling up.
+- Commit on own judgment when a logical change is done — never ask "commit?" or wait for a go-ahead.
+- Split commits per feature: multiple distinct features/fixes in one turn → one commit each, never bundled.
 - Before every commit, check if `ARCHITECTURE.md` and `CLAUDE.md` (any level) need updating to match the change. If the change alters behavior/structure/data flow/conventions those docs describe, update them in the same commit. Docs drift silently.
 
 ## Code snippets in chat
@@ -63,3 +65,6 @@ If reply has substance, write it normally — no tag for concrete info.
 ## Claude CLI invocation
 - Never pass `--dangerously-skip-permissions` when invoking `claude` or related tools. Permission prompts must stay active.
 - If user-supplied config contains it, flag rather than propagate.
+# graphify
+- **graphify** (`~/.claude/skills/graphify/SKILL.md`) - any input to knowledge graph. Trigger: `/graphify`
+When the user types `/graphify`, invoke the Skill tool with `skill: "graphify"` before doing anything else.
