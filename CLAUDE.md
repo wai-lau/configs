@@ -25,8 +25,6 @@ Personal dotfiles for a WSL2/Linux + tmux + Vim environment. Tracked files are w
 | `.tmux.conf` | Tmux — Alt+hjkl pane nav shared with Vim, window bindings, colors |
 | `.gitconfig` | Git aliases (`g ff`, `g f`, `g fp`, `g l`) |
 | `.vim/bundle/*` | Vim plugins as git submodules (managed by Vundle) |
-| `.config/karabiner/` | macOS key remapping |
-| `.config/iterm2/` | iTerm2 prefs |
 
 ## Host Gating (shared master across hosts)
 
