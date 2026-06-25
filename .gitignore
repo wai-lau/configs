@@ -28,3 +28,7 @@
 !src/repo/scripts/rc/
 !src/repo/scripts/rc/rc.sh
 
+# macOS cruft — re-ignore even inside whitelisted dirs (last match wins)
+.DS_Store
+**/.DS_Store
+
