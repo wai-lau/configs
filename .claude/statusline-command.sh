@@ -1,7 +1,7 @@
 #!/bin/bash
 input=$(cat)
 
-read -r cwd remaining five_hour seven_day reset_in overhead_pct _session_pct < <(echo "$input" | python3 -c "
+read -r cwd remaining five_hour seven_day reset_in overhead_pct _session_pct effort_lvl < <(echo "$input" | python3 -c "
 import sys,json,time,os
 d=json.load(sys.stdin)
 ctx=d.get('context_window') or {}
@@ -15,6 +15,7 @@ sid=d.get('session_id') or 'unknown'
 def pct(v): return '-' if v is None else '%.0f' % v
 
 cwd=d.get('cwd','') or '-'
+effort_lvl=((d.get('effort') or {}).get('level')) or '-'
 remaining=ctx.get('used_percentage')
 resets=fh.get('resets_at')
 if resets:
@@ -43,7 +44,7 @@ if total is not None and total>0:
     overhead='%.0f' % (base*100.0/size)
     sess='%.0f' % (max(0,total-base)*100.0/size)
 
-print(cwd, pct(remaining), pct(fh.get('used_percentage')), pct(sd.get('used_percentage')), countdown, overhead, sess)
+print(cwd, pct(remaining), pct(fh.get('used_percentage')), pct(sd.get('used_percentage')), countdown, overhead, sess, effort_lvl)
 " 2>/dev/null)
 
 short_cwd="${cwd/#$HOME/~}"
@@ -90,6 +91,10 @@ others=$((claude_total - 1))
 # Line 1: the recap as a hash-colored bar (black text, a space of padding each
 # side). Line 2: clock + cwd + metrics.
 title_line=""
-[ -n "$title" ] && title_line="\033[48;2;${bgc};38;2;0;0;0m ${title} \033[0m\n"
+# Effort level to the right of the title bar, dim gray (matches the
+# harness "(shift+tab to cycle)" hint color).
+effort_seg=""
+[ -n "$effort_lvl" ] && [ "$effort_lvl" != "-" ] && effort_seg=" \033[38;5;245m${effort_lvl}\033[0m"
+[ -n "$title" ] && title_line="\033[48;2;${bgc};38;2;0;0;0m ${title} \033[0m${effort_seg}\n"
 
 printf "${title_line}\033[38;2;255;181;200m[$(date +%H:%M)]\033[0m \033[38;2;245;237;216m%s\033[0m${suffix}" "$two_parts"
