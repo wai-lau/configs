@@ -64,7 +64,6 @@ alias python='python3'
 alias vim!='sudo vim'
 alias colocon='vim ~/.vim/bundle/vim-colorschemes/colors'
 alias alacon='vim ~/.config/alacritty/alacritty.yml'
-alias g=git
 alias k=kubectl
 alias dc='docker-compose'
 alias ..='cd ..'
