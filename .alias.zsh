@@ -58,4 +58,5 @@ alias ls='ls -a --color=auto'
 
 alias tags='ctags -R .'
 alias g='git'
+alias molt='HEARTBEAT_DEBUG=1 /molt/moltbook-heartbeat.sh'
 
