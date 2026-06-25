@@ -137,7 +137,8 @@ ulimit -n 10240
 # WSL-only: Windows Chrome as $BROWSER (absent on droplet)
 [[ -d /mnt/c ]] && export BROWSER="/mnt/c/Program Files/Google/Chrome/Application/chrome.exe"
 export COLORTERM=truecolor
-export GH_TOKEN=$(pass show github/token)
+# gated: pass (password-store) not on every host
+command -v pass >/dev/null && export GH_TOKEN=$(pass show github/token)
 
 # Inject ~/.claude/private.md as appended system prompt for interactive
 # claude sessions only. Skip for `claude -p` / `claude --print`.
