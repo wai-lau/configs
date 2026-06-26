@@ -62,10 +62,6 @@ If reply has substance, write it normally — no tag for concrete info.
 - Use kaomoji instead: `(＾▽＾)`, `(・∀・)`, `ヽ(^o^)丿`, etc., or plain text.
 - Embedded chars inside kaomoji (♡ ♪ ★) are fine.
 
-## Terminology
-- reMarkable documents → "rMdocs" (not "EXEC.rmdoc", ".rmdoc files", or "rmdoc").
-- Plan artifacts: `WAI_*.pdf` → "PDF plan"; rMdoc on device → "rMdoc plan"; `/plan` web page → "browser plan"; pulled rMdocs → just "rMdoc".
-
 ## Data Placement
 Classify every piece of info before writing it down:
 - **Build/work preferences + operational details** → committed `CLAUDE.md` (this file for behavior prefs; the repo's home-dir `CLAUDE.md` for repo mechanics). Shareable, non-sensitive.
