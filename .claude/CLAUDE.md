@@ -73,6 +73,35 @@ Before committing, verify no private/secret rode along.
 ## Claude CLI invocation
 - Never pass `--dangerously-skip-permissions` when invoking `claude` or related tools. Permission prompts must stay active.
 - If user-supplied config contains it, flag rather than propagate.
-# graphify
-- **graphify** (`~/.claude/skills/graphify/SKILL.md`) - any input to knowledge graph. Trigger: `/graphify`
-When the user types `/graphify`, invoke the Skill tool with `skill: "graphify"` before doing anything else.
+## Graphify
+
+Knowledge-graph skill (`~/.claude/skills/graphify/SKILL.md`). Turns any
+folder of code/docs into a queryable graph. When the user types
+`/graphify`, invoke the Skill tool with `skill: "graphify"` BEFORE doing
+anything else.
+
+**Where graphs live:** each repo's `graphify-out/` —
+`graph.html` (interactive, open in browser), `graph.json` (raw),
+`GRAPH_REPORT.md` (audit). These are the file/symbol map; repo
+`CLAUDE.md` filemaps were purged in favor of the graph.
+
+**Already graphified:** all `~/src/*` repos with code + the dotfiles
+repo (`/home/wai`). Skipped (no code): `local-llm-learning`,
+`mtg-rules-bot`, `rival-routesetters`.
+
+**Common usage:**
+- `/graphify` — build/rebuild graph for cwd
+- `/graphify <path>` — build for a specific path
+- `/graphify query "<question>"` — answer from existing graph (no
+  rebuild); use this first when `graphify-out/graph.json` exists
+- `/graphify path "A" "B"` — shortest path between two nodes
+- `/graphify explain "Node"` — plain-language node explanation
+- `/graphify <path> --update` — re-extract only changed files
+
+**Conventions for this environment:**
+- Build AST/code-only (no `GEMINI_API_KEY` set → semantic extraction
+  would spend subagent tokens). Restrict to git-tracked files; never
+  graph gitignored content (node_modules, build artifacts).
+- Rebuild after structural changes (new/moved files, renamed symbols).
+- A code question about a repo with a graph = treat as a graphify
+  query first.
