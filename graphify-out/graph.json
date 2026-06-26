@@ -1,0 +1,123 @@
+{
+  "directed": false,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "label": "statusline-command.sh",
+      "file_type": "code",
+      "source_file": ".claude/statusline-command.sh",
+      "source_location": "L1",
+      "metadata": {
+        "language": "bash",
+        "kind": "file"
+      },
+      "_origin": "ast",
+      "id": "claude_statusline_command",
+      "community": 1,
+      "community_name": "statusline-command.sh",
+      "norm_label": "statusline-command.sh"
+    },
+    {
+      "label": "statusline-command.sh script",
+      "file_type": "code",
+      "source_file": ".claude/statusline-command.sh",
+      "source_location": "L1",
+      "metadata": {
+        "language": "bash",
+        "kind": "bash_entrypoint"
+      },
+      "_origin": "ast",
+      "id": "home_wai_claude_statusline_command_sh__entry",
+      "community": 1,
+      "community_name": "statusline-command.sh",
+      "norm_label": "statusline-command.sh script"
+    },
+    {
+      "label": "preview.rb",
+      "file_type": "code",
+      "source_file": ".vim/plugged/fzf.vim/bin/preview.rb",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "vim_plugged_fzf_vim_bin_preview_rb_bin_preview",
+      "community": 0,
+      "community_name": "usage()",
+      "norm_label": "preview.rb"
+    },
+    {
+      "label": "usage()",
+      "file_type": "code",
+      "source_file": ".vim/plugged/fzf.vim/bin/preview.rb",
+      "source_location": "L16",
+      "_origin": "ast",
+      "id": "bin_preview_usage",
+      "community": 0,
+      "community_name": "usage()",
+      "norm_label": "usage()"
+    },
+    {
+      "label": "preview.sh",
+      "file_type": "code",
+      "source_file": ".vim/plugged/fzf.vim/bin/preview.sh",
+      "source_location": "L1",
+      "metadata": {
+        "language": "bash",
+        "kind": "file"
+      },
+      "_origin": "ast",
+      "id": "vim_plugged_fzf_vim_bin_preview_sh_bin_preview",
+      "community": 2,
+      "community_name": "preview.sh script",
+      "norm_label": "preview.sh"
+    },
+    {
+      "label": "preview.sh script",
+      "file_type": "code",
+      "source_file": ".vim/plugged/fzf.vim/bin/preview.sh",
+      "source_location": "L1",
+      "metadata": {
+        "language": "bash",
+        "kind": "bash_entrypoint"
+      },
+      "_origin": "ast",
+      "id": "home_wai_vim_plugged_fzf_vim_bin_preview_sh__entry",
+      "community": 2,
+      "community_name": "preview.sh script",
+      "norm_label": "preview.sh script"
+    }
+  ],
+  "links": [
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".claude/statusline-command.sh",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "claude_statusline_command",
+      "target": "home_wai_claude_statusline_command_sh__entry",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".vim/plugged/fzf.vim/bin/preview.rb",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "vim_plugged_fzf_vim_bin_preview_rb_bin_preview",
+      "target": "bin_preview_usage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".vim/plugged/fzf.vim/bin/preview.sh",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "vim_plugged_fzf_vim_bin_preview_sh_bin_preview",
+      "target": "home_wai_vim_plugged_fzf_vim_bin_preview_sh__entry",
+      "confidence_score": 1.0
+    }
+  ],
+  "hyperedges": [],
+  "built_at_commit": "86965654204bc6b0f8307f3d50abc5391e6c4df1"
+}

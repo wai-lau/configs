@@ -16,16 +16,7 @@ Personal dotfiles for a WSL2/Linux + tmux + Vim environment. Tracked files are w
 
 ## Tracked Files
 
-| File/Dir | Purpose |
-|----------|---------|
-| `README.md` | Public-facing repo overview (layout, install, highlights, host gating) |
-| `.vimrc` | Vim config — Vundle plugins, keymaps, ALE/syntastic, per-filetype color schemes |
-| `.zshrc` | Shell — PATH, Go env, rbenv, FZF, compinit |
-| `.alias.zsh` | Aliases and shell functions (`@`, `@pr`, `rubylint`, `swo`) |
-| `.local.zsh` | Tracked machine-local env vars (non-secret; empty by default). Secrets go in gitignored `~/.secrets`, not here. |
-| `.tmux.conf` | Tmux — Alt+hjkl pane nav shared with Vim, window bindings, colors |
-| `.gitconfig` | Git aliases (`g ff`, `g f`, `g fp`, `g l`) |
-| `.vim/bundle/*` | Vim plugins as git submodules (managed by Vundle) |
+The file/symbol map now lives in the knowledge graph (built with `/graphify`): open `graphify-out/graph.html` in a browser, or read `graphify-out/GRAPH_REPORT.md`. Regenerate after structural changes with `/graphify`.
 
 ## Host Gating (shared master across hosts)
 
