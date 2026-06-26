@@ -18,6 +18,7 @@
 !.local.zsh
 
 # graphify structural graph (AST-only); cache/ stays ignored
+!.graphifyignore
 !graphify-out/
 !graphify-out/graph.json
 !graphify-out/graph.html
