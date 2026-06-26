@@ -18,6 +18,7 @@ Personal dotfiles for a WSL2/Linux + tmux + Vim environment. Tracked files are w
 
 | File/Dir | Purpose |
 |----------|---------|
+| `README.md` | Public-facing repo overview (layout, install, highlights, host gating) |
 | `.vimrc` | Vim config — Vundle plugins, keymaps, ALE/syntastic, per-filetype color schemes |
 | `.zshrc` | Shell — PATH, Go env, rbenv, FZF, compinit |
 | `.alias.zsh` | Aliases and shell functions (`@`, `@pr`, `rubylint`, `swo`) |
