@@ -26,6 +26,8 @@
 
 !.claude
 !.claude/statusline-command.sh
+!.claude/hooks
+!.claude/hooks/*
 
 !docs/
 !docs/*
