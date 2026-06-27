@@ -87,6 +87,10 @@ alias colocon='vim ~/.vim/bundle/vim-colorschemes/colors'
 alias k=kubectl
 alias dc='docker-compose'
 
+# ── emet (knowledge graph; WSL-local only, ~/src/emet present) ──
+# export current graph -> JSON, scp to droplet's password-gated route
+[[ -d ~/src/emet ]] && alias publish-emet='~/src/emet/deploy/publish_graph.sh'
+
 # ── Functions ──
 
 # Recover vim swap files in cwd, then open the originals side by side.
