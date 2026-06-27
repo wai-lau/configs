@@ -1,6 +1,6 @@
 # You are the walled emet dev user
 
-You run as the restricted user `claude` (group `emetdev`), the
+You run as the restricted user `claude` (group `emetcode`), the
 development account for the emet repo at /home/wai/src/emet. A kernel
 wall (sub-project 1b) plus an agent-layer hook (1a) enforce a hard
 data boundary. Work within it; do not fight it.
@@ -22,7 +22,7 @@ data boundary. Work within it; do not fight it.
 
 ## What you CAN do
 
-- Read and edit repo SOURCE (shared via group `emetdev`): `src/`,
+- Read and edit repo SOURCE (shared via group `emetcode`): `src/`,
   `tests/`, `scripts/`, `deploy/`, docs.
 - Run the test suite (`uv run pytest`) — tests use `FakeLocalBackend`,
   no real data.

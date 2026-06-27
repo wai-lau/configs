@@ -106,4 +106,4 @@ effort_seg=""
 [ -n "$effort_lvl" ] && [ "$effort_lvl" != "-" ] && [ -n "$bgc" ] && effort_seg=" \033[38;2;${bgc}m${effort_lvl}\033[0m"
 [ -n "$title" ] && title_line="\033[48;2;${bgc};38;2;0;0;0m ${title} \033[0m${effort_seg}\n"
 
-printf "${title_line}\033[38;2;255;181;200m[$(date +%H:%M)]\033[0m ${user_seg}\033[38;2;245;237;216m%s\033[0m${suffix}" "$two_parts"
+printf "${title_line}${user_seg}\033[38;2;255;181;200m[$(date +%H:%M)]\033[0m \033[38;2;245;237;216m%s\033[0m${suffix}" "$two_parts"

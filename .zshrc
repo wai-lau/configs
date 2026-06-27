@@ -16,7 +16,7 @@ precmd() {
   else
     user_part="%F{208}%n%f "
   fi
-  PS1="%F{#FFB5C8}[%D{%H:%M}]%f ${ssh_part}${user_part}%F{#F5EDD8}%2~%f ${star} "
+  PS1="${user_part}%F{#FFB5C8}[%D{%H:%M}]%f ${ssh_part}%F{#F5EDD8}%2~%f ${star} "
 }
 
 # Sources
