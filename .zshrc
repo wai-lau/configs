@@ -8,7 +8,7 @@ precmd() {
   elif (( ec == 1 )); then
     star="%F{red}✦%f"
   else
-    star="%F{red}${ec}✦%f"
+    star="%F{red}${ec} ✦%f"
   fi
   PS1="%F{#FFB5C8}[%D{%H:%M}]%f ${ssh_part}%F{#F5EDD8}%2~%f ${star} "
 }
