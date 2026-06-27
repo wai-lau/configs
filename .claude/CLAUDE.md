@@ -103,8 +103,8 @@ repo (`/home/wai`). Skipped (no code): `local-llm-learning`,
   would spend subagent tokens). Restrict to git-tracked files; never
   graph gitignored content (node_modules, build artifacts).
 - Rebuild after structural changes (new/moved files, renamed symbols).
-- Note: `/graphify` at the end of a feature (merge/finish) — a shipped
-  feature is a structural change, so rebuilding the repo's graph is a
-  good closing step.
+- **REQUIRED: `/graphify` at the end of every feature** (merge/finish).
+  A shipped feature is a structural change, so rebuild the repo's graph
+  before considering the work done. Not optional.
 - A code question about a repo with a graph = treat as a graphify
   query first.
