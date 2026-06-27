@@ -12,7 +12,7 @@ precmd() {
   fi
   local user_part
   if [[ "$USER" == wai || "$USER" == root ]]; then
-    user_part="%F{#F5EDD8}%n%f "
+    user_part="%K{255}%F{0} %n %f%k "
   else
     user_part="%F{208}%n%f "
   fi

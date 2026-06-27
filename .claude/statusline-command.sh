@@ -88,10 +88,11 @@ claude_total=$(pgrep -xc claude 2>/dev/null || echo 0)
 others=$((claude_total - 1))
 [ "$others" -gt 0 ] && suffix="${suffix} \033[38;5;208malts:${others}\033[0m"
 
-# Current user (orange warning unless wai/root — pops when running walled).
+# Current user. wai/root = privileged owner → black-on-white warning bar.
+# walled claude (or any other) = orange text, normal bg.
 me=$(whoami)
 if [ "$me" = wai ] || [ "$me" = root ]; then
-  user_seg="\033[38;5;245m${me}\033[0m "
+  user_seg="\033[38;5;0;48;5;255m ${me} \033[0m "
 else
   user_seg="\033[38;5;208m${me}\033[0m "
 fi
