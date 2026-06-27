@@ -10,7 +10,13 @@ precmd() {
   else
     star="%F{red}${ec} ✦%f"
   fi
-  PS1="%F{#FFB5C8}[%D{%H:%M}]%f ${ssh_part}%F{#F5EDD8}%2~%f ${star} "
+  local user_part
+  if [[ "$USER" == wai || "$USER" == root ]]; then
+    user_part="%F{#F5EDD8}%n%f "
+  else
+    user_part="%F{208}%n%f "
+  fi
+  PS1="%F{#FFB5C8}[%D{%H:%M}]%f ${ssh_part}${user_part}%F{#F5EDD8}%2~%f ${star} "
 }
 
 # Sources
