@@ -4,7 +4,7 @@
 !.gitignoreglobal
 !.gitconfig
 !CLAUDE.md
-!README.md
+!/README.md
 !.vimrc
 !.zshrc
 !.tmux.conf
