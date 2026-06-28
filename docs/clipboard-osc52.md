@@ -46,7 +46,7 @@ bind-key -T copy-mode-vi MouseDragEnd1Pane \
 
 Helper location (per-host, `~`-relative in config):
 - Local: `/home/wai/bin/tmux-osc52`
-- Droplet (root@wai-lau.net): `/root/bin/tmux-osc52`
+- Droplet (wai-root@wai-lau.net): `/root/bin/tmux-osc52`
 
 > NOTE: `~/bin/tmux-osc52` is NOT tracked in this repo. It must exist on
 > each host independently (copy/scp it). The tmux binding pipes to it.

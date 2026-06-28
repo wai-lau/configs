@@ -23,7 +23,7 @@ The file/symbol map now lives in the knowledge graph (built with `/graphify`): o
 One `master` branch is shared by two hosts — no branch-per-host:
 
 - **WSL-local** workstation (`/mnt/c` present, `$SSH_CONNECTION` empty)
-- **Droplet** `root@wai-lau.net` (over ssh/mosh, `$SSH_CONNECTION` set)
+- **Droplet** `wai-root@wai-lau.net` (over ssh/mosh, `$SSH_CONNECTION` set)
 
 Config is mostly shared; diverge ONLY where intentional, and gate
 every host-specific thing so it never runs on the wrong host:

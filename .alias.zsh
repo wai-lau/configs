@@ -10,8 +10,8 @@ alias ea="$EDITOR ~/.alias.zsh"   # edit aliases
 alias el="$EDITOR ~/.local.zsh"   # edit machine-local
 
 # ── Remote (droplet) ──
-alias @x="ssh -t root@wai-lau.net 'tmux new-session -As shared'"
-alias @z="mosh root@wai-lau.net -- zsh"
+alias @x="ssh -t wai-root@wai-lau.net 'tmux new-session -As shared'"
+alias @z="mosh wai-root@wai-lau.net -- zsh"
 
 # ── Navigation ──
 alias ..='cd ..'
