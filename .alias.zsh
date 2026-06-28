@@ -91,6 +91,17 @@ alias dc='docker-compose'
 # export current graph -> JSON, scp to droplet's password-gated route
 [[ -d ~/src/emet ]] && alias publish-emet='~/src/emet/deploy/publish_graph.sh'
 
+# Enter the walled `claude` dev account inside ITS OWN emet checkout and
+# launch Claude Code there. `claude` = restricted emetcode-group dev acct;
+# the kernel wall keeps it out of data/. claude can't traverse /home/wai
+# (mode 750, group wai), so its repo is /home/claude/src/emet -- single-
+# quote the body so `~` expands to claude's home in the login shell, not
+# wai's. `sudo -i` loads claude's PATH; `exec` drops back to wai on quit.
+# Args forwarded: trailing `bash "$@"` sets $0=bash so "$@" fills the -c
+# script's positionals, e.g. `safeclaude -p '...'` reaches the walled claude.
+# The `claude()` wrapper in .zshrc auto-routes here when cwd is in ~/src/emet.
+safeclaude() { sudo -u claude -i bash -lc 'cd /home/wai/src/emet && exec claude "$@"' bash "$@"; }
+
 # ── Functions ──
 
 # Recover vim swap files in cwd, then open the originals side by side.

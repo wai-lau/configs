@@ -73,6 +73,13 @@ command -v pass >/dev/null && export GH_TOKEN=$(pass show github/token)
 # Inject ~/.claude/private.md as appended system prompt for interactive
 # claude sessions only. Skip for `claude -p` / `claude --print`.
 claude() {
+    # In the emet repo, route to the walled `claude` dev account (kernel wall
+    # keeps it out of data/). Gate: not already that account, and the walled
+    # checkout exists (WSL-only; droplet $HOME=/root has no /home/wai/src/emet).
+    if [[ "$USER" != claude && ( "$PWD" == /home/wai/src/emet || "$PWD" == /home/wai/src/emet/* ) ]]; then
+        safeclaude "$@"
+        return
+    fi
     local arg has_p=0
     for arg in "$@"; do
         if [[ "$arg" == "-p" || "$arg" == "--print" ]]; then
