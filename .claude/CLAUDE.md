@@ -34,3 +34,24 @@ data boundary. Work within it; do not fight it.
 - The LLM proposes; code commits. Read ARCHITECTURE.md before changing
   extractor/sweep/ops behavior.
 - Treat the data boundary as a security invariant, not an obstacle.
+
+## Handing the user a file to review (WSL)
+
+When you point the user at a file to open/review (specs, docs, reports):
+COPY it to a SHORT shallow path, then print the WSL Windows `file://` URL as a
+BARE url on its own line, so it is ctrl+clickable from the terminal:
+
+    cp <abs-path> ~/review.md
+    file://wsl.localhost/Ubuntu/home/wai/review.md
+
+Three hard requirements, all learned by failing:
+- COPY, never a symlink. Windows cannot follow a Linux symlink over
+  `wsl.localhost` -- the browser gets ERR_FILE_NOT_FOUND. Use a real file (re-cp
+  after editing the source).
+- BARE URL, never a markdown link. Claude Code styles `[name](url)` but emits no
+  clickable target for `file://` -- it looks like a link and does nothing. Only
+  bare URLs auto-link.
+- SHORT enough for ONE terminal line. A long bare URL wraps and the line break
+  kills ctrl+click. A shallow path (`~/review.md`) keeps it one line.
+
+(WSL distro = `Ubuntu`.)
