@@ -35,6 +35,15 @@ data boundary. Work within it; do not fight it.
   extractor/sweep/ops behavior.
 - Treat the data boundary as a security invariant, not an obstacle.
 
+## Graphify graphs (any repo) — never commit
+
+The `/graphify` skill writes a code-structure knowledge graph to
+`graphify-out/` (`graph.json`, `graph.html`, `GRAPH_REPORT.md`, `cache/`).
+It is a GENERATED, disposable artifact, NOT source: regenerate with
+`/graphify` whenever stale or needed, but never commit it — keep
+`graphify-out/` gitignored. (Distinct from emet's walled
+`data/graph.sqlite`, which is a different thing behind the boundary.)
+
 ## Handing the user a file to review (WSL)
 
 When you point the user at a file to open/review (specs, docs, reports):

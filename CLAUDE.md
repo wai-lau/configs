@@ -14,9 +14,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Personal dotfiles for a WSL2/Linux + tmux + Vim environment. Tracked files are whitelisted in `.gitignore` (everything ignored by default, explicit allowlist). Vim plugins live in `.vim/bundle/` as git submodules.
 
-## Tracked Files
+## Codebase Map (graphify)
 
-The file/symbol map now lives in the knowledge graph (built with `/graphify`): open `graphify-out/graph.html` in a browser, or read `graphify-out/GRAPH_REPORT.md`. Regenerate after structural changes with `/graphify`.
+The file/symbol map lives in a `/graphify` knowledge graph under `graphify-out/`: open `graph.html` in a browser, or read `GRAPH_REPORT.md`. These are generated **locally and gitignored — never committed**; regenerate with `/graphify` after structural changes.
 
 ## Host Gating (shared master across hosts)
 
