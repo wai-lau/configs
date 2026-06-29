@@ -87,11 +87,28 @@ claude() {
             break
         fi
     done
-    if (( has_p )) || [[ ! -r "$HOME/.claude/private.md" ]]; then
+    # -p/--print: one-shot, no private.md, no relaunch loop.
+    if (( has_p )); then
         command claude "$@"
-    else
-        command claude --append-system-prompt "$(<"$HOME/.claude/private.md")" "$@"
+        return
     fi
+    # Interactive: relaunch loop powering the /purge "hard refresh". /purge
+    # drops ~/.claude/.purge then SIGTERMs this process; on exit we wipe the
+    # sentinel and relaunch a fresh instance. Plain Ctrl+D quits (no sentinel).
+    # First launch honors "$@"; relaunches are bare for a pristine session.
+    local -a launch_args=("$@")
+    while true; do
+        if [[ -r "$HOME/.claude/private.md" ]]; then
+            command claude --append-system-prompt "$(<"$HOME/.claude/private.md")" "${launch_args[@]}"
+        else
+            command claude "${launch_args[@]}"
+        fi
+        [[ -f "$HOME/.claude/.purge" ]] || break
+        rm -f "$HOME/.claude/.purge"
+        launch_args=()
+        stty sane 2>/dev/null
+        printf '\033[?1049l\033[?25h\033[0m'
+    done
 }
 
 # Ollama (for aider, etc.)
