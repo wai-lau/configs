@@ -41,8 +41,20 @@ fi
 (
     convo=$(python3 "$HOOKS_DIR/recap-extract.py" "$tpath" 2>/dev/null)
     [ -z "$convo" ] && exit 0
-    prompt="Below is the recent transcript of a coding session. Write a 3-6 word title naming the CURRENT task/topic. Output ONLY the title on a single line: plain words, no markdown, no numbering, no quotes, no punctuation, no preamble.
+    prompt="You name coding sessions. Read the transcript and name the CURRENT task/topic as a 3-6 word noun phrase, like a git branch description. Abstract the topic — do NOT copy, quote, or echo any sentence from the transcript. No questions, no first person, no commentary.
 
+Examples of good titles:
+  Fix auth token expiry check
+  Add statusline recap sanitizer
+  Debug nightly ingest EACCES
+Examples of BAD output (never do this):
+  \"Approve delete? Files gone after.\"   (echoed a transcript line)
+  Here is the title: ...                  (preamble)
+  **Fix the bug**                          (markdown)
+
+Output ONLY the title on a single line: plain words, no markdown, no numbering, no quotes, no punctuation, no preamble.
+
+Transcript:
 $convo"
     title=$(CLAUDE_RECAP_GUARD=1 claude -p --model "$MODEL" "$prompt" 2>/dev/null \
         | python3 "$HOOKS_DIR/recap-clean.py")
