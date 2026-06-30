@@ -41,11 +41,11 @@ fi
 (
     convo=$(python3 "$HOOKS_DIR/recap-extract.py" "$tpath" 2>/dev/null)
     [ -z "$convo" ] && exit 0
-    prompt="Below is the recent transcript of a coding session. Write a 3-6 word title naming the CURRENT task/topic. Output ONLY the title: no quotes, no punctuation, no preamble.
+    prompt="Below is the recent transcript of a coding session. Write a 3-6 word title naming the CURRENT task/topic. Output ONLY the title on a single line: plain words, no markdown, no numbering, no quotes, no punctuation, no preamble.
 
 $convo"
     title=$(CLAUDE_RECAP_GUARD=1 claude -p --model "$MODEL" "$prompt" 2>/dev/null \
-        | tr '\n' ' ' | sed 's/^ *//; s/ *$//' | cut -c1-50)
+        | python3 "$HOOKS_DIR/recap-clean.py")
     [ -n "$title" ] && printf '%s' "$title" > "$recap_f"
 ) >/dev/null 2>&1 &
 
