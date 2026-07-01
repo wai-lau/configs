@@ -16,6 +16,11 @@ def pct(v): return '-' if v is None else '%.0f' % v
 
 cwd=d.get('cwd','') or '-'
 effort_lvl=((d.get('effort') or {}).get('level')) or '-'
+_m=d.get('model') or {}
+_mstr=((_m.get('id') or '')+' '+(_m.get('display_name') or '')).lower()
+_short=next((f for f in ('opus','sonnet','haiku','fable') if f in _mstr),'')
+if _short:
+    effort_lvl=(effort_lvl+'-'+_short) if effort_lvl!='-' else _short
 remaining=ctx.get('used_percentage')
 resets=fh.get('resets_at')
 if resets:
