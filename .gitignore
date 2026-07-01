@@ -9,6 +9,7 @@
 !.zshrc
 !.tmux.conf
 !.tmux-off.conf
+!.tmux-ssh.conf
 
 !.vim
 !.vim/*
