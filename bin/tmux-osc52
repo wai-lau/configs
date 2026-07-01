@@ -1,0 +1,18 @@
+#!/bin/bash
+# Read selection on stdin, emit OSC52 directly to tmux client tty.
+# Usage: tmux-osc52 [--wrap]
+#   --wrap : wrap in tmux passthrough (\ePtmux;\e<seq>\e\\) so an outer tmux
+#            strips one layer and forwards plain OSC52 to its own tty.
+#            Use this on hosts where tmux runs INSIDE another tmux (e.g. via SSH).
+set -euo pipefail
+
+payload="$(base64 -w0)"
+tty="$(tmux display-message -p '#{client_tty}')"
+[ -n "$tty" ] || exit 0
+
+if [ "${1:-}" = "--wrap" ]; then
+  # Each ESC inside passthrough body becomes ESC ESC.
+  printf '\ePtmux;\e\e]52;c;%s\e\e\\\e\\' "$payload" > "$tty"
+else
+  printf '\e]52;c;%s\e\\' "$payload" > "$tty"
+fi

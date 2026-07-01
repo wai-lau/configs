@@ -11,6 +11,10 @@
 !.tmux-off.conf
 !.tmux-ssh.conf
 
+# ~/bin scripts (tmux-osc52 clipboard helper, sourced by .tmux-ssh.conf)
+!bin/
+!bin/*
+
 !.vim
 !.vim/*
 !.vim/**/*
