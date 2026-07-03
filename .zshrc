@@ -11,7 +11,7 @@ precmd() {
     star="%F{red}${ec} ✦%f"
   fi
   local user_part
-  if [[ "$USER" == wai || "$USER" == root ]]; then
+  if [[ "$USER" == wai || "$USER" == wai-root || "$USER" == root ]]; then
     user_part="%K{255}%F{0} %n %f%k "
   else
     user_part="%F{208}%n%f "
@@ -27,9 +27,11 @@ source $HOME/.local.zsh
 
 # PATH
 export GOPATH=$HOME/go
-export PATH=/usr/local/bin:$PATH
 export PATH=$HOME/bin:$PATH
 export PATH=$HOME/.local/bin:$PATH
+# /usr/local/bin LAST so its `claude` session-cap wrapper wins over the native
+# ~/.local/bin/claude symlink (only `claude` lives in /usr/local/bin, nothing else shifts)
+export PATH=/usr/local/bin:$PATH
 export PATH=$HOME/.vim/bundle/fzf/bin:$PATH
 [[ -d $HOME/go/bin ]]   && export PATH=$HOME/go/bin:$PATH
 [[ -d $HOME/.rbenv ]]   && export PATH=$HOME/.rbenv/bin:$PATH

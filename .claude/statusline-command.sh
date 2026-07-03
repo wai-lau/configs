@@ -93,17 +93,17 @@ claude_total=$(pgrep -xc claude 2>/dev/null || echo 0)
 others=$((claude_total - 1))
 [ "$others" -gt 0 ] && suffix="${suffix} \033[38;5;208malts:${others}\033[0m"
 
-# Current user. wai/root = privileged owner → black-on-white warning bar.
+# Current user. wai/wai-root/root = privileged owner → black-on-white warning bar.
 # walled claude (or any other) = orange text, normal bg.
 me=$(whoami)
-if [ "$me" = wai ] || [ "$me" = root ]; then
+if [ "$me" = wai ] || [ "$me" = wai-root ] || [ "$me" = root ]; then
   user_seg="\033[38;5;0;48;5;255m ${me} \033[0m "
 else
   user_seg="\033[38;5;208m${me}\033[0m "
 fi
 
 # Line 1: the recap as a hash-colored bar (black text, a space of padding each
-# side). Line 2: clock + user + cwd + metrics.
+# side). Line 2: user + cwd + metrics.
 title_line=""
 # Effort level to the right of the title bar, fg = the title bar's
 # hash-derived bg color.
@@ -111,4 +111,4 @@ effort_seg=""
 [ -n "$effort_lvl" ] && [ "$effort_lvl" != "-" ] && [ -n "$bgc" ] && effort_seg=" \033[38;2;${bgc}m${effort_lvl}\033[0m"
 [ -n "$title" ] && title_line="\033[48;2;${bgc};38;2;0;0;0m ${title} \033[0m${effort_seg}\n"
 
-printf "${title_line}${user_seg}\033[38;2;255;181;200m[$(date +%H:%M)]\033[0m \033[38;2;245;237;216m%s\033[0m${suffix}" "$two_parts"
+printf "${title_line}${user_seg}\033[38;2;245;237;216m%s\033[0m${suffix}" "$two_parts"
