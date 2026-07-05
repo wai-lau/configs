@@ -1,0 +1,27 @@
+#!/bin/bash
+# pbcopy — macOS-style clipboard copy. Reads stdin, puts it on the clipboard.
+# Host-aware so one script works on both hosts sharing this dotfiles master:
+#   WSL-local (has /mnt/c): clip.exe  -> Windows clipboard.
+#   droplet   (no interop):  OSC52    -> the terminal that owns this session.
+# Usage:  cat file.txt | pbcopy   |   echo hi | pbcopy
+set -euo pipefail
+
+# WSL / Windows interop: hand to the native Windows clipboard.
+# clip.exe reads its pipe as the console codepage, which mangles UTF-8
+# (em-dash E2 80 94 -> "ΓÇö"). Feed it UTF-16LE so Unicode survives.
+if command -v clip.exe >/dev/null 2>&1; then
+  iconv -f UTF-8 -t UTF-16LE | clip.exe
+  exit
+fi
+
+# No Windows interop -> emit OSC52 so the copy lands in the *local* terminal.
+if [ -n "${TMUX:-}" ]; then
+  # inside tmux: reuse the OSC52 helper; --wrap when tmux is nested over SSH.
+  if [ -n "${SSH_CONNECTION:-}" ]; then
+    exec "$HOME/bin/tmux-osc52" --wrap
+  fi
+  exec "$HOME/bin/tmux-osc52"
+fi
+
+# bare terminal, no tmux: raw OSC52 straight to our tty.
+printf '\e]52;c;%s\e\\' "$(base64 -w0)"

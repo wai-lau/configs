@@ -9,6 +9,9 @@ alias sz="source ~/.zshrc"        # reload zshrc
 alias ea="$EDITOR ~/.alias.zsh"   # edit aliases
 alias el="$EDITOR ~/.local.zsh"   # edit machine-local
 
+# ── Clipboard ──
+alias pbc="pbcopy"                # cat file | pbc
+
 # ── Remote (droplet) ──
 alias @x="ssh -t wai-root@wai-lau.net 'tmux new-session -As shared'"
 alias @z="mosh wai-root@wai-lau.net -- zsh"
