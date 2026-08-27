@@ -72,8 +72,8 @@ ulimit -n 10240
 # gated: pass (password-store) not on every host
 command -v pass >/dev/null && export GH_TOKEN=$(pass show github/token)
 
-# Inject ~/.claude/private.md as appended system prompt for interactive
-# claude sessions only. Skip for `claude -p` / `claude --print`.
+# Interactive claude wrapper: auto-update, then launch with ~/.claude/private.md
+# as appended system prompt. Skip both for `claude -p` / `claude --print`.
 claude() {
     # In the emet repo, route to the walled `claude` dev account (kernel wall
     # keeps it out of data/). Gate: not already that account, and the walled
@@ -94,6 +94,12 @@ claude() {
         command claude "$@"
         return
     fi
+    # Auto-update before every interactive launch so this session runs the
+    # latest build (~2s when already current). Background updater is off
+    # (autoUpdates=false in ~/.claude.json), so this is the only update path.
+    # timeout guards offline hosts; a failed check never blocks launch.
+    # Sits above the loop: /purge relaunches skip it.
+    timeout 20 claude update || true
     # Interactive: relaunch loop powering the /purge "hard refresh". /purge
     # drops ~/.claude/.purge then SIGTERMs this process; on exit we wipe the
     # sentinel and relaunch a fresh instance. Plain Ctrl+D quits (no sentinel).
