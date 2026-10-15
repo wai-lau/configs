@@ -94,3 +94,11 @@ Three hard requirements, all learned by failing:
   kills ctrl+click. A shallow path (`~/review.md`) keeps it one line.
 
 (WSL distro = `Ubuntu`.)
+
+## Diagrams in docs (any repo) — mermaid or SVG, never ASCII art
+
+When a doc wants a picture, draw it: a ```mermaid``` fence for flows, state
+machines, sequences and dependency graphs; a committed SVG file referenced as
+an image (`![..](docs/arch/x.svg)`) for spatial things — geometry, layouts,
+wireframes. NO ASCII-art diagrams in markdown. Tables stay tables; an ordered
+list stays a list (not an arrow chain). (Wai, 2026-10-15.)
