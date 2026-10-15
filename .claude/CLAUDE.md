@@ -97,8 +97,15 @@ Three hard requirements, all learned by failing:
 
 ## Diagrams in docs (any repo) — mermaid or SVG, never ASCII art
 
-When a doc wants a picture, draw it: a ```mermaid``` fence for flows, state
-machines, sequences and dependency graphs; a committed SVG file referenced as
-an image (`![..](docs/arch/x.svg)`) for spatial things — geometry, layouts,
-wireframes. NO ASCII-art diagrams in markdown. Tables stay tables; an ordered
-list stays a list (not an arrow chain). (Wai, 2026-10-15.)
+When a doc wants a picture, draw it: mermaid for flows, state machines,
+sequences and dependency graphs; a hand-written SVG for spatial things —
+geometry, layouts, wireframes. NO ASCII-art diagrams in markdown. Tables stay
+tables; an ordered list stays a list (not an arrow chain). (Wai, 2026-10-15.)
+
+**Pre-render mermaid; embed the SVG.** The Claude Code app's markdown viewer
+prints a ```mermaid``` fence as a code block (GitHub renders it), so the
+source lives in `docs/arch/<name>.mmd` and the doc embeds
+`![..](docs/arch/<name>.svg)`. In exec-fn and its sub repos the pre-commit
+hook renders a staged `.mmd` and stages the `.svg` (exec-fn
+`scripts/render-mermaid.py`: playwright WebKit + mermaid from jsdelivr, SVG
+text labels so `<img>` works). Elsewhere run that script by hand.
