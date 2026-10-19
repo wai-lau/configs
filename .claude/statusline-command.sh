@@ -8,9 +8,12 @@ if [ ! -f "$uf" ] || [ $(( $(date +%s) - $(stat -c %Y "$uf") )) -gt 60 ]; then
   touch "$uf"
   (
     tok=$(python3 -c "import json,os;print(json.load(open(os.path.expanduser('~/.claude/.credentials.json')))['claudeAiOauth']['accessToken'])" 2>/dev/null) || exit
-    curl -sf -m 10 https://api.anthropic.com/api/oauth/usage \
-      -H "Authorization: Bearer $tok" -H 'anthropic-beta: oauth-2025-04-20' \
-      > "$uf.tmp" && mv "$uf.tmp" "$uf"
+    org=$(python3 -c "import json,os;print(json.load(open(os.path.expanduser('~/.claude.json')))['oauthAccount']['organizationUuid'])" 2>/dev/null) || exit
+    get() { curl -sf -m 10 "https://api.anthropic.com/api/oauth/$1" \
+      -H "Authorization: Bearer $tok" -H 'anthropic-beta: oauth-2025-04-20'; }
+    # Prepaid balance lives apart from /usage (which has spend, no balance).
+    u=$(get usage) && p=$(get "organizations/$org/prepaid/credits") &&
+      printf '{"usage":%s,"prepaid":%s}' "$u" "$p" > "$uf.tmp" && mv "$uf.tmp" "$uf"
   ) >/dev/null 2>&1 </dev/null &
   disown
 fi
@@ -63,15 +66,17 @@ if total is not None and total>0:
     overhead='%.0f' % (base*100.0/size)
     sess='%.0f' % (max(0,total-base)*100.0/size)
 
-# Credits left = balance, else monthly limit - used, else (no cap) month used.
+# Credits left = prepaid balance, else monthly limit - used, else month used.
 # "!" prefix = a window is at 100%, so credits are being spent now.
 credits='-'
 try:
-    sp=json.load(open(os.path.expanduser('~/.claude/cache/statusline_usage.json'))).get('spend') or {}
+    uj=json.load(open(os.path.expanduser('~/.claude/cache/statusline_usage.json')))
+    sp=uj['usage'].get('spend') or {}
+    bal=(uj['prepaid'].get('balance') or {}).get('money')
     def amt(m): return m['amount_minor']/10.0**m.get('exponent',2)
     if sp.get('enabled'):
         used=amt(sp['used']) if sp.get('used') else 0
-        if sp.get('balance'): credits='%.2f' % amt(sp['balance'])
+        if bal: credits='%.2f' % amt(bal)
         elif sp.get('limit'): credits='%.2f' % max(0,amt(sp['limit'])-used)
         else: credits='%.2fused' % used
 except: pass
