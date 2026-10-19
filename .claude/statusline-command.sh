@@ -123,13 +123,8 @@ suffix=""
 [ -n "$reset_in" ] && [ "$reset_in" != "-" ] && suffix="${suffix} \033[38;5;157m(${reset_in})\033[0m"
 [ -n "$seven_day" ] && [ "$seven_day" != "-" ] && suffix="${suffix} \033[36m7d:${seven_day}%%\033[0m"
 
-if [ -n "$credits" ] && [ "$credits" != "-" ]; then
-  if [ "${credits#!}" != "$credits" ]; then
-    suffix="${suffix} \033[1;91mc:\$${credits#!}\033[0m"
-  else
-    suffix="${suffix} \033[38;5;245mc:\$${credits}\033[0m"
-  fi
-fi
+# Credits only while spending them ("!" = a window at 100%): white on red.
+[ "${credits#!}" != "$credits" ] && suffix="${suffix} \033[1;97;41m c:\$${credits#!} \033[0m"
 
 claude_total=$(pgrep -xc claude 2>/dev/null || echo 0)
 others=$((claude_total - 1))
