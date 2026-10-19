@@ -1,6 +1,20 @@
 #!/bin/bash
 input=$(cat)
 
+# Usage credits: stdin carries no balance, so poll the OAuth usage endpoint.
+# Cache 60s; refresh detached so render never blocks on the network.
+uf=~/.claude/cache/statusline_usage.json
+if [ ! -f "$uf" ] || [ $(( $(date +%s) - $(stat -c %Y "$uf") )) -gt 60 ]; then
+  touch "$uf"
+  (
+    tok=$(python3 -c "import json,os;print(json.load(open(os.path.expanduser('~/.claude/.credentials.json')))['claudeAiOauth']['accessToken'])" 2>/dev/null) || exit
+    curl -sf -m 10 https://api.anthropic.com/api/oauth/usage \
+      -H "Authorization: Bearer $tok" -H 'anthropic-beta: oauth-2025-04-20' \
+      > "$uf.tmp" && mv "$uf.tmp" "$uf"
+  ) >/dev/null 2>&1 </dev/null &
+  disown
+fi
+
 read -r cwd remaining five_hour seven_day reset_in overhead_pct _session_pct effort_lvl credits < <(echo "$input" | python3 -c "
 import sys,json,time,os
 d=json.load(sys.stdin)
@@ -49,24 +63,20 @@ if total is not None and total>0:
     overhead='%.0f' % (base*100.0/size)
     sess='%.0f' % (max(0,total-base)*100.0/size)
 
-# Usage credits: stdin has no overage flag, so treat any window at >=100% as
-# spending credits. Snapshot session cost on entry; show spend since then.
+# Credits left = balance, else monthly limit - used, else (no cap) month used.
+# "!" prefix = a window is at 100%, so credits are being spent now.
 credits='-'
-cost=(d.get('cost') or {}).get('total_cost_usd')
-cf=os.path.expanduser('~/.claude/cache/statusline_credit_%s' % sid)
-over=any((w.get('used_percentage') or 0)>=100 for w in (fh,sd))
-if over and cost is not None:
-    try: cbase=float(open(cf).read().strip())
-    except:
-        cbase=cost
-        try:
-            os.makedirs(os.path.dirname(cf),exist_ok=True)
-            open(cf,'w').write(str(cbase))
-        except: pass
-    credits='%.2f' % max(0,cost-cbase)
-elif not over and os.path.exists(cf):
-    try: os.remove(cf)
-    except: pass
+try:
+    sp=json.load(open(os.path.expanduser('~/.claude/cache/statusline_usage.json'))).get('spend') or {}
+    def amt(m): return m['amount_minor']/10.0**m.get('exponent',2)
+    if sp.get('enabled'):
+        used=amt(sp['used']) if sp.get('used') else 0
+        if sp.get('balance'): credits='%.2f' % amt(sp['balance'])
+        elif sp.get('limit'): credits='%.2f' % max(0,amt(sp['limit'])-used)
+        else: credits='%.2fused' % used
+except: pass
+if credits!='-' and any((w.get('used_percentage') or 0)>=100 for w in (fh,sd)):
+    credits='!'+credits
 
 print(cwd, pct(remaining), pct(fh.get('used_percentage')), pct(sd.get('used_percentage')), countdown, overhead, sess, effort_lvl, credits)
 " 2>/dev/null)
@@ -108,7 +118,13 @@ suffix=""
 [ -n "$reset_in" ] && [ "$reset_in" != "-" ] && suffix="${suffix} \033[38;5;157m(${reset_in})\033[0m"
 [ -n "$seven_day" ] && [ "$seven_day" != "-" ] && suffix="${suffix} \033[36m7d:${seven_day}%%\033[0m"
 
-[ -n "$credits" ] && [ "$credits" != "-" ] && suffix="${suffix} \033[1;91mc:${credits}\$\033[0m"
+if [ -n "$credits" ] && [ "$credits" != "-" ]; then
+  if [ "${credits#!}" != "$credits" ]; then
+    suffix="${suffix} \033[1;91mc:\$${credits#!}\033[0m"
+  else
+    suffix="${suffix} \033[38;5;245mc:\$${credits}\033[0m"
+  fi
+fi
 
 claude_total=$(pgrep -xc claude 2>/dev/null || echo 0)
 others=$((claude_total - 1))
