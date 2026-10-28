@@ -24,6 +24,7 @@ bin/sox
 bin/voice
 bin/git-filter-repo
 bin/xdg-open
+bin/md
 
 !.vim
 !.vim/*
@@ -39,6 +40,8 @@ bin/xdg-open
 !.claude/statusline-command.sh
 !.claude/hooks
 !.claude/hooks/*
+# home-only: wired by untracked settings.json, needs ~/src/exec-fn
+.claude/hooks/js-swallow-guard.sh
 !.claude/commands
 !.claude/commands/*
 !.claude/commands/**/*
