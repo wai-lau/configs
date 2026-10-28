@@ -157,6 +157,14 @@ title_line=""
 # hash-derived bg color.
 effort_seg=""
 [ -n "$effort_lvl" ] && [ "$effort_lvl" != "-" ] && [ -n "$bgc" ] && effort_seg=" \033[38;2;${bgc}m${effort_lvl}\033[0m"
-[ -n "$title" ] && title_line="\033[48;2;${bgc};38;2;0;0;0m ${title} \033[0m${effort_seg}\n"
+# Claude PID (= cc-socks/<pid>.sock) left of the title, same fg as effort.
+# Walk ancestors to the claude process (statusline may run under sh -c).
+pid_seg=""
+p=$PPID
+while [ -n "$p" ] && [ "$p" -gt 1 ] && [ "$(cat /proc/$p/comm 2>/dev/null)" != claude ]; do
+  p=$(awk '{print $4}' /proc/$p/stat 2>/dev/null)
+done
+[ -n "$p" ] && [ "$p" -gt 1 ] && [ -n "$bgc" ] && pid_seg="\033[38;2;${bgc}m${p}\033[0m "
+[ -n "$title" ] && title_line="${pid_seg}\033[48;2;${bgc};38;2;0;0;0m ${title} \033[0m${effort_seg}\n"
 
 printf "${title_line}${user_seg}\033[38;2;245;237;216m%s\033[0m${suffix}" "$two_parts"
