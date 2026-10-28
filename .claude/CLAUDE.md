@@ -109,3 +109,11 @@ source lives in `docs/arch/<name>.mmd` and the doc embeds
 hook renders a staged `.mmd` and stages the `.svg` (exec-fn
 `scripts/render-mermaid.py`: playwright WebKit + mermaid from jsdelivr, SVG
 text labels so `<img>` works). Elsewhere run that script by hand.
+
+## Naming agents/sessions — by PID
+
+Wai tells Claude sessions apart by their claude PID. That PID also names
+the session's socket, `/run/user/1000/cc-socks/<pid>.sock`, and it shows
+in the statusline to the left of the title. When you refer to another
+session, or address one, use its PID (e.g. "11577 / Balance/Sims"). Don't
+use tmux pane numbers or vague labels.
