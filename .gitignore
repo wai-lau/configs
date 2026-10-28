@@ -14,6 +14,16 @@
 # ~/bin scripts (tmux-osc52 clipboard helper, sourced by .tmux-ssh.conf)
 !bin/
 !bin/*
+# host-local ~/bin: project symlinks (own repos), wai-owned copies, vendored
+# tools, WSL-only shims -- never shared (droplet home is /root)
+bin/aider
+bin/emet
+bin/emo
+bin/homo
+bin/sox
+bin/voice
+bin/git-filter-repo
+bin/xdg-open
 
 !.vim
 !.vim/*

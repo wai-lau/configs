@@ -22,3 +22,5 @@ tags
 .idea/dataSources.xml
 .idea/
 *.code-workspace
+
+**/.claude/settings.local.json
