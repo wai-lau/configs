@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Snooze the pace-cap hook (~/.claude/hooks/pace-cap.py) for N minutes.
+#   pace-snooze        15 min (default)
+#   pace-snooze 45     45 min
+#   pace-snooze 0      end the snooze now
+# Writes the expiry epoch to ~/.claude/cache/pace-snooze; the hook allows
+# every prompt while that time is in the future. Host-local (cache is
+# gitignored), so a snooze never leaks to the other host.
+set -eu
+mins=${1:-15}
+f=~/.claude/cache/pace-snooze
+mkdir -p "$(dirname "$f")"
+until=$(( $(date +%s) + mins * 60 ))
+echo "$until" > "$f"
+if (( mins > 0 )); then
+  echo "pace cap snoozed ${mins}m, until $(date -d "@$until" +%H:%M)"
+else
+  echo "pace cap snooze cleared"
+fi
