@@ -117,3 +117,60 @@ the session's socket, `/run/user/1000/cc-socks/<pid>.sock`, and it shows
 in the statusline to the left of the title. When you refer to another
 session, or address one, use its PID (e.g. "11577 / Balance/Sims"). Don't
 use tmux pane numbers or vague labels.
+
+## Wording in status reports (any repo)
+
+Never write "nothing needs you", "you are not needed" or variants. When
+nothing awaits the user, say "No blockers." or "Nothing to report."
+(Wai, 2026-10-30.)
+
+## Working with Wai (any repo; retro 2026-10-30)
+
+- **Short answers are complete answers.** "Sure", "Fewer", "go" mean act. When one is
+  ambiguous AND the stakes are high (a release, a push, a version cut), confirm the
+  reading in one line first (a lead session decides the reading itself; see
+  Multi-session work).
+- **Show the option space.** Lay out the feasible choices (with numbers) and let Wai
+  pick; that beats arguing one recommendation. Recommend, but list.
+- **The current target overrides old design notes.** Never argue a decision from an
+  older doc once Wai has set a newer target.
+- **What shows on screen is where Wai checks.** Card text, UI copy, the board: a change
+  Wai would reject surfaces there first, so read it before shipping.
+- **Wai's named levers are the brief.** A substitute lever or mechanic gets Wai's yes
+  BEFORE it ships, never after. Hidden or fiddly rules are a likely no; prefer visible,
+  simple mechanics.
+- **A name, once given, is everywhere.** Rename every printout, log and message at once.
+- **Plain words and labelled tables in reports.** No internal names (variant codes,
+  knob names) without saying what they are; label every column.
+- **Keep paid-for compute busy.** Wai notices idle runs; queue the next job before
+  writing up the last.
+- **Few open questions at a time.** Batch decisions, but don't let five stack up; stale
+  questions get answered in a burst and lose context.
+- **Quiet when quiet.** No status message just to say something is idle.
+- **Measure the noise first** before tuning anything measured by simulation or
+  sampling; size the run to beat it.
+- **Save Wai's decisions verbatim**, with the quote, the moment they are made.
+
+## Multi-session work and speed (any repo; retro 2026-11-05)
+
+- **Cheap tests first.** Probe in minutes, then a short screen with an early
+  stop; run the full suite only when the screen lands too close to call. Run
+  cases in shuffled order so any partial total is a fair read. Ship once the
+  gate passes; never queue a second long run before shipping.
+- **Own the reading.** When Wai names a mechanism, work out the goal behind it
+  and check (arithmetic, a quick probe) that the mechanism delivers it; build
+  the version that does and state the reading. Ask Wai only for owner calls
+  (game-wide numbers, setup, taste), never "did you mean X?".
+- **A lead session routes, it doesn't build.** Edits go to the peer that owns
+  them, lookups to a subagent; the lead keeps routing, shipping, memory and
+  reports. A lead doing hands-on work delays every relay.
+- **One checkout per session.** Parallel sessions each work in their own git
+  worktree; version numbers are set at ship time. In a shared tree: never
+  commit a whole file another session has modified (stage your hunks only),
+  keep failing work-in-progress out of the tree, never `--no-verify`.
+- **Ship each finished change at once**; don't hold it for a batch.
+- **ETAs from measurement**, never memory: file times, a timed run.
+- **Trap: `git apply` under ~/.** /home/wai is itself a git repo, so
+  `git apply` in a non-repo directory below it silently skips every path and
+  exits 0. Set `GIT_CEILING_DIRECTORIES` (or use `patch -p1`) and check the
+  result.
