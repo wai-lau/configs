@@ -18,7 +18,7 @@ if [ ! -f "$uf" ] || [ $(( $(date +%s) - $(stat -c %Y "$uf") )) -gt 60 ]; then
   disown
 fi
 
-read -r cwd remaining five_hour seven_day seven_cap reset_in overhead_pct _session_pct effort_lvl credits < <(echo "$input" | python3 -c "
+read -r cwd remaining five_hour seven_day seven_cap seven_over reset_in overhead_pct _session_pct effort_lvl credits < <(echo "$input" | python3 -c "
 import sys,json,time,os,math
 d=json.load(sys.stdin)
 ctx=d.get('context_window') or {}
@@ -49,7 +49,7 @@ else:
 # 7d pace cap, same formula as hooks/pace-cap.py: ceil(days into the 7d
 # window) * 100/7. Window start = resets_at - 7d (stdin epoch, else the
 # usage cache's ISO string).
-cap='-'
+cap='-'; over=0
 try:
     sr=sd.get('resets_at')
     if sr is None:
@@ -57,7 +57,9 @@ try:
         uj=json.load(open(os.path.expanduser('~/.claude/cache/statusline_usage.json')))
         sr=datetime.fromisoformat(uj['usage']['seven_day']['resets_at']).timestamp()
     day=max(1,math.ceil(max(0.0,time.time()-(sr-7*86400))/86400))
-    cap='%.0f' % min(100.0,day*100.0/7)
+    capf=min(100.0,day*100.0/7)
+    cap='%.0f' % capf
+    over=int((sd.get('used_percentage') or 0)>=capf)   # same test as the hook
 except: pass
 
 total=None
@@ -97,7 +99,7 @@ except: pass
 if credits!='-' and any((w.get('used_percentage') or 0)>=100 for w in (fh,sd)):
     credits='!'+credits
 
-print(cwd, pct(remaining), pct(fh.get('used_percentage')), pct(sd.get('used_percentage')), cap, countdown, overhead, sess, effort_lvl, credits)
+print(cwd, pct(remaining), pct(fh.get('used_percentage')), pct(sd.get('used_percentage')), cap, over, countdown, overhead, sess, effort_lvl, credits)
 " 2>/dev/null)
 
 short_cwd="${cwd/#$HOME/~}"
@@ -150,7 +152,11 @@ suffix=""
 if [ -n "$seven_day" ] && [ "$seven_day" != "-" ]; then
   sd_seg="7d:${seven_day}"
   [ -n "$seven_cap" ] && [ "$seven_cap" != "-" ] && sd_seg="${sd_seg}/${seven_cap}"
-  suffix="${suffix} \033[36m${sd_seg}%%\033[0m"
+  if [ "$seven_over" = 1 ]; then   # at/over cap: inverted (black on cyan), padded
+    suffix="${suffix} \033[30;46m ${sd_seg}%% \033[0m"
+  else
+    suffix="${suffix} \033[36m${sd_seg}%%\033[0m"
+  fi
 fi
 
 # Credits only while spending them ("!" = a window at 100%): white on red.
