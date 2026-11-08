@@ -143,11 +143,8 @@ sys.stdout.write('%s\x1f%s'%(title,bg))
 " 2>/dev/null)
 IFS=$'\x1f' read -r title bgc <<<"$recap"
 
+# Order: 7d, 5h, (credits), alts, ctx.
 suffix=""
-[ -n "$remaining" ] && [ "$remaining" != "-" ] && suffix="${suffix} \033[97mctx:${remaining}%%\033[0m"
-[ -n "$overhead_pct" ] && [ "$overhead_pct" != "-" ] && suffix="${suffix} \033[38;5;245m(base:${overhead_pct}%%)\033[0m"
-[ -n "$five_hour" ] && [ "$five_hour" != "-" ] && suffix="${suffix} \033[38;5;217m5h:${five_hour}%%\033[0m"
-[ -n "$reset_in" ] && [ "$reset_in" != "-" ] && suffix="${suffix} \033[38;5;157m(${reset_in})\033[0m"
 # 7d: used/allowed (allowed = pace cap for today, see hooks/pace-cap.py).
 if [ -n "$seven_day" ] && [ "$seven_day" != "-" ]; then
   sd_seg="7d:${seven_day}"
@@ -159,12 +156,18 @@ if [ -n "$seven_day" ] && [ "$seven_day" != "-" ]; then
   fi
 fi
 
+[ -n "$five_hour" ] && [ "$five_hour" != "-" ] && suffix="${suffix} \033[38;5;217m5h:${five_hour}%%\033[0m"
+[ -n "$reset_in" ] && [ "$reset_in" != "-" ] && suffix="${suffix} \033[38;5;157m(${reset_in})\033[0m"
+
 # Credits only while spending them ("!" = a window at 100%): white on red.
 [ "${credits#!}" != "$credits" ] && suffix="${suffix} \033[1;97;41m c:\$${credits#!} \033[0m"
 
 claude_total=$(pgrep -xc claude 2>/dev/null || echo 0)
 others=$((claude_total - 1))
 [ "$others" -gt 0 ] && suffix="${suffix} \033[38;5;208malts:${others}\033[0m"
+
+[ -n "$remaining" ] && [ "$remaining" != "-" ] && suffix="${suffix} \033[97mctx:${remaining}%%\033[0m"
+[ -n "$overhead_pct" ] && [ "$overhead_pct" != "-" ] && suffix="${suffix} \033[38;5;245m(base:${overhead_pct}%%)\033[0m"
 
 # Current user. wai/wai-root/root = privileged owner → black-on-white warning bar.
 # walled claude (or any other) = orange text, normal bg.
