@@ -124,6 +124,16 @@ Never write "nothing needs you", "you are not needed" or variants. When
 nothing awaits the user, say "No blockers." or "Nothing to report."
 (Wai, 2026-10-30.)
 
+## Text for other people — run the humanizer (any repo)
+
+Wai, 2026-11-08: "install this globally and use wherever you want a human
+to read things" + "human other than me". Before shipping prose that someone
+OTHER than Wai reads (player-facing UI copy and card text, changelogs and
+release notes, public pages, READMEs, PR descriptions, emails), run the
+`humanizer:humanizer` skill (plugin `humanizer@humanizer`, user scope) over
+it. Not for messages to Wai (status reports keep their own style),
+code, or commit subjects.
+
 ## Working with Wai (any repo; retro 2026-10-30)
 
 - **Short answers are complete answers.** "Sure", "Fewer", "go" mean act. When one is
