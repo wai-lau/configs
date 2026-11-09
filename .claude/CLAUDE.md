@@ -134,6 +134,35 @@ release notes, public pages, READMEs, PR descriptions, emails), run the
 it. Not for messages to Wai (status reports keep their own style),
 code, or commit subjects.
 
+## Questions for Wai — the open-questions doc (any repo)
+
+Wai, 2026-11-09: "I really like this questions doc, make it a global
+setting" (it started in spire 2026-11-06: "keep a gitignored open questions
+doc with analysis and link it every time"; 11-07: "also, use the doc").
+
+- **Every question for Wai goes in the doc first**, even a quick one: a
+  gitignored `OPEN-QUESTIONS.md` at the repo root (add it to `.gitignore`).
+  Chat then carries only "Needs you: question N" plus the page link, never
+  the option table.
+- **Sections:** `## Open` (each question a bold-numbered paragraph,
+  `**1. ...?**`, with the cause, a labelled numbers table and options
+  A/B/C, recommended first), `## Offers` (things Wai can say "yes" to),
+  `## Status that bears on the questions`. Stamp the top with
+  "Updated YYYY-MM-DD HH:MM".
+- **Answered questions leave the doc** (Wai, 2026-11-09: "move the
+  'answered' section into an archaeology doc"): the moment Wai answers,
+  the question moves to `.archaeology/answered-questions.md` in the repo's
+  gitignored attic (see Archiving), newest first, as a table: when, the
+  question, Wai's verbatim answer, the reading taken. The decision itself
+  also goes to project memory and, where the repo keeps one, its docs.
+- **Publish it as an Artifact page, one per repo, same URL every time:**
+  `python3 ~/.claude/questions-page.py OPEN-QUESTIONS.md <scratch>/questions.html [version] ["<Repo> Open Questions"]`,
+  then publish that file with the Artifact tool and keep its URL in the
+  repo's project memory. Every report ends with the open count and the link.
+- Plain words, no internal names without saying what they are, and no
+  answer codes as labels ("your 3D" means nothing a day later; say what
+  was decided). Few open at a time (see Working with Wai).
+
 ## Working with Wai (any repo; retro 2026-10-30)
 
 - **Short answers are complete answers.** "Sure", "Fewer", "go" mean act. When one is

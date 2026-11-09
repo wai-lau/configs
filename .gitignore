@@ -38,6 +38,7 @@ bin/md
 
 !.claude
 !.claude/statusline-command.sh
+!.claude/questions-page.py
 !.claude/hooks
 !.claude/hooks/*
 # home-only: wired by untracked settings.json, needs ~/src/exec-fn
