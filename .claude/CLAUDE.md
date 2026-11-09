@@ -151,10 +151,12 @@ doc with analysis and link it every time"; 11-07: "also, use the doc").
   "Updated YYYY-MM-DD HH:MM".
 - **Answered questions leave the doc** (Wai, 2026-11-09: "move the
   'answered' section into an archaeology doc"): the moment Wai answers,
-  the question moves to `.archaeology/answered-questions.md` in the repo's
-  gitignored attic (see Archiving), newest first, as a table: when, the
-  question, Wai's answer, the reading taken. The decision itself also
-  goes to project memory and, where the repo keeps one, its docs.
+  the question moves to the tracked, committed `docs/answered-questions.md`
+  (Wai: "the answered questions should get committed"; linked from the
+  repo's ARCHAEOLOGY.md where it has one), newest first, as a table: when,
+  the question, Wai's answer, the reading taken. Commit it by path with the
+  next ship. The decision itself also goes to project memory and, where the
+  repo keeps one, its docs.
 - **Question numbers and option letters die with the answer** (Wai,
   2026-11-09: "the exact question number and answer letter are not
   load-bearing after answering, drop"). Once answered, the log, memory,
