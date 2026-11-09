@@ -153,8 +153,14 @@ doc with analysis and link it every time"; 11-07: "also, use the doc").
   'answered' section into an archaeology doc"): the moment Wai answers,
   the question moves to `.archaeology/answered-questions.md` in the repo's
   gitignored attic (see Archiving), newest first, as a table: when, the
-  question, Wai's verbatim answer, the reading taken. The decision itself
-  also goes to project memory and, where the repo keeps one, its docs.
+  question, Wai's answer, the reading taken. The decision itself also
+  goes to project memory and, where the repo keeps one, its docs.
+- **Question numbers and option letters die with the answer** (Wai,
+  2026-11-09: "the exact question number and answer letter are not
+  load-bearing after answering, drop"). Once answered, the log, memory,
+  docs, code comments and reports name the decision in words ("Ifrit's
+  paths may each get a per-tier hit table"), never "1a" or "your 3D". A
+  verbatim quote is kept only for words beyond the code.
 - **Publish it as an Artifact page, one per repo, same URL every time:**
   `python3 ~/.claude/questions-page.py OPEN-QUESTIONS.md <scratch>/questions.html [version] ["<Repo> Open Questions"]`,
   then publish that file with the Artifact tool and keep its URL in the
