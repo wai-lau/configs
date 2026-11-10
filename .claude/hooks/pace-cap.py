@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """UserPromptSubmit: cap weekly Max usage to 1/7 per day of the window.
 
-Allowed 7d% = ceil(days elapsed in the current 7d window) * 100/7, so an
+Allowed 7d% = ceil(days elapsed in the current 7d window) * 95/7, so an
 unused day's share carries forward. Over pace -> block the prompt.
 RESERVE: from 95% of the week on, the cap blocks on any day (day 7 too);
 only a snooze spends the last 5% (Wai, 2026-11-09).
@@ -71,7 +71,7 @@ def main():
     now = time.time()
     elapsed = max(0.0, now - (reset - WEEK))
     day = max(1, math.ceil(elapsed / 86400))
-    allowed = min(100.0, day * 100.0 / 7)
+    allowed = day * RESERVE / 7  # Wai 2026-11-10: split 95%, not 100%, over 7 days
     if used < min(allowed, RESERVE):
         return
     if used >= RESERVE:

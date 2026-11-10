@@ -47,8 +47,8 @@ else:
     countdown='-'
 
 # 7d pace cap, same formula as hooks/pace-cap.py: ceil(days into the 7d
-# window) * 100/7. Window start = resets_at - 7d (stdin epoch, else the
-# usage cache's ISO string).
+# window) * 95/7 (the last 5% is a snooze-only reserve). Window start =
+# resets_at - 7d (stdin epoch, else the usage cache's ISO string).
 cap='-'; over=0
 try:
     sr=sd.get('resets_at')
@@ -57,7 +57,7 @@ try:
         uj=json.load(open(os.path.expanduser('~/.claude/cache/statusline_usage.json')))
         sr=datetime.fromisoformat(uj['usage']['seven_day']['resets_at']).timestamp()
     day=max(1,math.ceil(max(0.0,time.time()-(sr-7*86400))/86400))
-    capf=min(100.0,day*100.0/7)
+    capf=day*95.0/7
     cap='%.0f' % capf
     over=int((sd.get('used_percentage') or 0)>=capf)   # same test as the hook
 except: pass
