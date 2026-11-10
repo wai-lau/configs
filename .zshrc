@@ -125,3 +125,6 @@ export OLLAMA_CONTEXT_LENGTH=8192
 
 # caveman plugin default intensity (highest-priority resolver source)
 export CAVEMAN_DEFAULT_MODE=ultra
+
+# pace-snooze ? (status): zsh would glob the bare `?`, so no globbing for this command
+alias pace-snooze='noglob pace-snooze'

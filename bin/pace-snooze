@@ -3,17 +3,43 @@
 #   pace-snooze        15 min (default)
 #   pace-snooze 45     45 min
 #   pace-snooze 0      end the snooze now
+#   pace-snooze ?      show when the snooze runs until (nothing changes)
+#   pace-snooze -h     this help
 # Writes the expiry epoch to ~/.claude/cache/pace-snooze; the hook allows
 # every prompt while that time is in the future. Host-local (cache is
 # gitignored), so a snooze never leaks to the other host.
+# (zsh globs a bare `?`: .zshrc aliases this command with noglob.)
 set -eu
-mins=${1:-15}
 f=~/.claude/cache/pace-snooze
+arg=${1:-15}
+
+usage() { sed -n '3,7s/^#   //p' "$0"; }
+
+when() { # epoch -> "HH:MM", with the day when it is not today
+  if [ "$(date -d "@$1" +%F)" = "$(date +%F)" ]; then date -d "@$1" +%H:%M
+  else date -d "@$1" '+%a %H:%M'; fi
+}
+
+case "$arg" in
+  -h|--help|help) usage; exit 0 ;;
+  \?|status)
+    if [ ! -s "$f" ]; then echo "pace cap: never snoozed on this host"; exit 0; fi
+    until=$(cat "$f"); now=$(date +%s)
+    if (( until > now )); then
+      echo "pace cap snoozed until $(when "$until") ($(( (until - now + 59) / 60 ))m left)"
+    else
+      echo "pace cap not snoozed (the last snooze ended $(when "$until"))"
+    fi
+    exit 0 ;;
+  *[!0-9]*|'') echo "pace-snooze: '$arg' is not a number of minutes" >&2; usage >&2; exit 2 ;;
+esac
+
+mins=$arg
 mkdir -p "$(dirname "$f")"
 until=$(( $(date +%s) + mins * 60 ))
 echo "$until" > "$f"
 if (( mins > 0 )); then
-  echo "pace cap snoozed ${mins}m, until $(date -d "@$until" +%H:%M)"
+  echo "pace cap snoozed ${mins}m, until $(when "$until")"
 else
   echo "pace cap snooze cleared"
 fi
