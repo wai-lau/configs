@@ -125,7 +125,7 @@ nothing awaits the user, say "No blockers." or "Nothing to report."
 (Wai, 2026-10-30.)
 
 Before/after comparisons label the sides **Old** and **New**, never "Now"
-and "New" (Wai, 2026-11-09: "never use Now vs. New so hard to read. Alwasy
+and "New" (Wai, 2026-11-09: "never use Now vs. New so hard to read. Always
 use old vs new").
 
 ## Text for other people — run the humanizer (any repo)
