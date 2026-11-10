@@ -3,6 +3,8 @@
 
 Allowed 7d% = ceil(days elapsed in the current 7d window) * 100/7, so an
 unused day's share carries forward. Over pace -> block the prompt.
+RESERVE: from 95% of the week on, the cap blocks on any day (day 7 too);
+only a snooze spends the last 5% (Wai, 2026-11-09).
 
 Exempt: the wai-lau.net droplet (its UI runs interactive convos), detected
 positively by its resolved IP being bound to a local interface. Anything
@@ -19,6 +21,7 @@ from datetime import datetime
 CACHE = os.path.expanduser('~/.claude/cache/statusline_usage.json')
 SNOOZE = os.path.expanduser('~/.claude/cache/pace-snooze')
 WEEK = 7 * 86400
+RESERVE = 95.0  # Wai 2026-11-09: at 95% of the week the cap always engages; only `pace-snooze N` spends the last 5%
 
 
 def snoozed():
@@ -69,13 +72,21 @@ def main():
     elapsed = max(0.0, now - (reset - WEEK))
     day = max(1, math.ceil(elapsed / 86400))
     allowed = min(100.0, day * 100.0 / 7)
-    if used < allowed:
+    if used < min(allowed, RESERVE):
         return
-    unlock = reset - WEEK + day * 86400 - now
-    msg = ('Pace cap: 7d usage %.0f%% >= %.0f%% allowed (day %d/7). '
-           'Next day unlocks in %dh%02dm. '
-           'Snooze 15 min: `pace-snooze` (any terminal, or `! pace-snooze` here).'
-           % (used, allowed, day, unlock // 3600, unlock % 3600 // 60))
+    if used >= RESERVE:
+        # the last 5% is a reserve: only an explicit snooze spends it, on any day
+        left = reset - now
+        msg = ('Pace cap: 7d usage %.0f%% >= the %.0f%% reserve line. The last %.0f%% '
+               'is spent only by snoozing: `pace-snooze N` (N minutes; any terminal, or '
+               '`! pace-snooze N` here). Week resets in %dh%02dm.'
+               % (used, RESERVE, 100 - RESERVE, left // 3600, left % 3600 // 60))
+    else:
+        unlock = reset - WEEK + day * 86400 - now
+        msg = ('Pace cap: 7d usage %.0f%% >= %.0f%% allowed (day %d/7). '
+               'Next day unlocks in %dh%02dm. '
+               'Snooze 15 min: `pace-snooze` (any terminal, or `! pace-snooze` here).'
+               % (used, allowed, day, unlock // 3600, unlock % 3600 // 60))
     print(json.dumps({'decision': 'block', 'reason': msg}))
 
 
