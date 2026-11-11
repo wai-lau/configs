@@ -102,13 +102,19 @@ sequences and dependency graphs; a hand-written SVG for spatial things —
 geometry, layouts, wireframes. NO ASCII-art diagrams in markdown. Tables stay
 tables; an ordered list stays a list (not an arrow chain). (Wai, 2026-10-15.)
 
-**Pre-render mermaid; embed the SVG.** The Claude Code app's markdown viewer
-prints a ```mermaid``` fence as a code block (GitHub renders it), so the
-source lives in `docs/arch/<name>.mmd` and the doc embeds
-`![..](docs/arch/<name>.svg)`. In exec-fn and its sub repos the pre-commit
-hook renders a staged `.mmd` and stages the `.svg` (exec-fn
-`scripts/render-mermaid.py`: playwright WebKit + mermaid from jsdelivr, SVG
-text labels so `<img>` works). Elsewhere run that script by hand.
+**Mermaid goes inline; do not pre-render.** Wai, 2026-11-10: "avoid
+prerendering svg unless absolutely necessary / my md reader can render
+MathJax formulas, Mermaid diagrams". Write the diagram as a ```mermaid```
+fence in the doc itself, and write formulas as MathJax (`$...$`, `$$...$$`).
+Pre-render to SVG only when the target cannot render mermaid at all and
+there is no other way (if so: exec-fn `scripts/render-mermaid.py`, run with
+exec-fn's `.venv/bin/python`). A hand-written SVG is still right for spatial
+things, which mermaid cannot draw.
+
+## Wai's pronouns
+
+Wai uses **she/her**. Use it everywhere: chat, docs, commits, and messages to
+other sessions. (Wai, 2026-11-10: "she/her remember this, always".)
 
 ## Naming agents/sessions — by PID
 
