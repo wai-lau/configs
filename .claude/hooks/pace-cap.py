@@ -6,16 +6,16 @@ unused day's share carries forward. Over pace -> block the prompt.
 RESERVE: from 95% of the week on, the cap blocks on any day (day 7 too);
 only a snooze spends the last 5% (Wai, 2026-11-09).
 
-Exempt: the wai-lau.net droplet (its UI runs interactive convos), detected
-positively by its resolved IP being bound to a local interface. Anything
-not provably the droplet is capped. Headless (`claude -p`) runs are
-exempt too. `pace-snooze [min]` (~/bin) snoozes the cap by writing an
+Exempt: the droplet's Exec web UI, which runs as `cc-agent` (Wai,
+2026-11-16: "pace hooks are only for chats like this" -- a terminal chat
+on the droplet IS capped; only the web UI's convos are not). Headless
+(`claude -p`) runs are exempt too. `pace-snooze [min]` (~/bin) snoozes the cap by writing an
 expiry epoch to ~/.claude/cache/pace-snooze.
 
 Data: ~/.claude/cache/statusline_usage.json, refreshed every 60s by the
 statusline. Missing/stale (>10 min) data -> allow (never brick on outage).
 """
-import json, math, os, socket, subprocess, sys, time
+import json, math, os, pwd, sys, time
 from datetime import datetime
 
 CACHE = os.path.expanduser('~/.claude/cache/statusline_usage.json')
@@ -31,12 +31,10 @@ def snoozed():
         return False
 
 
-def on_droplet():
+def web_ui():
+    # the droplet's Exec panel agent (claude-box sidecar) runs as cc-agent
     try:
-        ip = socket.gethostbyname('wai-lau.net')
-        addrs = subprocess.run(['hostname', '-I'], capture_output=True,
-                               text=True, timeout=2).stdout.split()
-        return ip in addrs
+        return pwd.getpwuid(os.getuid()).pw_name == 'cc-agent'
     except Exception:
         return False
 
@@ -58,7 +56,7 @@ def headless():
 
 def main():
     json.load(sys.stdin)
-    if snoozed() or on_droplet() or headless():
+    if snoozed() or web_ui() or headless():
         return
     try:
         if time.time() - os.stat(CACHE).st_mtime > 600:

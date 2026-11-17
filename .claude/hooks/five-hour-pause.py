@@ -11,10 +11,12 @@ ScheduleWakeup), stop background work (TaskStop) and tell peers
 Applies to everything on the WSL desktop, headless `claude -p` runs too,
 and ignores `pace-snooze` (Wai, 2026-11-11: "Five hour pause should ignore
 the pace snooze, it should always kick in for anything on the desktop at
-95% of 5h"). Allow (never brick): the droplet (no /mnt/c); cache missing or
+95% of 5h"). Terminal chats on the droplet pause too; only its Exec web UI
+(user `cc-agent`) is exempt (Wai, 2026-11-16: "pace hooks are only for chats
+like this"). Allow (never brick): cache missing or
 stale (>10 min); reset time already past. Data: ~/.claude/cache/statusline_usage.json (statusline, every 60s).
 """
-import json, os, sys, time
+import json, os, pwd, sys, time
 from datetime import datetime
 
 CACHE = os.path.expanduser('~/.claude/cache/statusline_usage.json')
@@ -28,7 +30,7 @@ def main():
         tool = json.load(sys.stdin).get('tool_name', '')
     except Exception:
         return
-    if tool in PAUSE_TOOLS or not os.path.isdir('/mnt/c'):
+    if tool in PAUSE_TOOLS or pwd.getpwuid(os.getuid()).pw_name == 'cc-agent':
         return
     try:
         if time.time() - os.stat(CACHE).st_mtime > 600:
