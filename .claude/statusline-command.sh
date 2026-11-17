@@ -143,7 +143,7 @@ sys.stdout.write('%s\x1f%s'%(title,bg))
 " 2>/dev/null)
 IFS=$'\x1f' read -r title bgc <<<"$recap"
 
-# Order: 7d, 5h, (credits), alts, ctx.
+# Order: 7d, (snooze), 5h, (credits), alts, ctx.
 suffix=""
 # 7d: used/allowed (allowed = pace cap for today, see hooks/pace-cap.py).
 if [ -n "$seven_day" ] && [ "$seven_day" != "-" ]; then
@@ -156,8 +156,20 @@ if [ -n "$seven_day" ] && [ "$seven_day" != "-" ]; then
   fi
 fi
 
+# Pace-cap snooze left (~/bin/pace-snooze writes the expiry epoch), light blue.
+snz_until=$(cat ~/.claude/cache/pace-snooze 2>/dev/null)
+snz_until=${snz_until%%.*}
+if [[ "$snz_until" =~ ^[0-9]+$ ]]; then
+  snz_left=$(( (snz_until - $(date +%s) + 59) / 60 ))   # minutes, rounded up
+  if [ "$snz_left" -gt 0 ]; then
+    if [ "$snz_left" -ge 60 ]; then snz_left=$(printf '%dh%02dm' $((snz_left / 60)) $((snz_left % 60)))
+    else snz_left="${snz_left}m"; fi
+    suffix="${suffix} \033[38;5;117msnooze:${snz_left}\033[0m"
+  fi
+fi
+
 [ -n "$five_hour" ] && [ "$five_hour" != "-" ] && suffix="${suffix} \033[38;5;217m5h:${five_hour}%%\033[0m"
-[ -n "$reset_in" ] && [ "$reset_in" != "-" ] && suffix="${suffix} \033[38;5;157m(${reset_in})\033[0m"
+[ -n "$reset_in" ] && [ "$reset_in" != "-" ] && suffix="${suffix} \033[38;5;157m${reset_in}\033[0m"
 
 # Credits only while spending them ("!" = a window at 100%): white on red.
 [ "${credits#!}" != "$credits" ] && suffix="${suffix} \033[1;97;41m c:\$${credits#!} \033[0m"
