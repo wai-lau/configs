@@ -5,6 +5,10 @@ Allowed 7d% = ceil(days elapsed in the current 7d window) * 95/7, so an
 unused day's share carries forward. Over pace -> block the prompt.
 RESERVE: from 95% of the week on, the cap blocks on any day (day 7 too);
 only a snooze spends the last 5% (Wai, 2026-11-09).
+ENDGAME: in the last 3 h before the weekly reset the line rises from 95% to
+99% at the reset, and prompts under it pass (Wai, 2026-11-17: "when there are
+3 hours before weekly usage refreshes, try to set a pace to reach 99% usage
+when the usage refreshes"). mates/usage.py runs Claude followers on the same line.
 
 Exempt: the droplet's Exec web UI, which runs as `cc-agent` (Wai,
 2026-11-16: "pace hooks are only for chats like this" -- a terminal chat
@@ -22,6 +26,13 @@ CACHE = os.path.expanduser('~/.claude/cache/statusline_usage.json')
 SNOOZE = os.path.expanduser('~/.claude/cache/pace-snooze')
 WEEK = 7 * 86400
 RESERVE = 95.0  # Wai 2026-11-09: at 95% of the week the cap always engages; only `pace-snooze N` spends the last 5%
+ENDGAME_S = 3 * 3600  # Wai 2026-11-17: the last 3 h before the reset pace up to ENDGAME_TARGET
+ENDGAME_TARGET = 99.0
+
+
+def endgame_line(left):
+    """The pace line `left` seconds before the weekly reset, in the last ENDGAME_S."""
+    return RESERVE + (ENDGAME_TARGET - RESERVE) * (1 - left / ENDGAME_S)
 
 
 def snoozed():
@@ -71,6 +82,16 @@ def main():
     day = max(1, math.ceil(elapsed / 86400))
     allowed = day * RESERVE / 7  # Wai 2026-11-10: split 95%, not 100%, over 7 days
     if used < min(allowed, RESERVE):
+        return
+    left = reset - now
+    if 0 < left <= ENDGAME_S:
+        line = endgame_line(left)
+        if used < line:
+            return
+        msg = ('Pace cap (endgame): 7d usage %.0f%% >= the %.1f%% pace line, which rises to %.0f%% '
+               'at the reset in %dh%02dm. Snooze: `pace-snooze N`.'
+               % (used, line, ENDGAME_TARGET, left // 3600, left % 3600 // 60))
+        print(json.dumps({'decision': 'block', 'reason': msg}))
         return
     if used >= RESERVE:
         # the last 5% is a reserve: only an explicit snooze spends it, on any day
