@@ -164,7 +164,7 @@ if [[ "$snz_until" =~ ^[0-9]+$ ]]; then
   if [ "$snz_left" -gt 0 ]; then
     if [ "$snz_left" -ge 60 ]; then snz_left=$(printf '%dh%02dm' $((snz_left / 60)) $((snz_left % 60)))
     else snz_left="${snz_left}m"; fi
-    suffix="${suffix} \033[38;5;117msnooze:${snz_left}\033[0m"
+    suffix="${suffix} \033[38;5;117m${snz_left}\033[0m"
   fi
 fi
 
