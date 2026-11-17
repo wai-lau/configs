@@ -18,7 +18,7 @@ if [ ! -f "$uf" ] || [ $(( $(date +%s) - $(stat -c %Y "$uf") )) -gt 60 ]; then
   disown
 fi
 
-read -r cwd remaining five_hour seven_day seven_cap seven_over reset_in overhead_pct _session_pct effort_lvl credits < <(echo "$input" | python3 -c "
+read -r cwd remaining five_hour seven_day seven_cap reset_in overhead_pct _session_pct effort_lvl credits < <(echo "$input" | python3 -c "
 import sys,json,time,os,math
 d=json.load(sys.stdin)
 ctx=d.get('context_window') or {}
@@ -49,7 +49,7 @@ else:
 # 7d pace cap, same formula as hooks/pace-cap.py: ceil(days into the 7d
 # window) * 95/7 (the last 5% is a snooze-only reserve). Window start =
 # resets_at - 7d (stdin epoch, else the usage cache's ISO string).
-cap='-'; over=0
+cap='-'
 try:
     sr=sd.get('resets_at')
     if sr is None:
@@ -59,7 +59,6 @@ try:
     day=max(1,math.ceil(max(0.0,time.time()-(sr-7*86400))/86400))
     capf=day*95.0/7
     cap='%.0f' % capf
-    over=int((sd.get('used_percentage') or 0)>=capf)   # same test as the hook
 except: pass
 
 total=None
@@ -99,7 +98,7 @@ except: pass
 if credits!='-' and any((w.get('used_percentage') or 0)>=100 for w in (fh,sd)):
     credits='!'+credits
 
-print(cwd, pct(remaining), pct(fh.get('used_percentage')), pct(sd.get('used_percentage')), cap, over, countdown, overhead, sess, effort_lvl, credits)
+print(cwd, pct(remaining), pct(fh.get('used_percentage')), pct(sd.get('used_percentage')), cap, countdown, overhead, sess, effort_lvl, credits)
 " 2>/dev/null)
 
 short_cwd="${cwd/#$HOME/~}"
@@ -149,14 +148,11 @@ suffix=""
 if [ -n "$seven_day" ] && [ "$seven_day" != "-" ]; then
   sd_seg="7d:${seven_day}"
   [ -n "$seven_cap" ] && [ "$seven_cap" != "-" ] && sd_seg="${sd_seg}/${seven_cap}"
-  if [ "$seven_over" = 1 ]; then   # at/over cap: inverted (black on cyan), padded
-    suffix="${suffix} \033[30;46m ${sd_seg}%% \033[0m"
-  else
-    suffix="${suffix} \033[36m${sd_seg}%%\033[0m"
-  fi
+  suffix="${suffix} \033[36m${sd_seg}%%\033[0m"
 fi
 
-# Pace-cap snooze left (~/bin/pace-snooze writes the expiry epoch), light blue.
+# Pace-cap snooze left (~/bin/pace-snooze writes the expiry epoch): inverted
+# (black on light blue), padded, while the snooze runs.
 snz_until=$(cat ~/.claude/cache/pace-snooze 2>/dev/null)
 snz_until=${snz_until%%.*}
 if [[ "$snz_until" =~ ^[0-9]+$ ]]; then
@@ -164,7 +160,7 @@ if [[ "$snz_until" =~ ^[0-9]+$ ]]; then
   if [ "$snz_left" -gt 0 ]; then
     if [ "$snz_left" -ge 60 ]; then snz_left=$(printf '%dh%02dm' $((snz_left / 60)) $((snz_left % 60)))
     else snz_left="${snz_left}m"; fi
-    suffix="${suffix} \033[38;5;117m${snz_left}\033[0m"
+    suffix="${suffix} \033[30;48;5;117m ${snz_left} \033[0m"
   fi
 fi
 
