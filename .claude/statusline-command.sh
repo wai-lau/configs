@@ -169,6 +169,19 @@ sys.stdout.write('%s\x1f%s\x1f%s'%(title,bg,shim))
 " 2>/dev/null)
 IFS=$'\x1f' read -r title bgc shim <<<"$recap"
 
+# tmux tab = this title, in this color: pane options @cc_title / @cc_color
+# (#rrggbb) for the window-status formats in ~/.tmux.conf. No title = unset,
+# and the tab falls back to the window name.
+if [ -n "$TMUX_PANE" ] && command -v tmux >/dev/null 2>&1; then
+  if [ -n "$title" ] && [ -n "$bgc" ]; then
+    IFS=';' read -r cr cg cb <<<"$bgc"
+    tmux set -p -t "$TMUX_PANE" @cc_title "$title" \; \
+      set -p -t "$TMUX_PANE" @cc_color "$(printf '#%02x%02x%02x' "$cr" "$cg" "$cb")" >/dev/null 2>&1
+  else
+    tmux set -pu -t "$TMUX_PANE" @cc_title \; set -pu -t "$TMUX_PANE" @cc_color >/dev/null 2>&1
+  fi
+fi
+
 # No 16-color palette anywhere (SGR 30-37/90-97/40-47/100-107, 256 indices
 # 0-15): Windows Terminal draws bold on them as bright, and schemes remap them.
 # Inverted items are pills: text (black, or SGR $3) on color $1, an SGR color
@@ -204,6 +217,9 @@ if [[ "$snz_until" =~ ^[0-9]+$ ]]; then
     pill "5;117" "$snz_left"; snz_seg=$REPLY
   fi
 fi
+# No snooze: a plain space (terminal background) keeps 7d apart from 5h (Wai, 2026-11-18:
+# "when pace snooze is off, put a plain bg colored space").
+[ -z "$snz_seg" ] && [ -n "$sd_seg" ] && snz_seg=" "
 [ -n "${sd_seg}${snz_seg}" ] && suffix="${suffix}${sd_seg}${snz_seg}"
 
 # 5h used, then time to its reset: black on light green.
