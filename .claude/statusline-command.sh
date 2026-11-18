@@ -174,7 +174,7 @@ sd_seg=""
 if [ -n "$seven_day" ] && [ "$seven_day" != "-" ]; then
   sd_seg="7d:\033[1m${seven_day}\033[22m"   # used part bold
   [ -n "$seven_cap" ] && [ "$seven_cap" != "-" ] && sd_seg="${sd_seg}/${seven_cap}"
-  sd_seg="\033[36m${sd_seg}%%\033[0m"
+  sd_seg="\033[38;2;86;182;194m${sd_seg}%%\033[0m"   # truecolor cyan: WT draws bold on ANSI colors as bright, not bold
 fi
 
 # Pace-cap snooze left (~/bin/pace-snooze writes the expiry epoch): black on
