@@ -149,6 +149,40 @@ if len(title)>50: title=title[:49]+'…'
 bg='';shim=''
 if title:
     hue=int(hashlib.md5(title.encode('utf-8')).hexdigest(),16)%360
+    # Keep live sessions apart in hue (Wai, 2026-11-18: 'avoid titles that are
+    # too close in hue'). cache/hues/<claude pid> holds 'hue<TAB>title'. A session
+    # keeps its stored hue while its title holds; a new title starts at the md5
+    # hue and moves to the nearest hue at least GAP from every other live one
+    # (GAP = 40, less when too many sessions to fit), else the farthest hue.
+    try:
+        hd=os.path.expanduser('~/.claude/cache/hues'); os.makedirs(hd,exist_ok=True)
+        def comm(p):
+            try: return open('/proc/%d/comm'%p).read().strip()
+            except Exception: return ''
+        me=os.getppid()
+        while me>1 and comm(me)!='claude':
+            me=int(open('/proc/%d/stat'%me).read().rsplit(')',1)[1].split()[1])
+        if me>1:
+            others=[]; mine=None
+            for f in os.listdir(hd):
+                if not f.isdigit(): continue
+                try: h,t=open(os.path.join(hd,f),encoding='utf-8').read().split('\t',1)
+                except Exception: continue
+                if int(f)==me: mine=(int(h),t)
+                elif comm(int(f))=='claude': others.append(int(h))
+                else:
+                    try: os.remove(os.path.join(hd,f))
+                    except Exception: pass
+            if mine and mine[1]==title: hue=mine[0]
+            elif others:
+                gap=min(40.0,360.0/(len(others)+1))
+                def far(h): return min(min(abs(h-o)%360,360-abs(h-o)%360) for o in others)
+                cands=[(hue+s*k)%360 for k in range(181) for s in ((1,-1) if k else (1,))]
+                hue=next((h for h in cands if far(h)>=gap),None)
+                if hue is None: hue=max(cands,key=far)
+            if not (mine and mine[1]==title):
+                open(os.path.join(hd,str(me)),'w',encoding='utf-8').write('%d\t%s'%(hue,title))
+    except Exception: pass
     c=colorsys.hls_to_rgb(hue/360.0,0.60,0.95)   # bright + high saturation
     # Blues and violets come out dark at the same HLS lightness: mix in white
     # until relative luminance reaches 0.40 (Spire's orange, 0.415, reads fine;
