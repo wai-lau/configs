@@ -111,6 +111,16 @@ there is no other way (if so: exec-fn `scripts/render-mermaid.py`, run with
 exec-fn's `.venv/bin/python`). A hand-written SVG is still right for spatial
 things, which mermaid cannot draw.
 
+## Terminal colors (any repo) — never the 16-color palette
+
+Color terminal output (statuslines, prompts, scripts, TUIs, tmux) in truecolor
+(`38;2;r;g;b` / `48;2;r;g;b`) or 256-color indices 16–255. Never the 16 ANSI
+palette colors: SGR 30–37, 90–97, 40–47, 100–107, or 256-color indices 0–15.
+Windows Terminal draws bold on a palette color as its bright variant rather than
+a heavier weight, and color schemes remap them. To match the scheme's look,
+send its hex as truecolor (One Half Dark cyan = `#56b6c2`). Wai, 2026-11-18:
+"ignore 16 palette colors across the board, not just in this project".
+
 ## Wai's pronouns
 
 Wai uses **she/her**. Use it everywhere: chat, docs, commits, and messages to

@@ -157,6 +157,8 @@ sys.stdout.write('%s\x1f%s\x1f%s'%(title,bg,shim))
 " 2>/dev/null)
 IFS=$'\x1f' read -r title bgc shim <<<"$recap"
 
+# No 16-color palette anywhere (SGR 30-37/90-97/40-47/100-107, 256 indices
+# 0-15): Windows Terminal draws bold on them as bright, and schemes remap them.
 # Inverted items are pills: text (black, or SGR $3) on color $1, an SGR color
 # tail ("5;117" for 256 colors, "2;r;g;b" for truecolor), with half-block caps
 # drawn in that color on the plain background: U+2590 / U+258C, half a cell
@@ -164,7 +166,7 @@ IFS=$'\x1f' read -r title bgc shim <<<"$recap"
 # U+E0B6 / U+E0B4; arrows: U+E0B2 / U+E0B0.) Sets REPLY; the escapes stay
 # literal for the final printf, so a % in $2 must come as %%.
 CAP_L=$'\xe2\x96\x90' CAP_R=$'\xe2\x96\x8c'
-pill() { REPLY="\033[38;${1}m${CAP_L}\033[${3:-30};48;${1}m${2}\033[0m\033[38;${1}m${CAP_R}\033[0m"; }
+pill() { REPLY="\033[38;${1}m${CAP_L}\033[${3:-38;2;0;0;0};48;${1}m${2}\033[0m\033[38;${1}m${CAP_R}\033[0m"; }
 
 # Order: 7d+snooze, 5h+reset, (credits), ctx+base, alts. Each timer (and base)
 # is a pill glued to its field.
@@ -199,10 +201,10 @@ fh_seg="" rst_seg=""
 [ -n "${fh_seg}${rst_seg}" ] && suffix="${suffix}${fh_seg}${rst_seg}"
 
 # Credits only while spending them ("!" = a window at 100%): white on red.
-[ "${credits#!}" != "$credits" ] && { pill "5;1" "c:\$${credits#!}" "1;97"; suffix="${suffix}${REPLY}"; }
+[ "${credits#!}" != "$credits" ] && { pill "2;224;108;117" "c:\$${credits#!}" "1;38;2;220;223;228"; suffix="${suffix}${REPLY}"; }
 
 ctx_seg="" base_seg=""
-[ -n "$remaining" ] && [ "$remaining" != "-" ] && ctx_seg="\033[97mctx:${remaining}%%\033[0m"
+[ -n "$remaining" ] && [ "$remaining" != "-" ] && ctx_seg="\033[38;2;220;223;228mctx:${remaining}%%\033[0m"
 [ -n "$base_pct" ] && [ "$base_pct" != "-" ] && { pill "5;245" "${base_pct}%%"; base_seg=$REPLY; }
 [ -n "${ctx_seg}${base_seg}" ] && suffix="${suffix}${ctx_seg}${base_seg}"
 
