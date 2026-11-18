@@ -25,6 +25,9 @@ bin/voice
 bin/git-filter-repo
 bin/xdg-open
 bin/md
+bin/mates
+bin/qwen
+bin/spire-trio
 
 !.vim
 !.vim/*
