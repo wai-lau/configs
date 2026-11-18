@@ -37,7 +37,8 @@ if [ -s "$recap_f" ] && [ $((cnt % N)) -ne 0 ]; then
 fi
 [ -z "$tpath" ] && exit 0
 
-# Background summarizer — detached so Stop returns instantly.
+# Background summarizer — detached so Stop returns instantly. NO TOOLS (--tools "" + no MCP): with tools on, the
+# summarizer read the transcript and acted on it - messaged the Spire trio as "tier-redesign-NN" and tried to run sims (2026-11-02).
 (
     convo=$(python3 "$HOOKS_DIR/recap-extract.py" "$tpath" 2>/dev/null)
     [ -z "$convo" ] && exit 0
@@ -56,7 +57,7 @@ Output ONLY the title on a single line: plain words, no markdown, no numbering, 
 
 Transcript:
 $convo"
-    title=$(CLAUDE_RECAP_GUARD=1 claude -p --model "$MODEL" "$prompt" 2>/dev/null \
+    title=$(CLAUDE_RECAP_GUARD=1 claude -p --model "$MODEL" --tools "" --strict-mcp-config --no-session-persistence "$prompt" 2>/dev/null \
         | python3 "$HOOKS_DIR/recap-clean.py")
     [ -n "$title" ] && printf '%s' "$title" > "$recap_f"
 ) >/dev/null 2>&1 &
