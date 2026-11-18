@@ -1,17 +1,16 @@
 ---
-description: Restart Claude Code on this same conversation; background Bash tasks keep running
+description: Restart Claude Code on this same conversation; background tasks, subagents and workflows carry on
 allowed-tools: Bash
 ---
 The user wants a RESTART: relaunch Claude Code (latest build; settings, hooks,
-plugins and CLAUDE.md re-read) and resume this same conversation. Background
-Bash tasks survive it, and the relaunched session's first prompt lists them so
-it can pick them back up.
+plugins and CLAUDE.md re-read) and resume this same conversation.
 
-Subagents and workflows run inside this process and die with it. If any are
-still running, name them and ask the user before going on, unless the user's
-arguments say to go ahead anyway. Arguments: $ARGUMENTS
+Background Bash tasks keep running through it. Subagents and workflow runs die
+with this process, but their transcripts are on disk: the relaunched session's
+first prompt lists every one that was in flight, and it continues them
+(SendMessage to an agent id, Workflow resumeFromRunId).
 
-Otherwise run EXACTLY this one Bash command, with no commentary before or after:
+Run EXACTLY this one Bash command, with no commentary before or after:
 
 ```bash
 bash ~/.claude/restart.sh

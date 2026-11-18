@@ -5,7 +5,8 @@
 # Why SIGKILL: on SIGTERM claude kills its background task shells; on SIGKILL
 # they are orphaned and live on, still writing their output files. The
 # transcript is written as it goes, so `claude --resume <id>` picks up intact
-# (both tested 2026-11-18 on claude 2.1.327).
+# (both tested 2026-11-18 on claude 2.1.327). Subagents and workflow runs do
+# die, but the resumed session continues them from their saved transcripts.
 #
 # Relaunch: the claude() wrapper in ~/.zshrc exports CLAUDE_WRAPPER_PID and,
 # once claude is gone, relaunches `claude --resume <id> -- <note>` from
@@ -53,15 +54,54 @@ for c in $(ps -o pid= --ppid "$pid"); do
   tasks+="- task $(basename "$out" .output): pid $c, output $out"$'\n'
 done
 
+# Subagents and workflow runs in flight. They run inside claude and die with
+# it, but their transcripts are on disk, so the resumed session continues them:
+# SendMessage to an agent id, Workflow resumeFromRunId (tested 2026-11-18).
+# In flight = agent meta without "finished":true; a run dir with no
+# workflows/<run>.json (written when the run ends). Only ones touched since
+# this claude started: older leftovers belong to some earlier process.
+agents="" runs=""
+sdir=$(ls -d "$HOME"/.claude/projects/*/"$sid" 2>/dev/null | head -1)
+if [ -n "$sdir" ]; then
+  since=$(( $(date +%s) - $(ps -o etimes= -p "$pid" | tr -d ' ') ))
+  for m in "$sdir"/subagents/agent-*.meta.json; do
+    [ -f "$m" ] || continue
+    grep -q '"finished":true' "$m" && continue
+    grep -q '"spawnDepth":[2-9]' "$m" && continue  # its parent agent handles it
+    [ "$(stat -c %Y "${m%.meta.json}.jsonl" 2>/dev/null || echo 0)" -ge "$since" ] || continue
+    id=$(basename "$m" .meta.json)
+    desc=$(sed -n 's/.*"description":"\([^"]*\)".*/\1/p' "$m")
+    agents+="- agent ${id#agent-}${desc:+ ($desc)}"$'\n'
+  done
+  for w in "$sdir"/subagents/workflows/wf_*/; do
+    [ -d "$w" ] || continue
+    run=$(basename "$w")
+    [ -f "$sdir/workflows/$run.json" ] && continue
+    [ "$(stat -c %Y "$w/journal.jsonl" 2>/dev/null || echo 0)" -ge "$since" ] || continue
+    script=$(ls "$sdir"/workflows/scripts/*-"$run".js 2>/dev/null | head -1)
+    runs+="- workflow run $run${script:+, scriptPath $script}"$'\n'
+  done
+fi
+
 note="[/restart] Claude Code restarted: new process, same conversation, settings and CLAUDE.md re-read."
 if [ -n "$tasks" ]; then
   note+="
 These background Bash tasks were running and survived, but this process does not track them, so no completion notice will come:
 ${tasks}Do this first, for every task above, even if nothing else was in progress: if \`ps -p <pid>\` finds nothing, the task has ended, so read its output file. Otherwise re-attach: run \`while ps -p <pid> >/dev/null; do sleep 5; done\` with run_in_background, and read the output file when that finishes. The exit code is lost; judge by the output."
 fi
+if [ -n "$agents" ]; then
+  note+="
+These subagents were mid-task. Their process died, but their transcripts are saved, so continue each one now (skip any that was stopped on purpose): SendMessage to its agent id, saying: 'A restart interrupted you. Your last tool call may or may not have taken effect: check before redoing it, then continue your task.'
+${agents}"
+fi
+if [ -n "$runs" ]; then
+  note+="
+These workflow runs were mid-run. Resume each now (skip any that was stopped on purpose): Workflow tool with resumeFromRunId set to the run id and the same script, scriptPath as given or the one its Workflow call used. Finished agent steps replay from cache; the step that was running starts over, so one of its actions may happen twice.
+${runs}"
+fi
 note+="
-Subagents and workflows that were running died with the old process; re-dispatch any whose results are still needed.
-Then carry on with whatever was in progress before /restart. If nothing was and no task is listed above, reply with one line: Restarted."
+If any other subagent or workflow from before /restart never reported back, continue it the same way.
+Then carry on with whatever was in progress before /restart. If nothing was and nothing is listed above, reply with one line: Restarted."
 
 restart_file="$HOME/.claude/.restart.$shell"
 printf '%s\n%s\n' "$sid" "$note" > "$restart_file" || die "cannot write $restart_file"
