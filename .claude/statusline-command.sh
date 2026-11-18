@@ -149,10 +149,22 @@ if len(title)>50: title=title[:49]+'…'
 bg='';shim=''
 if title:
     hue=int(hashlib.md5(title.encode('utf-8')).hexdigest(),16)%360
-    r,g,b=colorsys.hls_to_rgb(hue/360.0,0.60,0.95)   # bright + high saturation
-    bg='%d;%d;%d'%(round(r*255),round(g*255),round(b*255))
-    r,g,b=colorsys.hls_to_rgb(hue/360.0,0.78,0.95)   # lighter: prompt bar shimmer
-    shim='%d,%d,%d'%(round(r*255),round(g*255),round(b*255))
+    c=colorsys.hls_to_rgb(hue/360.0,0.60,0.95)   # bright + high saturation
+    # Blues and violets come out dark at the same HLS lightness: mix in white
+    # until relative luminance reaches 0.40 (Spire's orange, 0.415, reads fine;
+    # Human Music's violet, 0.13, did not). Brighter hues stay as they are.
+    def lin(v): return v/12.92 if v<=0.04045 else ((v+0.055)/1.055)**2.4
+    def lum(c): return 0.2126*lin(c[0])+0.7152*lin(c[1])+0.0722*lin(c[2])
+    def whiten(c,t): return tuple(v+(1-v)*t for v in c)
+    lo,hi=0.0,1.0
+    if lum(c)<0.40:
+        for _ in range(20):
+            mid=(lo+hi)/2
+            if lum(whiten(c,mid))<0.40: lo=mid
+            else: hi=mid
+        c=whiten(c,hi)
+    bg='%d;%d;%d'%tuple(round(v*255) for v in c)
+    shim='%d,%d,%d'%tuple(round(v*255) for v in whiten(c,0.45))   # lighter: prompt bar shimmer
 sys.stdout.write('%s\x1f%s\x1f%s'%(title,bg,shim))
 " 2>/dev/null)
 IFS=$'\x1f' read -r title bgc shim <<<"$recap"
