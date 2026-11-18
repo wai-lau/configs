@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
-"""PreToolUse: pause work when the 5-hour Claude usage window hits 95%.
+"""PreToolUse: pause work when the 5-hour Claude usage window hits 99%.
 
-At five_hour.utilization >= 95 every tool call is denied except the ones a
+At five_hour.utilization >= 99 every tool call is denied except the ones a
 session needs to pause cleanly: write resume notes (Read/Write/Edit), load
 and schedule a one-shot resume (ToolSearch, CronCreate/List/Delete,
 ScheduleWakeup), stop background work (TaskStop) and tell peers
 (SendMessage). The deny reason tells the model what to do (Wai, 2026-11-10:
-"do this globally when claude 5h usage is up to 95%").
+"do this globally when claude 5h usage is up to 95%"; line raised to 99%,
+2026-11-18: "just change the percentage to 99%").
 
 Applies to everything on the WSL desktop, headless `claude -p` runs too,
 and ignores `pace-snooze` (Wai, 2026-11-11: "Five hour pause should ignore
 the pace snooze, it should always kick in for anything on the desktop at
-95% of 5h"). Terminal chats on the droplet pause too; only its Exec web UI
+95% of 5h"; still holds at the 99% line). Terminal chats on the droplet pause too; only its Exec web UI
 (user `cc-agent`) is exempt (Wai, 2026-11-16: "pace hooks are only for chats
 like this"). Allow (never brick): cache missing or
 stale (>10 min); reset time already past. Data: ~/.claude/cache/statusline_usage.json (statusline, every 60s).
@@ -20,7 +21,7 @@ import json, os, pwd, sys, time
 from datetime import datetime
 
 CACHE = os.path.expanduser('~/.claude/cache/statusline_usage.json')
-LINE = 95.0
+LINE = 99.0
 PAUSE_TOOLS = {'Read', 'Write', 'Edit', 'ToolSearch', 'CronCreate', 'CronList',
                'CronDelete', 'ScheduleWakeup', 'TaskStop', 'SendMessage'}
 
