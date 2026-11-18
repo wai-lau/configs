@@ -164,3 +164,7 @@ export CAVEMAN_DEFAULT_MODE=ultra
 
 # pace-snooze ? (status): zsh would glob the bare `?`, so no globbing for this command
 alias pace-snooze='noglob pace-snooze'
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
