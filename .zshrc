@@ -100,16 +100,39 @@ claude() {
     # timeout guards offline hosts; a failed check never blocks launch.
     # Sits above the loop: /purge relaunches skip it.
     timeout 20 claude update || true
-    # Interactive: relaunch loop powering the /purge "hard refresh". /purge
-    # drops ~/.claude/.purge then SIGTERMs this process; on exit we wipe the
-    # sentinel and relaunch a fresh instance. Plain Ctrl+D quits (no sentinel).
-    # First launch honors "$@"; relaunches are bare for a pristine session.
-    local -a launch_args=("$@")
+    # Interactive: relaunch loop powering /purge and /restart. Plain Ctrl+D
+    # quits (no sentinel). First launch honors "$@".
+    # /purge drops ~/.claude/.purge then SIGTERMs this process; on exit we wipe
+    # the sentinel and relaunch a fresh instance, bare, for a pristine session.
+    # /restart (~/.claude/restart.sh) writes ~/.claude/.restart.<this shell's
+    # pid> (line 1: session id, rest: first prompt), then SIGKILLs claude so its
+    # background tasks live on; we relaunch `claude --resume <id>` on the latest
+    # build. CLAUDE_WRAPPER_PID tells restart.sh this loop is here to do that.
+    # The file is also read at launch: for a shell that ran an older wrapper,
+    # restart.sh types `source ~/.zshrc && claude` into the tmux pane.
+    local -a launch_args=("$@") restart
+    local restart_file="$HOME/.claude/.restart.$$"
     while true; do
+        if [[ -f "$restart_file" ]]; then
+            # Over 10 minutes old: a relaunch that never ran; drop it.
+            if [[ -n "$(find "$restart_file" -mmin -10 2>/dev/null)" ]]; then
+                restart=("${(@f)$(<"$restart_file")}")
+                launch_args=(--resume "${restart[1]}" -- "${(F)restart[2,-1]}")
+            fi
+            rm -f "$restart_file"
+        fi
         if [[ -r "$HOME/.claude/private.md" ]]; then
-            command claude --append-system-prompt "$(<"$HOME/.claude/private.md")" "${launch_args[@]}"
+            CLAUDE_WRAPPER_PID=$$ command claude --append-system-prompt "$(<"$HOME/.claude/private.md")" "${launch_args[@]}"
         else
-            command claude "${launch_args[@]}"
+            CLAUDE_WRAPPER_PID=$$ command claude "${launch_args[@]}"
+        fi
+        if [[ -f "$restart_file" ]]; then
+            # SIGKILLed, so claude left the terminal raw, on the alt screen with
+            # the cursor hidden and paste/focus/mouse/kitty-key modes on.
+            stty sane 2>/dev/null
+            printf '\033[?1049l\033[?25h\033[0m\033[?2004l\033[?1004l\033[?1000l\033[?1002l\033[?1003l\033[?1006l\033[<u\033[>4m'
+            timeout 20 claude update || true
+            continue
         fi
         [[ -f "$HOME/.claude/.purge" ]] || break
         rm -f "$HOME/.claude/.purge"
