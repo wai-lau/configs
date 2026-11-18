@@ -111,6 +111,18 @@ there is no other way (if so: exec-fn `scripts/render-mermaid.py`, run with
 exec-fn's `.venv/bin/python`). A hand-written SVG is still right for spatial
 things, which mermaid cannot draw.
 
+## Naming files (any repo) — by what they do, never by version
+
+Name a file, script or tool by its FUNCTION (`spire-deploy.sh`, `ship-branches.sh`), never by
+its history: no `2`, `-v3`, `-new`, `-old`, `-final`, `-fixed` suffixes. Wai, 2026-11-16 (on
+the ship script, then `spire-ship2.sh`, now `spire-ship.sh`): "always name a file based on a functional name, unless the version is super
+relevant or something, this feels like a student naming their file
+final-reviewed-edited-main-document-v7". A version belongs in a name only when versions coexist
+on purpose and the number is what tells them apart (a wire-protocol `v2` next to `v1`). When a
+rewrite replaces a file, it takes the old name (git keeps the history); when a new file splits off
+work, it gets the name of what it does. Renaming an existing one: change every caller, doc and memory
+note at once (a name, once given, is everywhere).
+
 ## Terminal colors (any repo) — never the 16-color palette
 
 Color terminal output (statuslines, prompts, scripts, TUIs, tmux) in truecolor
@@ -229,6 +241,14 @@ doc with analysis and link it every time"; 11-07: "also, use the doc").
 
 ## Multi-session work and speed (any repo; retro 2026-11-05)
 
+- **Spare usage means more subagents.** Wai, 2026-11-16: "we have so much
+  compute left before the reset / remember to be more aggressive with
+  subagents when we have >1d worth of usage before hitting pace". When the
+  week's headroom under the pace cap is more than one day's share
+  (`python3 -c "import sys; sys.path.insert(0,'$HOME/src/mates'); from mates import usage; print(usage.read())"`
+  prints `'on': True`), fan independent work out to subagents in parallel
+  (worktree-isolated when they edit) instead of doing it one piece at a time.
+  Missing or stale usage means don't.
 - **Cheap tests first.** Probe in minutes, then a short screen with an early
   stop; run the full suite only when the screen lands too close to call. Run
   cases in shuffled order so any partial total is a fair read. Ship once the
