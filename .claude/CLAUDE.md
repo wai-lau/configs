@@ -197,6 +197,15 @@ doc with analysis and link it every time"; 11-07: "also, use the doc").
   ambiguous AND the stakes are high (a release, a push, a version cut), confirm the
   reading in one line first (a lead session decides the reading itself; see
   Multi-session work).
+- **An interrupt adds a task; it never cancels one.** Wai, 2026-11-18: "Don't drop a
+  task unless I contradict myself or explicitly say so". When Wai interrupts or raises
+  a different issue mid-task, the open task stays open: keep both on the task list (or
+  restate both in the reply if the harness has none), handle the new one, then resume
+  the old one unasked. A task ends only when it is done, when Wai drops it ("drop",
+  "stop", "forget it", "nvm"), or when her newer message contradicts it. Unsure if it
+  contradicts? Keep the task and ask at turn end. Every report, resume note and
+  context summary names each open task and where it stands. A `UserPromptSubmit`
+  hook (`~/.claude/hooks/keep-open-tasks.py`) repeats this on every prompt.
 - **Show the option space.** Lay out the feasible choices (with numbers) and let Wai
   pick; that beats arguing one recommendation. Recommend, but list.
 - **The current target overrides old design notes.** Never argue a decision from an
