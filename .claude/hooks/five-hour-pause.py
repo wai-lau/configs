@@ -32,6 +32,17 @@ def line(left):
     return float(min(99, max(95, 100 - math.ceil(left / 3600))))
 
 
+def resume_at(reset):
+    """When the resume one-shot should fire: 3 min after the reset, on a minute that is not :00 or
+    :30. The scheduler runs a one-shot landing on :00/:30 up to 90 s early, and a job that fires
+    before the reset hits the 5-hour limit and is used up with nothing re-arming it (Human Music,
+    2026-11-18: scheduled for 14:30, fired 14:28, limit hit, never resumed)."""
+    t = math.ceil((reset + 180) / 60) * 60
+    while time.localtime(t).tm_min in (0, 30):
+        t += 60
+    return time.localtime(t)
+
+
 def main():
     try:
         tool = json.load(sys.stdin).get('tool_name', '')
@@ -53,13 +64,14 @@ def main():
     limit = line(reset - now)
     if used < limit:
         return
-    at = time.localtime(reset + 60)
+    at = resume_at(reset)
     msg = ('5h pause: Claude 5-hour usage %.0f%% >= %.0f%%; resets %s (in %dh%02dm). '
            'Pause now: 1) start no new work and dispatch nothing; 2) write resume notes '
            '(what is done, what is next, exact commands) to the task ledger or a notes '
            'file; 3) unless one is already scheduled (CronList), CronCreate ONE one-shot '
-           '(recurring false) for %02d:%02d local (cron "%d %d %d %d *") whose prompt '
-           'says to resume from those notes; 4) tell the user in one line and end the '
+           '(recurring false) for %02d:%02d local (cron "%d %d %d %d *"; keep that exact '
+           'minute: it is after the reset and off :00/:30, which can fire early) whose '
+           'prompt says to resume from those notes; 4) tell the user in one line and end the '
            'turn. Allowed now: %s.'
            % (used, limit, time.strftime('%H:%M', time.localtime(reset)),
               (reset - now) // 3600, (reset - now) % 3600 // 60,
