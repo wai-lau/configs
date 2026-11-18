@@ -1,29 +1,35 @@
 #!/usr/bin/env python3
-"""PreToolUse: pause work when the 5-hour Claude usage window hits 99%.
+"""PreToolUse: pause work when the 5-hour Claude usage window hits its line.
 
-At five_hour.utilization >= 99 every tool call is denied except the ones a
+The line climbs as the window's reset nears: 95% with more than 4 h left,
+96% with <=4 h, 97% <=3 h, 98% <=2 h, 99% <=1 h (Wai, 2026-11-18: "95% if
+<=5 hours left, 96%<=4, 97@<=3 98@<=2 99@<=1"). At or over the line every
+tool call is denied except the ones a
 session needs to pause cleanly: write resume notes (Read/Write/Edit), load
 and schedule a one-shot resume (ToolSearch, CronCreate/List/Delete,
 ScheduleWakeup), stop background work (TaskStop) and tell peers
 (SendMessage). The deny reason tells the model what to do (Wai, 2026-11-10:
-"do this globally when claude 5h usage is up to 95%"; line raised to 99%,
-2026-11-18: "just change the percentage to 99%").
+"do this globally when claude 5h usage is up to 95%").
 
 Applies to everything on the WSL desktop, headless `claude -p` runs too,
 and ignores `pace-snooze` (Wai, 2026-11-11: "Five hour pause should ignore
 the pace snooze, it should always kick in for anything on the desktop at
-95% of 5h"; still holds at the 99% line). Terminal chats on the droplet pause too; only its Exec web UI
+95% of 5h"; still holds under the sliding line). Terminal chats on the droplet pause too; only its Exec web UI
 (user `cc-agent`) is exempt (Wai, 2026-11-16: "pace hooks are only for chats
 like this"). Allow (never brick): cache missing or
 stale (>10 min); reset time already past. Data: ~/.claude/cache/statusline_usage.json (statusline, every 60s).
 """
-import json, os, pwd, sys, time
+import json, math, os, pwd, sys, time
 from datetime import datetime
 
 CACHE = os.path.expanduser('~/.claude/cache/statusline_usage.json')
-LINE = 99.0
 PAUSE_TOOLS = {'Read', 'Write', 'Edit', 'ToolSearch', 'CronCreate', 'CronList',
                'CronDelete', 'ScheduleWakeup', 'TaskStop', 'SendMessage'}
+
+
+def line(left):
+    """Pause line in % with `left` seconds to the reset: 100 - whole hours left (rounded up), 95..99."""
+    return float(min(99, max(95, 100 - math.ceil(left / 3600))))
 
 
 def main():
@@ -42,7 +48,10 @@ def main():
     except Exception:
         return
     now = time.time()
-    if used < LINE or now >= reset:
+    if now >= reset:
+        return
+    limit = line(reset - now)
+    if used < limit:
         return
     at = time.localtime(reset + 60)
     msg = ('5h pause: Claude 5-hour usage %.0f%% >= %.0f%%; resets %s (in %dh%02dm). '
@@ -52,7 +61,7 @@ def main():
            '(recurring false) for %02d:%02d local (cron "%d %d %d %d *") whose prompt '
            'says to resume from those notes; 4) tell the user in one line and end the '
            'turn. Allowed now: %s.'
-           % (used, LINE, time.strftime('%H:%M', time.localtime(reset)),
+           % (used, limit, time.strftime('%H:%M', time.localtime(reset)),
               (reset - now) // 3600, (reset - now) % 3600 // 60,
               at.tm_hour, at.tm_min, at.tm_min, at.tm_hour, at.tm_mday, at.tm_mon,
               ', '.join(sorted(PAUSE_TOOLS))))
