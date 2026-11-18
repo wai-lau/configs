@@ -8,6 +8,8 @@
 # (both tested 2026-11-18 on claude 2.1.327). Subagents and workflow runs do
 # die, but the resumed session continues them from their saved transcripts.
 #
+# A mates lead (claude's parent is ~/bin/mates) is relaunched by bin/mates itself from the
+# same restart file, with that lead's prompt rebuilt (today's lead.md and lessons).
 # Relaunch: the claude() wrapper in ~/.zshrc exports CLAUDE_WRAPPER_PID and,
 # once claude is gone, relaunches `claude --resume <id> -- <note>` from
 # ~/.claude/.restart.<wrapper pid> (line 1: session id; the rest: the first
@@ -33,8 +35,14 @@ sid=${CLAUDE_CODE_SESSION_ID:-}
 [ -n "$sid" ] || die "CLAUDE_CODE_SESSION_ID is not set"
 
 shell=$(ps -o ppid= -p "$pid" | tr -d ' ')
-[ "$(comm "$shell")" = zsh ] || die "claude was not started from a zsh, so no claude() wrapper can relaunch it"
-if [ "${CLAUDE_WRAPPER_PID:-}" = "$shell" ]; then
+if tr '\0' '\n' < "/proc/$shell/cmdline" 2>/dev/null | grep -qE '(^|/)bin/mates$'; then
+  # A mates lead: ~/bin/mates runs claude as its child and, once claude is gone, relaunches it
+  # from ~/.claude/.restart.<its pid> on the same conversation with a freshly built lead prompt
+  # (its run_lead loop), so nothing needs typing into the pane.
+  mode=mates
+elif [ "$(comm "$shell")" != zsh ]; then
+  die "claude was not started from a zsh or by ~/bin/mates, so nothing can relaunch it"
+elif [ "${CLAUDE_WRAPPER_PID:-}" = "$shell" ]; then
   mode=wrapper
 elif [ -n "${TMUX_PANE:-}" ] && command -v tmux >/dev/null; then
   mode=tmux
