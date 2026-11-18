@@ -1,0 +1,79 @@
+#!/usr/bin/env python3
+"""Fit tmux tabs to the status bar: cut only the longest names, with "…".
+
+Sets a width cap @tab_w on every window of the client's session, read by the
+window-status formats in ~/.tmux.conf. Short names stay whole; the cap is the
+largest one that lets every tab fit beside status-right (never under 3). All
+names fit -> no cap. Run by tmux: #() in status-left (every status-interval)
+and the client-resized / window-linked / window-unlinked hooks.
+
+Usage: tmux-tab-fit [client-tty]
+"""
+import re
+import subprocess
+import sys
+
+NO_CAP = 999
+MIN_CAP = 3
+
+
+def tmux(*args):
+    return subprocess.run(('tmux',) + args, capture_output=True, text=True).stdout
+
+
+def width(s):
+    """Cells a status string takes: drop #[style] runs, ## is one #."""
+    return len(re.sub(r'#\[[^\]]*\]', '', s).replace('##', '#'))
+
+
+def cap_for(tabs, room):
+    """Largest cap c so every tab (fixed cells + name cut to c, +1 for "…") fits in room."""
+    def cost(c):
+        return sum(fixed + min(n, c) + (n > c) for fixed, n in tabs)
+    longest = max(n for _, n in tabs)
+    if cost(longest) <= room:
+        return NO_CAP
+    lo, hi = MIN_CAP, longest
+    if cost(lo) > room:
+        return MIN_CAP
+    while lo < hi:
+        mid = (lo + hi + 1) // 2
+        if cost(mid) <= room:
+            lo = mid
+        else:
+            hi = mid - 1
+    return lo
+
+
+def main():
+    client = ['-c', sys.argv[1]] if len(sys.argv) > 1 and sys.argv[1] else []
+    info = tmux('display', *client, '-p', '#{client_width}\t#{session_id}\t#{T:status-right}')
+    try:
+        cw, sid, right = info.rstrip('\n').split('\t', 2)
+        cw = int(cw)
+    except ValueError:
+        return  # no client (detached, or tmux gone)
+    rows = tmux('list-windows', '-t', sid, '-F',
+                '#{window_id}\t#{window_index}\t#{window_flags}\t#{E:@cc_tab}\t'
+                '#{@tab_w}\t#{@cc_title}\t#{window_name}').splitlines()
+    tabs, ids, old = [], [], []
+    for row in rows:
+        wid, idx, flags, cc, cur, title, name = (row.split('\t', 6) + [''] * 7)[:7]
+        shown = title if cc == '1' else name
+        # " N | " + name + flags + " " + the one-cell window separator
+        tabs.append((len(idx) + len(flags) + 6, width(shown)))
+        ids.append(wid)
+        old.append(cur)
+    if not tabs:
+        return
+    cap = str(cap_for(tabs, cw - width(right) - 1))
+    cmd = []
+    for wid, cur in zip(ids, old):
+        if cur != cap:
+            cmd += ['set', '-w', '-t', wid, '@tab_w', cap, ';']
+    if cmd:
+        tmux(*cmd, 'refresh-client', *(['-t', client[1]] if client else []), '-S')
+
+
+if __name__ == '__main__':
+    main()
