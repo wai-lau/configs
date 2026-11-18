@@ -157,8 +157,16 @@ sys.stdout.write('%s\x1f%s\x1f%s'%(title,bg,shim))
 " 2>/dev/null)
 IFS=$'\x1f' read -r title bgc shim <<<"$recap"
 
+# Inverted items are pills: black text on color $1, an SGR color tail ("5;117"
+# for 256 colors, "2;r;g;b" for truecolor), with rounded Powerline caps drawn
+# in that color on the plain background (Nerd Font U+E0B6 / U+E0B4; arrows
+# are U+E0B2 / U+E0B0). Sets REPLY; the escapes stay literal for the final
+# printf, so a % in $2 must come as %%.
+CAP_L=$'\xee\x82\xb6' CAP_R=$'\xee\x82\xb4'
+pill() { REPLY="\033[38;${1}m${CAP_L}\033[30;48;${1}m${2}\033[0m\033[38;${1}m${CAP_R}\033[0m"; }
+
 # Order: 7d+snooze, 5h+reset, (credits), ctx+base, alts. Each timer (and base)
-# is glued to its field, inverted (black on the color) with a space inside.
+# is a pill glued to its field.
 suffix=""
 # 7d: used/allowed (allowed = pace cap for today, see hooks/pace-cap.py).
 sd_seg=""
@@ -178,7 +186,7 @@ if [[ "$snz_until" =~ ^[0-9]+$ ]]; then
   if [ "$snz_left" -gt 0 ]; then
     if [ "$snz_left" -ge 60 ]; then snz_left=$(printf '%dh%02dm' $((snz_left / 60)) $((snz_left % 60)))
     else snz_left="${snz_left}m"; fi
-    snz_seg="\033[30;48;5;117m ${snz_left} \033[0m"
+    pill "5;117" "$snz_left"; snz_seg=$REPLY
   fi
 fi
 [ -n "${sd_seg}${snz_seg}" ] && suffix="${suffix} ${sd_seg}${snz_seg}"
@@ -186,7 +194,7 @@ fi
 # 5h used, then time to its reset: black on light green.
 fh_seg="" rst_seg=""
 [ -n "$five_hour" ] && [ "$five_hour" != "-" ] && fh_seg="\033[38;5;217m5h:${five_hour}%%\033[0m"
-[ -n "$reset_in" ] && [ "$reset_in" != "-" ] && rst_seg="\033[30;48;5;157m ${reset_in} \033[0m"
+[ -n "$reset_in" ] && [ "$reset_in" != "-" ] && { pill "5;157" "$reset_in"; rst_seg=$REPLY; }
 [ -n "${fh_seg}${rst_seg}" ] && suffix="${suffix} ${fh_seg}${rst_seg}"
 
 # Credits only while spending them ("!" = a window at 100%): white on red.
@@ -194,7 +202,7 @@ fh_seg="" rst_seg=""
 
 ctx_seg="" base_seg=""
 [ -n "$remaining" ] && [ "$remaining" != "-" ] && ctx_seg="\033[97mctx:${remaining}%%\033[0m"
-[ -n "$base_pct" ] && [ "$base_pct" != "-" ] && base_seg="\033[30;48;5;245m ${base_pct}%% \033[0m"
+[ -n "$base_pct" ] && [ "$base_pct" != "-" ] && { pill "5;245" "${base_pct}%%"; base_seg=$REPLY; }
 [ -n "${ctx_seg}${base_seg}" ] && suffix="${suffix} ${ctx_seg}${base_seg}"
 
 claude_total=$(pgrep -xc claude 2>/dev/null || echo 0)
@@ -202,16 +210,15 @@ others=$((claude_total - 1))
 [ "$others" -gt 0 ] && suffix="${suffix} \033[38;5;208malts:${others}\033[0m"
 
 # Current user, glued to the cwd. wai/wai-root/root = privileged owner →
-# black-on-white warning bar. walled claude (or any other) = orange text.
+# black-on-white warning pill. walled claude (or any other) = orange text.
 me=$(whoami)
 if [ "$me" = wai ] || [ "$me" = wai-root ] || [ "$me" = root ]; then
-  user_seg="\033[38;5;0;48;5;255m ${me} \033[0m"
+  pill "5;255" "$me"; user_seg=$REPLY
 else
   user_seg="\033[38;5;208m${me}\033[0m"
 fi
 
-# Line 1: the recap as a hash-colored bar (black text, a space of padding each
-# side). Line 2: user + cwd + metrics.
+# Line 1: the recap as a hash-colored pill. Line 2: user + cwd + metrics.
 title_line=""
 # Effort level to the right of the title bar, fg = the title bar's
 # hash-derived bg color.
@@ -238,6 +245,6 @@ if [ -n "$p" ] && [ "$p" -gt 1 ] && [ -n "$bgc" ] && [ -n "$shim" ]; then
     [ "$(cat "$tf" 2>/dev/null)" = "$want" ] || { printf '%s\n' "$want" > "$tf.tmp" && mv "$tf.tmp" "$tf"; }
   fi
 fi
-[ -n "$title" ] && title_line="${pid_seg}\033[48;2;${bgc};38;2;0;0;0m ${title} \033[0m${effort_seg}\n"
+[ -n "$title" ] && { pill "2;${bgc}" "${title//%/%%}"; title_line="${pid_seg}${REPLY}${effort_seg}\n"; }
 
 printf "${title_line}${user_seg}\033[38;2;245;237;216m%s\033[0m${suffix}" "$two_parts"
