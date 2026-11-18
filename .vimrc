@@ -34,6 +34,12 @@ call vundle#end()
 syntax enable
 set term=screen-256color
 set t_ut=
+" Bracketed paste: vim only auto-enables it for xterm* TERM, not screen*.
+" Without it a terminal paste is typed in -> autoindent staircase.
+let &t_BE = "\e[?2004h"
+let &t_BD = "\e[?2004l"
+exec "set t_PS=\e[200~"
+exec "set t_PE=\e[201~"
 set cmdheight=1
 set number
 set norelativenumber
@@ -142,6 +148,7 @@ nnoremap @ orequire 'pry'; binding.pry<Esc>
 nnoremap <C-e> :edit!<CR>
 
 " Clipboard
+set pastetoggle=<C-P>
 vnoremap <C-c> "*y
 nnoremap <C-c> V"*y
 nnoremap <C-v> i<Esc>$<C-P>"*p<C-P>
