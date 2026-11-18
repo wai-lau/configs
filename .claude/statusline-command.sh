@@ -18,7 +18,7 @@ if [ ! -f "$uf" ] || [ $(( $(date +%s) - $(stat -c %Y "$uf") )) -gt 60 ]; then
   disown
 fi
 
-read -r cwd remaining five_hour seven_day seven_cap reset_in overhead_pct _session_pct effort_lvl credits < <(echo "$input" | python3 -c "
+read -r cwd remaining five_hour seven_day seven_cap reset_in base_pct effort_lvl credits < <(echo "$input" | python3 -c "
 import sys,json,time,os,math
 d=json.load(sys.stdin)
 ctx=d.get('context_window') or {}
@@ -61,25 +61,38 @@ try:
     cap='%.0f' % capf
 except: pass
 
-total=None
-if cu:
-    total=(cu.get('input_tokens') or 0)+(cu.get('cache_read_input_tokens') or 0)+(cu.get('cache_creation_input_tokens') or 0)
-
-overhead='-'; sess='-'
-if total is not None and total>0:
-    bdir=os.path.expanduser('~/.claude/cache')
-    os.makedirs(bdir,exist_ok=True)
-    bf=os.path.join(bdir,'statusline_baseline_global')
-    base=None
-    try:
-        base=int(open(bf).read().strip())
+# Base = context taken before the conversation: system prompt, tools, CLAUDE.md
+# files, memory, hook context. Read off the session's first API call (its
+# input, less the first prompt at ~4 chars/token), cached per session. A
+# resumed session keeps the base it started with.
+base='-'
+tp=d.get('transcript_path') or ''
+if tp and sid!='unknown':
+    bf=os.path.expanduser('~/.claude/cache/base_%s'%sid)
+    bt=None
+    try: bt=int(open(bf).read())
     except: pass
-    if base is None or total<base:
-        base=total
-        try: open(bf,'w').write(str(base))
+    if bt is None:
+        try:
+            fu=None
+            for line in open(tp,encoding='utf-8'):
+                try: m=json.loads(line)
+                except: continue
+                if m.get('isSidechain'): continue
+                msg=m.get('message') or {}
+                if m.get('type')=='user' and fu is None:
+                    c=msg.get('content')
+                    fu=len(c) if isinstance(c,str) else sum(len(b.get('text') or '') for b in c if isinstance(b,dict)) if isinstance(c,list) else 0
+                u=msg.get('usage') if m.get('type')=='assistant' else None
+                if u:
+                    t=(u.get('input_tokens') or 0)+(u.get('cache_read_input_tokens') or 0)+(u.get('cache_creation_input_tokens') or 0)
+                    bt=max(0,t-(fu or 0)//4)
+                    break
         except: pass
-    overhead='%.0f' % (base*100.0/size)
-    sess='%.0f' % (max(0,total-base)*100.0/size)
+        if bt is not None:
+            try: open(bf,'w').write(str(bt))
+            except: pass
+    if bt is not None: base='%.0f' % (bt*100.0/size)
 
 # Credits left = prepaid balance, else monthly limit - used, else month used.
 # "!" prefix = a window is at 100%, so credits are being spent now.
@@ -98,7 +111,7 @@ except: pass
 if credits!='-' and any((w.get('used_percentage') or 0)>=100 for w in (fh,sd)):
     credits='!'+credits
 
-print(cwd, pct(remaining), pct(fh.get('used_percentage')), pct(sd.get('used_percentage')), cap, countdown, overhead, sess, effort_lvl, credits)
+print(cwd, pct(remaining), pct(fh.get('used_percentage')), pct(sd.get('used_percentage')), cap, countdown, base, effort_lvl, credits)
 " 2>/dev/null)
 
 short_cwd="${cwd/#$HOME/~}"
@@ -133,26 +146,31 @@ else:
         except: pass
 title=' '.join(title.split())
 if len(title)>50: title=title[:49]+'…'
-bg=''
+bg='';shim=''
 if title:
     hue=int(hashlib.md5(title.encode('utf-8')).hexdigest(),16)%360
     r,g,b=colorsys.hls_to_rgb(hue/360.0,0.60,0.95)   # bright + high saturation
     bg='%d;%d;%d'%(round(r*255),round(g*255),round(b*255))
-sys.stdout.write('%s\x1f%s'%(title,bg))
+    r,g,b=colorsys.hls_to_rgb(hue/360.0,0.78,0.95)   # lighter: prompt bar shimmer
+    shim='%d,%d,%d'%(round(r*255),round(g*255),round(b*255))
+sys.stdout.write('%s\x1f%s\x1f%s'%(title,bg,shim))
 " 2>/dev/null)
-IFS=$'\x1f' read -r title bgc <<<"$recap"
+IFS=$'\x1f' read -r title bgc shim <<<"$recap"
 
-# Order: 7d, (snooze), 5h, (credits), alts, ctx.
+# Order: 7d+snooze, 5h+reset, (credits), ctx+base, alts. Each timer (and base)
+# is glued to its field, inverted (black on the color) with a space inside.
 suffix=""
 # 7d: used/allowed (allowed = pace cap for today, see hooks/pace-cap.py).
+sd_seg=""
 if [ -n "$seven_day" ] && [ "$seven_day" != "-" ]; then
   sd_seg="7d:${seven_day}"
   [ -n "$seven_cap" ] && [ "$seven_cap" != "-" ] && sd_seg="${sd_seg}/${seven_cap}"
-  suffix="${suffix} \033[36m${sd_seg}%%\033[0m"
+  sd_seg="\033[36m${sd_seg}%%\033[0m"
 fi
 
-# Pace-cap snooze left (~/bin/pace-snooze writes the expiry epoch): inverted
-# (black on light blue), padded, while the snooze runs.
+# Pace-cap snooze left (~/bin/pace-snooze writes the expiry epoch): black on
+# light blue, while the snooze runs.
+snz_seg=""
 snz_until=$(cat ~/.claude/cache/pace-snooze 2>/dev/null)
 snz_until=${snz_until%%.*}
 if [[ "$snz_until" =~ ^[0-9]+$ ]]; then
@@ -160,30 +178,36 @@ if [[ "$snz_until" =~ ^[0-9]+$ ]]; then
   if [ "$snz_left" -gt 0 ]; then
     if [ "$snz_left" -ge 60 ]; then snz_left=$(printf '%dh%02dm' $((snz_left / 60)) $((snz_left % 60)))
     else snz_left="${snz_left}m"; fi
-    suffix="${suffix} \033[30;48;5;117m ${snz_left} \033[0m"
+    snz_seg="\033[30;48;5;117m ${snz_left} \033[0m"
   fi
 fi
+[ -n "${sd_seg}${snz_seg}" ] && suffix="${suffix} ${sd_seg}${snz_seg}"
 
-[ -n "$five_hour" ] && [ "$five_hour" != "-" ] && suffix="${suffix} \033[38;5;217m5h:${five_hour}%%\033[0m"
-[ -n "$reset_in" ] && [ "$reset_in" != "-" ] && suffix="${suffix} \033[38;5;157m${reset_in}\033[0m"
+# 5h used, then time to its reset: black on light green.
+fh_seg="" rst_seg=""
+[ -n "$five_hour" ] && [ "$five_hour" != "-" ] && fh_seg="\033[38;5;217m5h:${five_hour}%%\033[0m"
+[ -n "$reset_in" ] && [ "$reset_in" != "-" ] && rst_seg="\033[30;48;5;157m ${reset_in} \033[0m"
+[ -n "${fh_seg}${rst_seg}" ] && suffix="${suffix} ${fh_seg}${rst_seg}"
 
 # Credits only while spending them ("!" = a window at 100%): white on red.
 [ "${credits#!}" != "$credits" ] && suffix="${suffix} \033[1;97;41m c:\$${credits#!} \033[0m"
+
+ctx_seg="" base_seg=""
+[ -n "$remaining" ] && [ "$remaining" != "-" ] && ctx_seg="\033[97mctx:${remaining}%%\033[0m"
+[ -n "$base_pct" ] && [ "$base_pct" != "-" ] && base_seg="\033[30;48;5;245m ${base_pct}%% \033[0m"
+[ -n "${ctx_seg}${base_seg}" ] && suffix="${suffix} ${ctx_seg}${base_seg}"
 
 claude_total=$(pgrep -xc claude 2>/dev/null || echo 0)
 others=$((claude_total - 1))
 [ "$others" -gt 0 ] && suffix="${suffix} \033[38;5;208malts:${others}\033[0m"
 
-[ -n "$remaining" ] && [ "$remaining" != "-" ] && suffix="${suffix} \033[97mctx:${remaining}%%\033[0m"
-[ -n "$overhead_pct" ] && [ "$overhead_pct" != "-" ] && suffix="${suffix} \033[38;5;245m(base:${overhead_pct}%%)\033[0m"
-
-# Current user. wai/wai-root/root = privileged owner → black-on-white warning bar.
-# walled claude (or any other) = orange text, normal bg.
+# Current user, glued to the cwd. wai/wai-root/root = privileged owner →
+# black-on-white warning bar. walled claude (or any other) = orange text.
 me=$(whoami)
 if [ "$me" = wai ] || [ "$me" = wai-root ] || [ "$me" = root ]; then
-  user_seg="\033[38;5;0;48;5;255m ${me} \033[0m "
+  user_seg="\033[38;5;0;48;5;255m ${me} \033[0m"
 else
-  user_seg="\033[38;5;208m${me}\033[0m "
+  user_seg="\033[38;5;208m${me}\033[0m"
 fi
 
 # Line 1: the recap as a hash-colored bar (black text, a space of padding each
@@ -201,6 +225,19 @@ while [ -n "$p" ] && [ "$p" -gt 1 ] && [ "$(cat /proc/$p/comm 2>/dev/null)" != c
   p=$(awk '{print $4}' /proc/$p/stat 2>/dev/null)
 done
 [ -n "$p" ] && [ "$p" -gt 1 ] && [ -n "$bgc" ] && pid_seg="\033[38;2;${bgc}m${p}\033[0m "
+
+# Prompt bar = title color. The claude() wrapper in ~/.zshrc runs each pane on
+# its own theme, ~/.claude/themes/pane-<shell pid>.json, which claude reloads
+# on change; rewrite it whenever the title color moves. No file = a claude
+# not started by that wrapper: leave it be.
+if [ -n "$p" ] && [ "$p" -gt 1 ] && [ -n "$bgc" ] && [ -n "$shim" ]; then
+  sh_pid=$(awk '{print $4}' /proc/$p/stat 2>/dev/null)
+  tf=~/.claude/themes/pane-$sh_pid.json
+  if [ -f "$tf" ]; then
+    want="{\"name\":\"pane-$sh_pid\",\"base\":\"dark\",\"overrides\":{\"promptBorder\":\"rgb(${bgc//;/,})\",\"promptBorderShimmer\":\"rgb($shim)\"}}"
+    [ "$(cat "$tf" 2>/dev/null)" = "$want" ] || { printf '%s\n' "$want" > "$tf.tmp" && mv "$tf.tmp" "$tf"; }
+  fi
+fi
 [ -n "$title" ] && title_line="${pid_seg}\033[48;2;${bgc};38;2;0;0;0m ${title} \033[0m${effort_seg}\n"
 
 printf "${title_line}${user_seg}\033[38;2;245;237;216m%s\033[0m${suffix}" "$two_parts"

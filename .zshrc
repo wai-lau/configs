@@ -112,6 +112,18 @@ claude() {
     # restart.sh types `source ~/.zshrc && claude` into the tmux pane.
     local -a launch_args=("$@") restart
     local restart_file="$HOME/.claude/.restart.$$"
+    # Prompt bar color: this pane runs on its own theme, which the statusline
+    # (~/.claude/statusline-command.sh) recolors to the session's title bar.
+    local pane_theme="pane-$$"
+    local theme_file="$HOME/.claude/themes/$pane_theme.json"
+    mkdir -p "$HOME/.claude/themes"
+    # A closed pane kills its shell before the rm below runs: prune the
+    # themes of shells that are gone.
+    local f
+    for f in "$HOME"/.claude/themes/pane-*.json(N); do
+        kill -0 "${${f:t:r}#pane-}" 2>/dev/null || rm -f "$f"
+    done
+    [[ -f "$theme_file" ]] || printf '{"name":"%s","base":"dark","overrides":{}}\n' "$pane_theme" > "$theme_file"
     while true; do
         if [[ -f "$restart_file" ]]; then
             # Over 10 minutes old: a relaunch that never ran; drop it.
@@ -122,9 +134,9 @@ claude() {
             rm -f "$restart_file"
         fi
         if [[ -r "$HOME/.claude/private.md" ]]; then
-            CLAUDE_WRAPPER_PID=$$ command claude --append-system-prompt "$(<"$HOME/.claude/private.md")" "${launch_args[@]}"
+            CLAUDE_WRAPPER_PID=$$ command claude --settings "{\"theme\":\"custom:$pane_theme\"}" --append-system-prompt "$(<"$HOME/.claude/private.md")" "${launch_args[@]}"
         else
-            CLAUDE_WRAPPER_PID=$$ command claude "${launch_args[@]}"
+            CLAUDE_WRAPPER_PID=$$ command claude --settings "{\"theme\":\"custom:$pane_theme\"}" "${launch_args[@]}"
         fi
         if [[ -f "$restart_file" ]]; then
             # SIGKILLed, so claude left the terminal raw, on the alt screen with
@@ -140,6 +152,7 @@ claude() {
         stty sane 2>/dev/null
         printf '\033[?1049l\033[?25h\033[0m'
     done
+    rm -f "$theme_file"
 }
 
 # Ollama (for aider, etc.)
