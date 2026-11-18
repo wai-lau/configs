@@ -172,7 +172,7 @@ suffix=""
 # 7d: used/allowed (allowed = pace cap for today, see hooks/pace-cap.py).
 sd_seg=""
 if [ -n "$seven_day" ] && [ "$seven_day" != "-" ]; then
-  sd_seg="7d:${seven_day}"
+  sd_seg="7d:\033[1m${seven_day}\033[22m"   # used part bold
   [ -n "$seven_cap" ] && [ "$seven_cap" != "-" ] && sd_seg="${sd_seg}/${seven_cap}"
   sd_seg="\033[36m${sd_seg}%%\033[0m"
 fi
@@ -208,7 +208,7 @@ ctx_seg="" base_seg=""
 
 claude_total=$(pgrep -xc claude 2>/dev/null || echo 0)
 others=$((claude_total - 1))
-[ "$others" -gt 0 ] && suffix="${suffix}\033[38;5;208malts:${others}\033[0m"
+[ "$others" -gt 0 ] && suffix="${suffix}\033[38;5;208malts:\033[1m${others}\033[0m"
 
 # Current user, right after the cwd. wai/wai-root/root = privileged owner →
 # black-on-white warning pill. walled claude (or any other) = orange text.
@@ -225,7 +225,14 @@ title_line=""
 # Effort level to the right of the title bar, fg = the title bar's
 # hash-derived bg color.
 effort_seg=""
-[ -n "$effort_lvl" ] && [ "$effort_lvl" != "-" ] && [ -n "$bgc" ] && effort_seg="\033[38;2;${bgc}m${effort_lvl}\033[0m"
+# The model name (the part after the last "-", when it is one) is bold.
+if [ -n "$effort_lvl" ] && [ "$effort_lvl" != "-" ] && [ -n "$bgc" ]; then
+  case "${effort_lvl##*-}" in
+    opus|sonnet|haiku|fable) eff_txt="${effort_lvl%${effort_lvl##*-}}\033[1m${effort_lvl##*-}" ;;
+    *) eff_txt="$effort_lvl" ;;
+  esac
+  effort_seg="\033[38;2;${bgc}m${eff_txt}\033[0m"
+fi
 # Claude PID (= cc-socks/<pid>.sock) left of the title, same fg as effort.
 # Walk ancestors to the claude process (statusline may run under sh -c).
 pid_seg=""
@@ -233,7 +240,7 @@ p=$PPID
 while [ -n "$p" ] && [ "$p" -gt 1 ] && [ "$(cat /proc/$p/comm 2>/dev/null)" != claude ]; do
   p=$(awk '{print $4}' /proc/$p/stat 2>/dev/null)
 done
-[ -n "$p" ] && [ "$p" -gt 1 ] && [ -n "$bgc" ] && pid_seg="\033[38;2;${bgc}m${p}\033[0m"
+[ -n "$p" ] && [ "$p" -gt 1 ] && [ -n "$bgc" ] && pid_seg="\033[1;38;2;${bgc}m${p}\033[0m"
 
 # Prompt bar = title color. The claude() wrapper in ~/.zshrc runs each pane on
 # its own theme, ~/.claude/themes/pane-<shell pid>.json, which claude reloads
