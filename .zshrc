@@ -100,6 +100,17 @@ claude() {
     # timeout guards offline hosts; a failed check never blocks launch.
     # Sits above the loop: /purge relaunches skip it.
     timeout 20 claude update || true
+    # A bare `claude` in a git repo under ~/src starts mates there: a lead with
+    # Qwen panes, crash resume, terminal reset (Wai, 2026-11-18: "claude command
+    # should run mates"). Arguments, anywhere else, or a Qwen worktree: plain
+    # claude below. `command claude` is always plain.
+    local top
+    if (( $# == 0 )) && [[ -z "${MATES_LEAD:-}" ]] && [[ -x "$HOME/bin/mates" ]] \
+        && top=$(git rev-parse --show-toplevel 2>/dev/null) \
+        && [[ "$top" == "$HOME"/src/?* && "$top" != */.claude/worktrees/* ]]; then
+        "$HOME/bin/mates"
+        return
+    fi
     # Interactive: relaunch loop powering /purge and /restart. Plain Ctrl+D
     # quits (no sentinel). First launch honors "$@".
     # /purge drops ~/.claude/.purge then SIGTERMs this process; on exit we wipe
@@ -134,15 +145,18 @@ claude() {
             rm -f "$restart_file"
         fi
         if [[ -r "$HOME/.claude/private.md" ]]; then
-            CLAUDE_WRAPPER_PID=$$ command claude --settings "{\"theme\":\"custom:$pane_theme\"}" --append-system-prompt "$(<"$HOME/.claude/private.md")" "${launch_args[@]}"
+            CLAUDE_WRAPPER_PID=$$ MIMALLOC_PURGE_HOLES=0 command claude --settings "{\"theme\":\"custom:$pane_theme\"}" --append-system-prompt "$(<"$HOME/.claude/private.md")" "${launch_args[@]}"
         else
-            CLAUDE_WRAPPER_PID=$$ command claude --settings "{\"theme\":\"custom:$pane_theme\"}" "${launch_args[@]}"
+            CLAUDE_WRAPPER_PID=$$ MIMALLOC_PURGE_HOLES=0 command claude --settings "{\"theme\":\"custom:$pane_theme\"}" "${launch_args[@]}"
         fi
+        # However claude ended (a SIGKILL from /restart, a crash such as Bun's
+        # segfault), it may have left the terminal raw, on the alt screen with
+        # the cursor hidden and paste/focus/mouse/kitty-key modes on: mouse moves
+        # then type junk and Ctrl+C arrives as an escape code. MIMALLOC_PURGE_HOLES=0
+        # above turns off the allocator step Bun 1.4.4 segfaulted in (2026-11-18).
+        stty sane 2>/dev/null
+        printf '\033[?1049l\033[?25h\033[0m\033[?2004l\033[?1004l\033[?1000l\033[?1002l\033[?1003l\033[?1006l\033[<100u\033[=0;1u\033[>4m'
         if [[ -f "$restart_file" ]]; then
-            # SIGKILLed, so claude left the terminal raw, on the alt screen with
-            # the cursor hidden and paste/focus/mouse/kitty-key modes on.
-            stty sane 2>/dev/null
-            printf '\033[?1049l\033[?25h\033[0m\033[?2004l\033[?1004l\033[?1000l\033[?1002l\033[?1003l\033[?1006l\033[<u\033[>4m'
             timeout 20 claude update || true
             continue
         fi
