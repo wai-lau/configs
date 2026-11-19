@@ -155,7 +155,9 @@ if title:
     # cache/hues/anchor holds the first title's hue. A session keeps its stored hue
     # while its title holds. A new title on a lone session gets a random hue and
     # becomes the anchor; with other live sessions it takes anchor+36k for the
-    # smallest k>=1 no live session holds (k = 1..5, the 180 deg in five steps).
+    # first k in 5,2,4,1,3 no live session holds: the complement first, then the
+    # slots between, so a few sessions already span the 180 deg (Wai: 'the colors
+    # look too similar / shouldn't 180deg span two complimentary colors').
     try:
         hd=os.path.expanduser('~/.claude/cache/hues'); os.makedirs(hd,exist_ok=True)
         af=os.path.join(hd,'anchor')
@@ -182,7 +184,7 @@ if title:
                 try: anchor=int(open(af).read().strip())%360
                 except Exception:
                     anchor=others[0]; open(af,'w').write('%d'%anchor)
-                slots=[(anchor+36*k)%360 for k in range(1,6)]
+                slots=[(anchor+36*k)%360 for k in (5,2,4,1,3)]  # farthest first: the complement, then between
                 held=set(others)
                 hue=next((h for h in slots if h not in held), slots[len(others)%len(slots)])
             if not (mine and mine[1]==title):
