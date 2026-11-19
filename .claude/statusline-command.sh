@@ -204,18 +204,24 @@ if title:
         c=whiten(c,hi)
     bg='%d;%d;%d'%tuple(round(v*255) for v in c)
     shim='%d,%d,%d'%tuple(round(v*255) for v in whiten(c,0.45))   # lighter: prompt bar shimmer
-sys.stdout.write('%s\x1f%s\x1f%s'%(title,bg,shim))
+    # Claude Code draws this line in 256 colors: it rounds the title's color to an
+    # xterm-256 cube entry (chalk's rule). The tmux tab takes that same entry, so
+    # tab and title match (Wai, 2026-11-19: 'human music tab and claude title are
+    # still different colors' / 'missing lightness?').
+    lv=(0,95,135,175,215,255)
+    r8,g8,b8=(round(v*255) for v in c)
+    tab='#%02x%02x%02x'%(lv[round(r8/255*5)],lv[round(g8/255*5)],lv[round(b8/255*5)])
+sys.stdout.write('%s\x1f%s\x1f%s\x1f%s'%(title,bg,shim,tab if title else ''))
 " 2>/dev/null)
-IFS=$'\x1f' read -r title bgc shim <<<"$recap"
+IFS=$'\x1f' read -r title bgc shim tabc <<<"$recap"
 
 # tmux tab = this title, in this color: pane options @cc_title / @cc_color
 # (#rrggbb) for the window-status formats in ~/.tmux.conf. No title = unset,
 # and the tab falls back to the window name.
 if [ -n "$TMUX_PANE" ] && command -v tmux >/dev/null 2>&1; then
   if [ -n "$title" ] && [ -n "$bgc" ]; then
-    IFS=';' read -r cr cg cb <<<"$bgc"
     tmux set -p -t "$TMUX_PANE" @cc_title "$title" \; \
-      set -p -t "$TMUX_PANE" @cc_color "$(printf '#%02x%02x%02x' "$cr" "$cg" "$cb")" >/dev/null 2>&1
+      set -p -t "$TMUX_PANE" @cc_color "$tabc" >/dev/null 2>&1
   else
     tmux set -pu -t "$TMUX_PANE" @cc_title \; set -pu -t "$TMUX_PANE" @cc_color >/dev/null 2>&1
   fi
