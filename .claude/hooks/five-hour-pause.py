@@ -19,7 +19,7 @@ the pace snooze, it should always kick in for anything on the desktop at
 like this"). Allow (never brick): cache missing or
 stale (>10 min); reset time already past. Data: ~/.claude/cache/statusline_usage.json (statusline, every 60s).
 """
-import json, math, os, pwd, sys, time
+import json, math, os, pwd, re, shlex, sys, time
 from datetime import datetime
 
 CACHE = os.path.expanduser('~/.claude/cache/statusline_usage.json')
@@ -30,6 +30,39 @@ PAUSE_TOOLS = {'Read', 'Write', 'Edit', 'ToolSearch', 'CronCreate', 'CronList',
 def line(left):
     """Pause line in % with `left` seconds to the reset: 100 - whole hours left (rounded up), 95..99."""
     return float(min(99, max(95, 100 - math.ceil(left / 3600))))
+
+
+# Qwen is never paused (Wai, 2026-11-20: "ensure qwen followers are always allowed, regardless of
+# pacing"): a Bash call made only of `mates` commands passes, so a lead keeps sending to, waiting
+# on and merging its local Qwen panes. The documented wait loop counts as one.
+WAIT_LOOP = re.compile(r'^\s*until (MATES_LEAD=1 )?mates wait \d+( --timeout \d+)?; rc=\$\?; \[ \$rc -ne 1 \]; do :; done\s*$')
+SEPARATORS = {';', '&&', '||', '|', '&', '\n', '(', ')', ';;', '|&'}
+
+
+def only_mates(command):
+    """True if every command in this Bash line runs `mates` (env assignments before it allowed)."""
+    if WAIT_LOOP.match(command):
+        return True
+    try:
+        lex = shlex.shlex(command.replace('\n', ' ; '), posix=True, punctuation_chars=True)
+        lex.whitespace_split = True
+        tokens = list(lex)
+    except ValueError:
+        return False
+    segment, segments = [], []
+    for t in tokens:
+        if t in SEPARATORS:
+            segments.append(segment); segment = []
+        else:
+            segment.append(t)
+    segments.append(segment)
+    for seg in segments:
+        words = [w for w in seg if not re.match(r'^[A-Za-z_][A-Za-z0-9_]*=', w)]
+        if not seg:
+            continue
+        if not words or os.path.basename(words[0]) != 'mates':
+            return False
+    return any(segments)
 
 
 def resume_at(reset):
@@ -45,8 +78,11 @@ def resume_at(reset):
 
 def main():
     try:
-        tool = json.load(sys.stdin).get('tool_name', '')
+        event = json.load(sys.stdin)
+        tool = event.get('tool_name', '')
     except Exception:
+        return
+    if tool == 'Bash' and only_mates((event.get('tool_input') or {}).get('command', '')):
         return
     if tool in PAUSE_TOOLS or pwd.getpwuid(os.getuid()).pw_name == 'cc-agent':
         return
@@ -72,7 +108,8 @@ def main():
            '(recurring false) for %02d:%02d local (cron "%d %d %d %d *"; keep that exact '
            'minute: it is after the reset and off :00/:30, which can fire early) whose '
            'prompt says to resume from those notes; 4) tell the user in one line and end the '
-           'turn. Allowed now: %s.'
+           'turn. Allowed now: %s, and Bash calls made only of `mates` commands (Qwen is '
+           'never paused: keep sending to, waiting on and merging your Qwen panes).'
            % (used, limit, time.strftime('%H:%M', time.localtime(reset)),
               (reset - now) // 3600, (reset - now) % 3600 // 60,
               at.tm_hour, at.tm_min, at.tm_min, at.tm_hour, at.tm_mday, at.tm_mon,
