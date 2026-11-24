@@ -1,0 +1,75 @@
+#!/usr/bin/env python3
+"""Carry Claude Code conversations across a tmux-resurrect save/restore.
+
+tmux-resurrect restores panes, layouts and cwds, but would restart `claude`
+fresh (or retype its huge wrapper argv). Instead:
+
+  save     (@resurrect-hook-post-save-all): map each live Claude pane
+           "session:window.pane" -> its sessionId, from ~/.claude/sessions/*.json.
+  restore  (@resurrect-hook-post-restore-all): type `claude --resume <id>` into
+           each restored pane at that address that sits at an idle shell.
+"""
+import glob, json, os, subprocess, sys
+
+DIR = os.path.expanduser('~/.local/share/tmux/resurrect')
+MAP = os.environ.get('TMUX_CLAUDE_PANES_MAP') or os.path.join(DIR, 'claude-panes.tsv')  # override: tests
+
+
+def tmux(*a):
+    return subprocess.run(['tmux', *a], capture_output=True, text=True).stdout
+
+
+def alive(s):
+    """Session file's process still runs: same pid AND same start time.
+
+    ~/.claude/sessions/ keeps files from earlier boots, whose pids get reused.
+    """
+    try:
+        stat = open(f"/proc/{s.get('pid', 0)}/stat").read()
+    except OSError:
+        return False
+    return stat.rpartition(')')[2].split()[19] == str(s.get('procStart'))
+
+
+def save():
+    # pane id (%N) -> "session:window.pane"
+    addr = {}
+    for line in tmux('list-panes', '-a', '-F',
+                     '#{pane_id}\t#{session_name}:#{window_index}.#{pane_index}').splitlines():
+        pid_, a = line.split('\t', 1)
+        addr[pid_] = a
+    rows = []
+    for f in glob.glob(os.path.expanduser('~/.claude/sessions/*.json')):
+        try:
+            s = json.load(open(f))
+        except (OSError, ValueError):
+            continue
+        if s.get('kind') != 'interactive' or not alive(s):
+            continue
+        pane = (s.get('tmux') or '').rpartition('.')[2]  # "0:@1.%2" -> "%2"
+        if pane in addr and s.get('sessionId'):
+            rows.append(f"{addr[pane]}\t{s['sessionId']}\n")
+    os.makedirs(DIR, exist_ok=True)
+    tmp = MAP + '.tmp'
+    with open(tmp, 'w') as fh:
+        fh.writelines(sorted(rows))
+    os.replace(tmp, MAP)
+
+
+def restore():
+    try:
+        rows = [l.rstrip('\n').split('\t') for l in open(MAP) if '\t' in l]
+    except OSError:
+        return
+    idle = {}
+    for line in tmux('list-panes', '-a', '-F',
+                     '#{session_name}:#{window_index}.#{pane_index}\t#{pane_current_command}').splitlines():
+        a, cmd = line.split('\t', 1)
+        idle[a] = cmd in ('zsh', 'bash', 'sh')
+    for a, sid in rows:
+        if idle.get(a):
+            tmux('send-keys', '-t', a, f'claude --resume {sid}', 'Enter')
+
+
+if __name__ == '__main__':
+    {'save': save, 'restore': restore}[sys.argv[1]]()
