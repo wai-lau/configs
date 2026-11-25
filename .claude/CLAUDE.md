@@ -156,6 +156,12 @@ Before/after comparisons label the sides **Old** and **New**, never "Now"
 and "New" (Wai, 2026-11-09: "never use Now vs. New so hard to read. Always
 use old vs new").
 
+Third-person pronouns must always say clearly who they mean (Wai, 2026-11-24:
+"3rd pronoun pronouns should always be clear who they are referring to", after
+a report said "he" for the HolyArrs maintainer). Name the person (and their
+role) first, and repeat the name whenever another person came up in between.
+Unless someone's pronouns are stated, use they/them, never a guessed he/she.
+
 ## Text for other people — run the humanizer (any repo)
 
 Wai, 2026-11-08: "install this globally and use wherever you want a human
@@ -166,20 +172,26 @@ release notes, public pages, READMEs, PR descriptions, emails), run the
 it. Not for messages to Wai (status reports keep their own style),
 code, or commit subjects.
 
-## Questions for Wai — the open-questions doc (any repo)
+## Open Items for Wai — the open-items doc (any repo, every project)
 
-Wai, 2026-11-09: "I really like this questions doc, make it a global
+Wai, 2026-11-24: "this documenting/openitems strategy (and doc format) should be used globally". Wai, 2026-11-09: "I really like this questions doc, make it a global
 setting" (it started in spire 2026-11-06: "keep a gitignored open questions
 doc with analysis and link it every time"; 11-07: "also, use the doc").
 
-- **Every question for Wai goes in the doc first**, even a quick one: a
-  gitignored `OPEN-QUESTIONS.md` at the repo root (add it to `.gitignore`).
-  Chat then carries only "Needs you: question N" plus the page link, never
-  the option table.
-- **Sections:** `## Open` (each question a bold-numbered paragraph,
+- **Everything that needs Wai's input goes in the doc first**, even a quick
+  one: questions, approvals and yes/no offers, checks she should do on screen,
+  commands she must run herself (Wai, 2026-11-24: "Anything that requires my
+  input should go in the questions doc"). The doc is a gitignored
+  `OPEN-QUESTIONS.md` at the repo root (add it to `.gitignore`), titled
+  "<Repo> Open Items" (Wai, 2026-11-24: "Rename the doc title to 'Open Items'").
+  Chat then carries only "Needs you: item N" plus the page link, never the
+  option table or the to-do list.
+- **Sections:** `## Open` (decisions: each a bold-numbered paragraph,
   `**1. ...?**`, with the cause, a labelled numbers table and options
-  A/B/C, recommended first), `## Offers` (things Wai can say "yes" to),
-  `## Status that bears on the questions`. Stamp the top with
+  A/B/C, recommended first), `## Your checks` (things to look at on screen,
+  files to review, commands only she can run, each with what to expect),
+  `## Offers` (things Wai can say "yes" to, with the steps if she must do
+  them), `## Status that bears on the questions`. Stamp the top with
   "Updated YYYY-MM-DD HH:MM".
 - **Answered questions leave the doc** (Wai, 2026-11-09: "move the
   'answered' section into an archaeology doc"): the moment Wai answers,
@@ -195,8 +207,8 @@ doc with analysis and link it every time"; 11-07: "also, use the doc").
   docs, code comments and reports name the decision in words ("Ifrit's
   paths may each get a per-tier hit table"), never "1a" or "your 3D". A
   verbatim quote is kept only for words beyond the code.
-- **Publish it as an Artifact page, one per repo, same URL every time:**
-  `python3 ~/.claude/questions-page.py OPEN-QUESTIONS.md <scratch>/questions.html [version] ["<Repo> Open Questions"]`,
+- **Publish it as an Artifact page titled "<Repo> Open Items", one per repo, same URL every time:**
+  `python3 ~/.claude/questions-page.py OPEN-QUESTIONS.md <scratch>/questions.html [version] ["<Repo> Open Items"]`,
   then publish that file with the Artifact tool and keep its URL in the
   repo's project memory. Every report ends with the open count and the link.
 - Plain words, no internal names without saying what they are, and no
