@@ -152,6 +152,12 @@ Never write "nothing needs you", "you are not needed" or variants. When
 nothing awaits the user, say "No blockers." or "Nothing to report."
 (Wai, 2026-10-30.)
 
+Links and action items go at the BOTTOM of every report, after the body: the
+open-questions link, other page links, and what Wai should do next. Never lead
+with them or scatter them mid-message (Wai, 2026-11-23: "always put links and
+action items at the bottom", "global"). Every message, any repo; it overrides
+any output-style rule that says to lead with the next action.
+
 Before/after comparisons label the sides **Old** and **New**, never "Now"
 and "New" (Wai, 2026-11-09: "never use Now vs. New so hard to read. Always
 use old vs new").
@@ -186,6 +192,9 @@ doc with analysis and link it every time"; 11-07: "also, use the doc").
   "<Repo> Open Items" (Wai, 2026-11-24: "Rename the doc title to 'Open Items'").
   Chat then carries only "Needs you: item N" plus the page link, never the
   option table or the to-do list.
+  Never repeat in chat what the doc already holds: no open-task lists, no
+  status tables, no copies of its items (Wai, 2026-11-25: "no need to write
+  here if in the FILE / DON'T DUPLICATE IF IN THE ARTIFACT").
 - **Sections:** `## Open` (decisions: each a bold-numbered paragraph,
   `**1. ...?**`, with the cause, a labelled numbers table and options
   A/B/C, recommended first), `## Your checks` (things to look at on screen,
@@ -211,12 +220,26 @@ doc with analysis and link it every time"; 11-07: "also, use the doc").
   `python3 ~/.claude/questions-page.py OPEN-QUESTIONS.md <scratch>/questions.html [version] ["<Repo> Open Items"]`,
   then publish that file with the Artifact tool and keep its URL in the
   repo's project memory. Every report ends with the open count and the link.
+- **Chat and page options always match** (Wai, 2026-11-24: "make sure chat
+  and page options match, always"). The same letters, in the same order,
+  meaning the same thing in chat and on the page; letters run A, B, C top
+  to bottom, the recommended option is A and listed first. Rewriting a
+  question re-letters every option and says so in chat; never reorder
+  letters (a "B" listed above "A" made her "A" raise a cap she meant to
+  keep, 11-24). Before acting on a letter, read it back in words in one
+  line.
 - Plain words, no internal names without saying what they are, and no
   answer codes as labels ("your 3D" means nothing a day later; say what
   was decided). Few open at a time (see Working with Wai).
 
 ## Working with Wai (any repo; retro 2026-10-30)
 
+- **Most bang-for-buck first, always.** Wai, 2026-11-23: "Make sure to do the work that gives
+  the most bang-for-buck first always for all projects". Before starting a batch of work, rank
+  the items by value per effort (measure where you can) and do the top one first; say the
+  ranking in one line. Interesting-but-small wins wait behind the big cheap ones. Re-check
+  while working: "ensure that the work that you are doing is the highest value work possible
+  with the limited time" (same day); when something bigger shows up, switch to it.
 - **Short answers are complete answers.** "Sure", "Fewer", "go" mean act. When one is
   ambiguous AND the stakes are high (a release, a push, a version cut), confirm the
   reading in one line first (a lead session decides the reading itself; see
@@ -228,7 +251,8 @@ doc with analysis and link it every time"; 11-07: "also, use the doc").
   the old one unasked. A task ends only when it is done, when Wai drops it ("drop",
   "stop", "forget it", "nvm"), or when her newer message contradicts it. Unsure if it
   contradicts? Keep the task and ask at turn end. Every report, resume note and
-  context summary names each open task and where it stands. A `UserPromptSubmit`
+  context summary names each open task and where it stands (in a repo with an
+  open-items doc, the doc's In progress table does that; chat only links it). A `UserPromptSubmit`
   hook (`~/.claude/hooks/keep-open-tasks.py`) repeats this on every prompt.
 - **Show the option space.** Lay out the feasible choices (with numbers) and let Wai
   pick; that beats arguing one recommendation. Recommend, but list.
