@@ -8,6 +8,10 @@ fresh (or retype its huge wrapper argv). Instead:
            "session:window.pane" -> its sessionId, from ~/.claude/sessions/*.json.
   restore  (@resurrect-hook-post-restore-all): type `claude --resume <id>` into
            each restored pane at that address that sits at an idle shell.
+  fix-last (before TPM loads, and inside save): a save taken while the server
+           dies writes an empty file and points `last` at it. Restoring that
+           kills session 0 and leaves none, so a fresh `tmux` exits at once.
+           Drop empty saves and point `last` at the newest one with panes.
 """
 import glob, json, os, subprocess, sys
 
@@ -31,7 +35,32 @@ def alive(s):
     return stat.rpartition(')')[2].split()[19] == str(s.get('procStart'))
 
 
+def has_panes(path):
+    try:
+        return any(l.startswith('pane\t') for l in open(path))
+    except OSError:
+        return False
+
+
+def fix_last():
+    """Repair `last` if it points at a save with no panes. True if it did."""
+    last = os.path.join(DIR, 'last')
+    if not os.path.lexists(last) or has_panes(last):
+        return False
+    saves = sorted(glob.glob(os.path.join(DIR, 'tmux_resurrect_*.txt')), reverse=True)
+    for f in saves:
+        if not has_panes(f):
+            os.remove(f)
+    good = [f for f in saves if os.path.exists(f)]
+    os.remove(last)
+    if good:
+        os.symlink(os.path.basename(good[0]), last)
+    return True
+
+
 def save():
+    if fix_last():
+        return  # dying-server save: keep the last good pane map too
     # pane id (%N) -> "session:window.pane"
     addr = {}
     for line in tmux('list-panes', '-a', '-F',
@@ -72,4 +101,4 @@ def restore():
 
 
 if __name__ == '__main__':
-    {'save': save, 'restore': restore}[sys.argv[1]]()
+    {'save': save, 'restore': restore, 'fix-last': fix_last}[sys.argv[1]]()
