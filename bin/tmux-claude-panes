@@ -7,7 +7,14 @@ fresh (or retype its huge wrapper argv). Instead:
   save     (@resurrect-hook-post-save-all): map each live Claude pane
            "session:window.pane" -> its sessionId, from ~/.claude/sessions/*.json.
   restore  (@resurrect-hook-post-restore-all): type `claude --resume <id>` into
-           each restored pane at that address that sits at an idle shell.
+           each restored pane at that address that sits at an idle shell. A pane
+           that was a mates lead (its tmux @mates tag ends ":lead") gets `mates`
+           instead, so it comes back a lead with its Qwen panes, on the same
+           conversation (mates finds it by title). Resurrect does not keep tmux
+           user options, so the lead mark rides in this map's third column, and
+           the restored idle shells of its Qwen panes (cwd in a mates-qwen
+           worktree) are closed first: mates reopens them itself, and in a
+           window with other panes it would open a second window instead.
   fix-last (before TPM loads, and inside save): a save taken while the server
            dies writes an empty file and points `last` at it. Restoring that
            kills session 0 and leaves none, so a fresh `tmux` exits at once.
@@ -62,11 +69,13 @@ def save():
     if fix_last():
         return  # dying-server save: keep the last good pane map too
     # pane id (%N) -> "session:window.pane"
-    addr = {}
+    addr, lead = {}, set()
     for line in tmux('list-panes', '-a', '-F',
-                     '#{pane_id}\t#{session_name}:#{window_index}.#{pane_index}').splitlines():
-        pid_, a = line.split('\t', 1)
+                     '#{pane_id}\t#{session_name}:#{window_index}.#{pane_index}\t#{@mates}').splitlines():
+        pid_, a, tag = (line.split('\t') + ['', ''])[:3]
         addr[pid_] = a
+        if tag.endswith(':lead'):
+            lead.add(pid_)
     rows = []
     for f in glob.glob(os.path.expanduser('~/.claude/sessions/*.json')):
         try:
@@ -77,7 +86,7 @@ def save():
             continue
         pane = (s.get('tmux') or '').rpartition('.')[2]  # "0:@1.%2" -> "%2"
         if pane in addr and s.get('sessionId'):
-            rows.append(f"{addr[pane]}\t{s['sessionId']}\n")
+            rows.append(f"{addr[pane]}\t{s['sessionId']}" + ("\tmates" if pane in lead else "") + "\n")
     os.makedirs(DIR, exist_ok=True)
     tmp = MAP + '.tmp'
     with open(tmp, 'w') as fh:
@@ -90,14 +99,24 @@ def restore():
         rows = [l.rstrip('\n').split('\t') for l in open(MAP) if '\t' in l]
     except OSError:
         return
-    idle = {}
+    idle, ids, qwen_shells = {}, {}, {}  # qwen_shells: window "session:window" -> idle shell panes in a mates-qwen worktree
     for line in tmux('list-panes', '-a', '-F',
-                     '#{session_name}:#{window_index}.#{pane_index}\t#{pane_current_command}').splitlines():
-        a, cmd = line.split('\t', 1)
+                     '#{session_name}:#{window_index}.#{pane_index}\t#{pane_current_command}\t#{pane_id}\t#{pane_current_path}').splitlines():
+        a, cmd, pid_, path = (line.split('\t') + ['', '', ''])[:4]
         idle[a] = cmd in ('zsh', 'bash', 'sh')
-    for a, sid in rows:
-        if idle.get(a):
-            tmux('send-keys', '-t', a, f'claude --resume {sid}', 'Enter')
+        ids[a] = pid_
+        if idle[a] and '/.claude/worktrees/mates-qwen-' in path + '/':
+            qwen_shells.setdefault(a.rpartition('.')[0], []).append(pid_)
+    for row in rows:
+        a, sid, kind = (row + [''])[:3]
+        if not idle.get(a):
+            continue
+        if kind == 'mates':
+            for p in qwen_shells.pop(a.rpartition('.')[0], []):
+                tmux('kill-pane', '-t', p)
+            tmux('send-keys', '-t', ids[a], 'mates', 'Enter')  # by id: the kills renumber indexes
+        else:
+            tmux('send-keys', '-t', ids[a], f'claude --resume {sid}', 'Enter')
 
 
 if __name__ == '__main__':
