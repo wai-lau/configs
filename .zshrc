@@ -191,11 +191,12 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-# WSL: the first terminal opened attaches to the boot tmux server, so it
+# WSL: the first Windows Terminal tab attaches to the boot tmux server, so it
 # runs in front instead of only in the background. Tabs opened after that
-# get a plain shell (no mirrored second client). Skip inside tmux, over
-# ssh, in VS Code, and without a tty.
-if [[ -d /mnt/c && -z $TMUX && -z $SSH_CONNECTION && $TERM_PROGRAM != vscode \
+# get a plain shell (no mirrored second client). Gate on WT_SESSION (set only
+# in WT tabs): WSL's boot runs a hidden `login -f` shell with a tty, and it
+# would otherwise grab the attach as an invisible client.
+if [[ -n $WT_SESSION && -z $TMUX && -z $SSH_CONNECTION \
       && -o interactive && -t 0 && -t 1 ]] \
    && [[ -z $(command tmux list-clients 2>/dev/null) ]]; then
   tmux
