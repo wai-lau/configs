@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Start a detached tmux server at WSL boot so tmux-continuum restores the
+# saved panes and ~/bin/tmux-claude-panes resumes their Claude sessions.
+# Run by the tmux-boot systemd user service. No-op if tmux already runs.
+tmux has-session 2>/dev/null && { echo "tmux already running"; exit 0; }
+# systemd's user env lacks the WSL vars a login shell has; panes inherit them.
+if [[ -d /mnt/c ]]; then
+  export WSL_DISTRO_NAME=${WSL_DISTRO_NAME:-$(wslpath -w / | cut -d'\' -f4)}
+  export WSL_INTEROP=${WSL_INTEROP:-/run/WSL/1_interop}
+fi
+# Own scope: the server must outlive this oneshot service.
+systemd-run --user --scope -q tmux new-session -d
+echo "tmux started; continuum restores the last save"

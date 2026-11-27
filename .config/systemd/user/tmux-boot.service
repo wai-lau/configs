@@ -1,0 +1,9 @@
+[Unit]
+Description=Start tmux at boot so tmux-continuum restores saved panes
+
+[Service]
+Type=oneshot
+ExecStart=%h/bin/tmux-boot
+
+[Install]
+WantedBy=default.target

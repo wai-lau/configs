@@ -64,3 +64,9 @@ bin/spire-trio
 .DS_Store
 **/.DS_Store
 
+
+# systemd user units owned by this repo (WSL-only; enable by hand per host)
+!.config/
+!.config/systemd/
+!.config/systemd/user/
+!.config/systemd/user/tmux-boot.service
