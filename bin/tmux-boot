@@ -6,8 +6,15 @@ tmux has-session 2>/dev/null && { echo "tmux already running"; exit 0; }
 # systemd's user env lacks the WSL vars a login shell has; panes inherit them.
 if [[ -d /mnt/c ]]; then
   export WSL_DISTRO_NAME=${WSL_DISTRO_NAME:-$(wslpath -w / | cut -d'\' -f4)}
-  export WSL_INTEROP=${WSL_INTEROP:-/run/WSL/1_interop}
+  [[ -S /run/WSL/1_interop ]] && export WSL_INTEROP=${WSL_INTEROP:-/run/WSL/1_interop}
+  # WSL init appends these to a login PATH; .zshrc doesn't (cmd.exe, nvidia-smi).
+  PATH+=:/usr/lib/wsl/lib
+  winpath=$(cd /mnt/c && /mnt/c/WINDOWS/system32/cmd.exe /d /c 'echo %PATH%' 2>/dev/null | tr -d '\r')
+  IFS=';' read -ra parts <<<"$winpath"
+  for d in "${parts[@]}"; do [[ -n $d ]] && PATH+=":$(wslpath -u "$d" 2>/dev/null)"; done
+  export PATH
 fi
 # Own scope: the server must outlive this oneshot service.
-systemd-run --user --scope -q tmux new-session -d
+systemd-run --user --scope -q tmux new-session -d || { echo "tmux failed to start" >&2; exit 1; }
+tmux has-session 2>/dev/null || { echo "tmux server gone after start" >&2; exit 1; }
 echo "tmux started; continuum restores the last save"
